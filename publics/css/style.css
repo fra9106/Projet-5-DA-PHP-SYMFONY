@@ -1,0 +1,126 @@
+body {
+
+   text-align: center !important;
+}
+.btn-xl{
+    margin-top: 10px;
+}
+
+.slider{
+
+    background: url('../img/buro.png')center center/cover no-repeat!important;
+}
+
+.fa-desktop{
+    font-size: 50px;
+    margin-bottom: 30px;;
+}
+
+.bienvenu{
+    font-family: 'Pinyon Script', serif;
+    color: #C89446;
+    
+}
+
+.masthead{
+    height: 800px;;
+}
+
+.pic{
+    border: solid black 1px;
+    border-radius: 100%;
+    
+}
+
+.accroche{
+    font-size: 18px;;
+}
+
+.divider-custom.divider-light .divider-custom-line {
+    background-color: #fff;
+}
+
+.bg.prim{
+
+    background: url('../img/buro2.png')center center/cover no-repeat;
+}
+
+.couleur{
+
+    background: #ede7e3;
+}
+
+.fa-envelope-open{
+    font-size: 25px;
+}
+
+
+footer{
+    padding-top: 30px;
+    padding-bottom: 30px;
+    
+}
+.btn-social {
+    border-radius: 100% !important;
+    width: 3.25rem;
+    height: 3.25rem;
+    
+}
+
+.fa-linkedin-in, .fa-twitter, .fa-facebook-f, .fa-github-square {
+    font-size: 28px;
+    text-align: center;
+    margin-top: 4px;
+    margin-left: -2px;
+}
+
+@media only screen and (min-width: 360px) /*Samsung Galaxie*/
+{
+    
+    
+}
+
+@media only screen and (min-width: 375px) /*iphone6*/
+{
+    
+}
+
+
+@media only screen and (min-width: 414px) /*6plus*/
+{
+    
+}
+
+
+@media only screen and (min-width: 700px) /*tablette-*/
+{
+    
+    
+    .bienvenu
+    {
+
+        font-size: 50px;
+        line-height: 250px;
+        margin-bottom: 240px;
+    }
+
+}
+.container{
+    margin-bottom: -15px;
+}
+
+@media only screen and (min-width: 1023px)
+{
+    
+   
+
+}
+
+@media only screen and (min-width: 1100px) /*desktop*/
+{
+    
+
+}
+
+
+
