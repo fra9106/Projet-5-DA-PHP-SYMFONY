@@ -11,18 +11,22 @@ use Mod\ArticlesManager;
 
 class ControllerArticles{
 
-    public function listArticles() {
+    public function listArticle() {
 
         $loader = new \Twig\Loader\FilesystemLoader('views/frontend');
-		$twig = new \Twig\Environment($loader);	
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+		$twig = new \Twig\Environment($loader, ['debug' => true]);	
         $twig->addExtension(new \Twig\Extension\DebugExtension());
 
         	 
 
         $articlesManager = new ArticlesManager();
         $artic = $articlesManager->getArticles(); 
-        return $artic;
-        echo $twig->render("article.html.twig");
+        //var_dump($artic); die;
+            
+        echo $twig->render("articles.html.twig");
     
     
     }
@@ -31,9 +35,12 @@ class ControllerArticles{
     public function formArticle(){
             
         $loader = new \Twig\Loader\FilesystemLoader('views/frontend');
-		$twig = new \Twig\Environment($loader);	
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+		$twig = new \Twig\Environment($loader, ['debug' => true]);	
         $twig->addExtension(new \Twig\Extension\DebugExtension());
-
+        
         echo $twig->render("articleWriting.html.twig");	 
         
     }  
@@ -47,7 +54,7 @@ class ControllerArticles{
 
     }else
         {
-            header('Location: index.php?action=home.html.twig');
+            header('Location: index.php?action=homePage');
         }
     }
 

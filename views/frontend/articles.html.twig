@@ -3,9 +3,7 @@
 {% block title %}Liste articles{% endblock %}
 
 {% block body %}
-{#{{<pre>
-    {{ dump(artic) }}
-</pre>}}#}
+
 <div class="jumbotron text-center">
     <h1>
         Liste des articles
@@ -16,7 +14,10 @@
 <div class="container">
     <h2>Derniers articles</h2>
     <div class="row flex">
-        {% for article in articles %}
+        {% for artic in artics %}
+        <pre>
+            {{ dump(artic) }}
+        </pre>
             <div class="col-3"><br>
                 <div class="card">
                     <div class="card-body">
@@ -31,5 +32,7 @@
         {% endfor %}
     </div>
 </div>
-
+<pre>
+    {{ dump(articles) }}
+</pre>
 {% endblock %}

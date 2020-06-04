@@ -5,6 +5,7 @@ use Control\{ControllerHome, ControllerArticles};
 
 try{
     if (isset($_GET['action'])) {
+
         if ($_GET['action'] == 'homePage') {
             $display = new ControllerHome();
             $contact = $display->homePage();
@@ -12,14 +13,14 @@ try{
         }
 
         if ($_GET['action'] == 'listArticles')
-        {
+        { 
             $listarticles = new ControllerArticles();
-            $list = $listarticles->listArticles();
-            
+            $artic = $listarticles->listArticle();
+            //var_dump($artic); die;
 
         }
 
-        if($_GET['action'] == 'lienRedacArticle'){
+        if($_GET['action'] == 'writeArticleDisplay'){
 
             $controlleradmin = new ControllerArticles();
             $adminconnect = $controlleradmin->formArticle();
@@ -27,11 +28,13 @@ try{
         }
 
         if ($_GET['action'] == 'articleWriting')
-        {
-            if (isset($_POST['send_article']) and isset($_POST['id_category']) and isset($_POST['id_user'])  and isset($_POST['mini_content']) and isset($_POST['title']) and isset($_POST['content']))
+        { 
+            
+            if (isset($_POST['send_article']) and isset($_POST['id_category']) /*and isset($_SESSION['id_user'])*/and isset($_POST['mini_content']) and isset($_POST['title']) and isset($_POST['content']))
             {
+                
                 $idCategory = ($_POST['id_category']);
-                $idUser = ($_POST['id_user']);
+                //$idUser = ($_SESSION['id_user']);
                 $miniContent = ($_POST['mini_content']);
                 $title = ($_POST['title']);
                 $content = ($_POST['content']);
@@ -39,8 +42,9 @@ try{
                 
                 if (!empty(trim($_POST['mini_content'])) and !empty(trim($_POST['title'])) and !empty(trim($_POST['content'])))
                 {
-                    $redacArticle = new ControllerArticles();
-                    $display = $redacArticle->articleWriting($idCategory, $idUser, $miniContent, $title, $content);
+                    $articleWrite = new ControllerArticles();
+                    $display = $articleWrite->articleWriting($idCategory, $idUser, $miniContent, $title, $content);
+                    
                 }
                 else
                 {
