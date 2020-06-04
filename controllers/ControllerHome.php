@@ -2,6 +2,7 @@
 namespace Control;
 
 
+
 class ControllerHome
 {
 	/**
@@ -14,6 +15,11 @@ class ControllerHome
 		
 		$loader = new \Twig\Loader\FilesystemLoader('views/frontend');
 		$twig = new \Twig\Environment($loader);	
+
+		$twig = new \Twig\Environment($loader, [
+            'debug' => true
+        ]);
+        $twig->addExtension(new \Twig\Extension\DebugExtension());
 
 		echo $twig->render("home.html.twig");	 
 	 
