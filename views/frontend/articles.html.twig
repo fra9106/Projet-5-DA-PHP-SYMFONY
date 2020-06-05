@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste articles{% endblock %}
+
+{% block body %}
+
+<div class="jumbotron text-center">
+    <h1>
+        Liste des articles
+    </h1>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non nesciunt ducimus distinctio nostrum? Doloribus temporibus eum nulla doloremque maxime rem eveniet repellendus a deserunt velit dolorum unde tempore voluptatibus minus quidem, mollitia hic saepe? Reprehenderit cum ipsam quaerat modi recusandae.</p>
+    
+</div>
+<div class="container">
+    <h2>Derniers articles</h2>
+    <div class="row flex">
+        {% for artic in artics %}
+        <pre>
+            {{ dump(artic) }}
+        </pre>
+            <div class="col-3"><br>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href= {{ articles.title }}</a>
+                        </h5>
+                        <p class="card-text">{{ articles.mini_content}} ({{articles.content}})</p>
+                        
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<pre>
+    {{ dump(articles) }}
+</pre>
+{% endblock %}

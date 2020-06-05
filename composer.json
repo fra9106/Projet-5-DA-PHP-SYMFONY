@@ -5,7 +5,7 @@
     },
 	"autoload": {
 		"psr-4" : {
-		"Manager\\" : "models",
+		"Mod\\" : "modeles",
 		"Control\\" : "controllers"
 		}
 	}
