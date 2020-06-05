@@ -1,7 +1,7 @@
 <?php
 require 'vendor/autoload.php';
 
-use Control\{ControllerHome, ControllerArticles};
+use Control\{ControllerHome, ControllerArticles, ControllerUser};
 
 try{
     if (isset($_GET['action'])) {
@@ -10,6 +10,47 @@ try{
             $display = new ControllerHome();
             $contact = $display->homePage();
 
+        }
+
+        if ($_GET['action'] == 'displFormulContact')
+        {
+            $display = new ControllerUser();
+            $contact = $display->displFormulContact();
+
+        }
+
+        if ($_GET['action'] == 'addMember')
+        {
+            if (isset($_POST['addMember']) and isset($_POST['pseudo']) and isset($_POST['mail']) and isset($_POST['mdp']))
+            {
+                $pseudo = htmlspecialchars($_POST['pseudo']);
+                $mail = htmlspecialchars($_POST['mail']);
+                if (!empty($_POST['pseudo']) and !empty($_POST['mail']) and !empty($_POST['mdp']))
+                {
+                    $pseudolength = strlen($pseudo);
+                    if ($pseudolength > 2)
+                    {
+                        if (filter_var($mail, FILTER_VALIDATE_EMAIL))
+                        {
+                            $inscription = new ControllerUser();
+                            $contact = $inscription->addMember($_POST['pseudo'], $_POST['mail'], $_POST['mdp'], 'default.jpg');
+                            return $contact;
+                        }
+                        else
+                        {
+                            throw new Exception('Adresse mail non valide !');
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception('Votre pseudo doit contenir plus de deux caractères !');
+                    }
+                }
+                else
+                {
+                    throw new Exception('Tous les champs doivent être complétés');
+                }
+            }
         }
 
         if ($_GET['action'] == 'listArticles')
