@@ -36,16 +36,14 @@ body {
     font-size: 18px;;
 }
 
-.divider-custom.divider-light .divider-custom-line {
-    background-color: #fff;
-}
+
 
 .bg.prim{
 
     background: url('../img/buro2.png')center center/cover no-repeat;
 }
 
-.couleur{
+.color{
 
     background: #ede7e3;
 }
