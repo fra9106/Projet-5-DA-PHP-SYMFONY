@@ -32,7 +32,7 @@
                   <a class="nav-link" href="index.php?action=writeArticleDisplay">Rédiger</a>
                 </li>
                <li class="nav-item">
-                  <a class="nav-link" href="#">Connexion</a>
+                  <a class="nav-link" href="index.php?action=displFormulContact">Connexion</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Déconnexion</a>
@@ -42,7 +42,8 @@
             </div>
           </nav>
           {% block body %}{% endblock %}
-        <footer class="footer text-center text-white footer-dark bg-primary mb-0">
+          {% block footer %}{% endblock %}
+          <footer class="footer text-center text-white footer-dark bg-primary">
             <div class="container">
               <div class="row">
                  <!-- Footer Location -->
@@ -74,14 +75,14 @@
                             <a class="open text-center" href="https://openclassrooms.com/fr/paths/59-developpeur-dapplication-php-symfony">Start Openclassrooms</a>&nbsp;
                             <a class="open text-center" href="#">Administation</a></p>
                     </div>
+                    <div class="container mt-4 mb-4" >
+                      <small>Copyright &copy; monpersoweb.fr 2020 | <a href="mentions_legales.htlm">Mentions légales</a></small>
+                  </div>
                 </div>
             </div>
         </footer>
-        <section class="copyright py-4 text-center text-white footer-dark bg-primary">
-            <div class="container">
-                <small>Copyright &copy; monpersoweb.fr 2020 | <a href="mentions_legales.htlm">Mentions légales</a></small>
-            </div>
-        </section>
+       
+        
         <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
     <div class="scroll-to-top d-lg-none position-fixed ">
       <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">

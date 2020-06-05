@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'basearticles.html.twig' %}
 {% block title %}Rédaction article{% endblock %}
 {% block body %}
-<div>
-   <br><br><br><br><br><br>
-   <div align="center">
+
+  <div class="articlewrite">
+   
       <h2>Bonjour cher admin</h2>
       <br/>
       <h3><a href="index.php?action=homePage">Accueil</a></h3>
@@ -41,12 +41,13 @@
                      <textarea class="mytextarea  formcont mt-0 mb-0" name="content"  rows="5" cols="50" placeholder="Votre message"></textarea>
                   </div>
                </div>
-               <button type="submit" name="send_article"class="btn btn-secondary">Envoyer article !</button><br><br>
+               <button type="submit" name="send_article"class="btn btn-secondary mt-4">Envoyer article !</button><br><br>
             </form>
          </div>
       </div>
-   </div>
-</div>
+   </div> 
+
+
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 {% block javascripts %}<script>tinymce.init({ selector:'.mytextarea', content_css : 'publics/css/style.css', 
    language_url: 'https://olli-suutari.github.io/tinyMCE-4-translations/fr_FR.js', language: 'fr_FR' });

@@ -1,7 +1,25 @@
+html, body{
+
+    min-height: 100%;
+    
+}
 body {
 
    text-align: center !important;
+   overflow-x: hidden;
+   background-color: #ede7e3 !important;
+
 }
+
+footer{
+
+    padding-top: 30px;
+    padding-bottom: 30px;
+    position: absolute;
+    width: 100%;
+    margin-bottom: 0;
+    }
+
 .btn-xl{
     margin-top: 10px;
 }
@@ -22,6 +40,10 @@ body {
     
 }
 
+.articlewrite{
+    margin-top: 150px;
+}
+
 .masthead{
     height: 800px;;
 }
@@ -36,18 +58,11 @@ body {
     font-size: 18px;;
 }
 
-.divider-custom.divider-light .divider-custom-line {
-    background-color: #fff;
-}
+
 
 .bg.prim{
 
     background: url('../img/buro2.png')center center/cover no-repeat;
-}
-
-.couleur{
-
-    background: #ede7e3;
 }
 
 .fa-envelope-open{
@@ -55,16 +70,17 @@ body {
 }
 
 
-footer{
-    padding-top: 30px;
-    padding-bottom: 30px;
-    
-}
+
 .btn-social {
     border-radius: 100% !important;
     width: 3.25rem;
     height: 3.25rem;
     
+}
+
+.register{
+
+    margin-top: 250px;
 }
 
 .fa-linkedin-in, .fa-twitter, .fa-facebook-f, .fa-github-square {
