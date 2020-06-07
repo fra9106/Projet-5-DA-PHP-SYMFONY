@@ -1,6 +1,6 @@
 <?php
 namespace Mod;
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
 class Manager
 {

@@ -13,7 +13,7 @@ class ControllerHome
 	public function homePage()
 	{
 		
-		$loader = new \Twig\Loader\FilesystemLoader('views/templates/home');
+		$loader = new \Twig\Loader\FilesystemLoader('../views/templates/home');
 		$twig = new \Twig\Environment($loader);	
 
 		echo $twig->render("home.html.twig");	 
