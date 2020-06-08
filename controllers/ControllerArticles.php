@@ -2,7 +2,7 @@
 
 namespace Control;
 
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
 use Mod\ArticlesManager;
 
@@ -13,7 +13,7 @@ class ControllerArticles{
 
     public function listArticle() {
 
-        $loader = new \Twig\Loader\FilesystemLoader('views/templates/articles');
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
         $twig = new \Twig\Environment($loader, [
             'cache' => false
         ]);
@@ -34,7 +34,7 @@ class ControllerArticles{
 
     public function formArticle(){
             
-        $loader = new \Twig\Loader\FilesystemLoader('views/templates/articles');
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
         $twig = new \Twig\Environment($loader, [
             'cache' => false
         ]);

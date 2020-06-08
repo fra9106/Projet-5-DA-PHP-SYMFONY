@@ -6,7 +6,8 @@
 	"autoload": {
 		"psr-4" : {
 		"Mod\\" : "modeles",
-		"Control\\" : "controllers"
+		"Control\\" : "controllers",
+		"App\\" : "app"
 		}
 	}
 }

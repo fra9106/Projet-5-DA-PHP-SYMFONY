@@ -2,7 +2,7 @@
 
 namespace Control;
 
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
 use Mod\{MembersManager};
 
@@ -11,7 +11,7 @@ class ControllerUser {
     public function displFormulContact() // affichage formulaire de contact
     
     {
-        $loader = new \Twig\Loader\FilesystemLoader('views/templates/security');
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
 		$twig = new \Twig\Environment($loader);	
 
 		echo $twig->render("sign_in.html.twig");	
