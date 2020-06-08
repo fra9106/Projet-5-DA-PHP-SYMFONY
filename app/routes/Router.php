@@ -18,6 +18,23 @@ class Router
                     $contact = $display->homePage();
                     
                 }
+
+                if ($_GET['action'] == 'sendMessage')
+        {
+            if (isset($_POST['sendMessage']) and isset($_POST['username']) and isset($_POST['mail']) and isset($_POST['content']))
+            {
+                $username = htmlspecialchars($_POST['username']);
+                $mail = htmlspecialchars($_POST['mail']);
+                $content = htmlspecialchars($_POST['content']);
+
+                $contact = new ControllerHome();
+                $infoscontact = $contact->sendMessage($username, $mail, $content);
+                
+              }else
+                        {
+                            throw new Exception('Message non envoyé !');
+                        }
+        }
                 
                 if ($_GET['action'] == 'displFormulContact'){
                     $display = new ControllerUser();

@@ -39,32 +39,32 @@
         </div>
         <div class="row">
             <div class="col-lg-8 mx-auto">
-               <form action="index.php?action=envMessage" method="POST">
+               <form action="index.php?action=sendMessage" method="POST">
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2 text-secondary">
-                            <label class="reveal1">Nom</label>
-                            <input class="form-control" id="nom" name="nom" type="text" placeholder="Nom" required="required" data-validation-required-message="Please enter your name.">
+                            <label class="reveal1">Nom Prénom</label>
+                            <input class="form-control" id="nom" name="username" type="text" placeholder="Nom Prénom" required="required" data-validation-required-message="Merci de rentrer vos nom et prénom">
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2 text-secondary ">
                             <label class="reveal2">Email</label>
-                            <input class="form-control" id="mail" name="mail" type="email" placeholder="Email" required="required" data-validation-required-message="Please enter your email address.">
+                            <input class="form-control" id="mail" name="mail" type="email" placeholder="Email" required="required" data-validation-required-message="Merci de rentrer votre email">
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2 text-secondary ">
                             <label class="reveal1">Message</label>
-                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Message" required="required" data-validation-required-message="Please enter a message."></textarea>
+                            <textarea class="form-control" id="message" name="content" rows="5" placeholder="Message" required="required" data-validation-required-message="Merci de rentrer un message"></textarea>
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <br>
                     <div id="success"></div>
                     <div class="form-group">
-                        <button type="submit" name="envMessage" class="reveal2 btn btn-secondary btn-xl" id="sendMessageButton"><i class="far fa-envelope"></i> Envoyer</button>
+                        <button type="submit" name="sendMessage" class="reveal2 btn btn-secondary btn-xl" id="sendMessageButton"><i class="far fa-envelope"></i> Envoyer</button>
                     </div>
                 </form>
                 <br>

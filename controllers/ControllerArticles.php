@@ -54,7 +54,7 @@ class ControllerArticles{
 
     }else
         {
-            header('Location: index.php?action=homePage');
+            header('Location:index.php?action=homePage');
         }
     }
 
