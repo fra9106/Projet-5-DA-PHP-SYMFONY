@@ -21,11 +21,12 @@ class ControllerArticles{
         $twig->addExtension(new \Twig\Extension\DebugExtension());
         $articlesManager = new ArticlesManager();
         $articles = $articlesManager->getArticles();
-        var_dump($articles);
+       
             
         echo $twig->render('articles.html.twig',['articles' => $articles]);
     
-         
+        
+        //var_dump($articles); die;
     }
 
 

@@ -19,22 +19,19 @@ class Router
                     
                 }
 
-                if ($_GET['action'] == 'sendMessage')
-        {
-            if (isset($_POST['sendMessage']) and isset($_POST['username']) and isset($_POST['mail']) and isset($_POST['content']))
-            {
-                $username = htmlspecialchars($_POST['username']);
-                $mail = htmlspecialchars($_POST['mail']);
-                $content = htmlspecialchars($_POST['content']);
+                if ($_GET['action'] == 'sendMessage'){
+                    if (isset($_POST['sendMessage']) and isset($_POST['username']) and isset($_POST['mail']) and isset($_POST['content'])){
+                    $username = htmlspecialchars($_POST['username']);
+                    $mail = htmlspecialchars($_POST['mail']);
+                    $content = htmlspecialchars($_POST['content']);
 
-                $contact = new ControllerHome();
-                $infoscontact = $contact->sendMessage($username, $mail, $content);
+                    $contact = new ControllerHome();
+                    $infoscontact = $contact->sendMessage($username, $mail, $content);
                 
-              }else
-                        {
+                    }else{
                             throw new Exception('Message non envoyé !');
-                        }
-        }
+                         }
+                }
                 
                 if ($_GET['action'] == 'displFormulContact'){
                     $display = new ControllerUser();
@@ -96,7 +93,7 @@ class Router
                 
                 if ($_GET['action'] == 'listArticles'){
                     $listarticles = new ControllerArticles();
-                    $articles = $listarticles->listArticle();
+                    $list = $listarticles->listArticle();
                     //var_dump($articles); die;
                     }
                 
@@ -119,7 +116,7 @@ class Router
                         if (!empty(trim($_POST['mini_content'])) and !empty(trim($_POST['title'])) and !empty(trim($_POST['content']))){
                             $articleWrite = new ControllerArticles();
                             $display = $articleWrite->articleWriting($idCategory, $idUser, $miniContent, $title, $content);
-                            var_dump($idUser); die;
+                            //var_dump($idUser); die;
                         }
                         else{
                             throw new Exception('Vous n\'avez pas saisi d\'article !');
