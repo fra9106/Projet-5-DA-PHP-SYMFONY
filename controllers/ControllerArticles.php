@@ -19,16 +19,13 @@ class ControllerArticles{
         ]);
 		$twig = new \Twig\Environment($loader, ['debug' => true]);	
         $twig->addExtension(new \Twig\Extension\DebugExtension());
-
-        	 
-
         $articlesManager = new ArticlesManager();
-        $artic = $articlesManager->getArticles(); 
-        //var_dump($artic); die;
+        $articles = $articlesManager->getArticles();
+        var_dump($articles);
             
-        echo $twig->render("articles.html.twig");
+        echo $twig->render('articles.html.twig',['articles' => $articles]);
     
-    
+         
     }
 
 
@@ -48,6 +45,7 @@ class ControllerArticles{
     public function articleWriting($idCategory, $idUser, $miniContent, $title, $content){
     $articleEdit = new ArticlesManager(); 
     $createarticle = $articleEdit->postArticle($idCategory, $idUser, $miniContent, $title, $content);
+    
     if ($createarticle === false)
     {
         throw new \Exception('Impossible d \'ajouter un article...');
