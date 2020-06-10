@@ -1,0 +1,41 @@
+{% extends 'basearticles.html.twig' %}
+
+{% block title %}Liste articles{% endblock %}
+
+{% block body %}
+<div class="jumbotron text-center"><br><br>
+    <h1>
+        Liste des articles
+    </h1>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non nesciunt ducimus distinctio nostrum? Doloribus temporibus eum nulla doloremque maxime rem eveniet repellendus a deserunt velit dolorum unde tempore voluptatibus minus quidem, mollitia hic saepe? Reprehenderit cum ipsam quaerat modi recusandae.</p>
+    
+</div>
+<div class="container">
+    <h2>Derniers articles</h2><br>
+    <div class="row flex">
+        {% for article in articles %}
+       {#<pre>
+            {{ dump(article.content) }}
+        </pre>#} 
+            <div class="col-3"><br>
+                <div class="card">
+                    <div class="card-body">
+                        <strong>Catégorie : {{article.category}}</strong>
+                        <h5 class="card-title">
+                             {{article.title|nl2br}}
+                        </h5>
+                        <p class="card-text">{{article.mini_content }}</p>
+                        <p class="card-text">{{article.content|striptags|raw }}</p>
+                        <div class="btn-group">
+                            <a href="index.php?action=editArticleAdmin&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-secondary">Modifier</button></a>
+                            <a href="index.php?action=deleteArticle&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-secondary">Supprimer</button></a>
+                         </div>
+                        <small class="text-muted"><em>de la part de : {{article.pseudo}}</em></small>
+                        <small class="text-muted"><em>le : {{article.creation_date_fr}}</em></small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

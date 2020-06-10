@@ -92,10 +92,40 @@ class Router
                 }
                 
                 if ($_GET['action'] == 'listArticles'){
-                    $listarticles = new ControllerArticles();
-                    $list = $listarticles->listArticle();
-                    //var_dump($articles); die;
+                        $listarticles = new ControllerArticles();
+                        $list = $listarticles->listArticle();
+                        //var_dump($articles); die;
                     }
+
+                if ($_GET['action'] == 'listArticlesAdmin'){
+                        $listarticles = new ControllerArticles();
+                        $list = $listarticles->listArticlesAdmin();
+                }
+
+                if ($_GET['action'] == 'editArticleAdmin'){
+                    if (isset($_GET['id']) && $_GET['id'] > 0){
+                        $controllerArticles = new ControllerArticles();
+                        $display = $controllerArticles->editArticleAdmin();
+                    }
+                }
+
+                if ($_GET['action'] == "updateArticleAdmin"){
+                    if ((isset($_GET['id'])) && (!empty($_GET['id']))){
+                        $controlleradmin = new ControllerArticles();
+                        $edit = $controlleradmin->updateArticleAdmin($_POST['mini_content'], $_POST['title'], $_POST['content'], $_GET['id']);
+                        
+                    }else{
+                        throw new Exception('Impossible de modifier l\'article !');
+                    }
+
+                }
+
+                if ($_GET['action'] == 'deleteArticle'){
+                    if ((isset($_GET['id'])) && (!empty($_GET['id']))){
+                    $controlleradmin = new ControllerArticles();
+                    $delete = $controlleradmin->deleteArticle($_GET['id']);
+                    }
+                }
                 
                 if ($_GET['action'] == 'writeArticleDisplay'){
                     

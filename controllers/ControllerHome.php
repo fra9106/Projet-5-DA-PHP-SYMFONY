@@ -18,8 +18,10 @@ class ControllerHome
 		
 		$loader = new \Twig\Loader\FilesystemLoader('../views/templates/home');
 		$twig = new \Twig\Environment($loader);	
+		    
+		$twig->addGlobal('session', $_SESSION);
 
-		echo $twig->render("home.html.twig");	 
+		echo $twig->render("home.html.twig", ['session' => $_SESSION['pseudo']]);	 
 	 }
 
 	 /**
