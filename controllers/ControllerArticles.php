@@ -22,8 +22,8 @@ class ControllerArticles{
         $articlesManager = new ArticlesManager();
         $articles = $articlesManager->getArticles();
        
-            
-        echo $twig->render('articles.html.twig',['articles' => $articles]);
+        $twig->addGlobal('session', $_SESSION);   
+        echo $twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
     
         
         //var_dump($articles); die;

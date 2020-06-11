@@ -16,7 +16,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-            <a class="navbar-brand" href="/">Mon Blog</a>
+            <a class="navbar-brand" href="index.php?action=homePage">Mon Blog</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -25,20 +25,28 @@
                 <li class="nav-item">
                   <a class="nav-link" href="index.php?action=homePage">Accueil</a>
                 </li>
+                {% if  session.pseudo %}
                 <li class="nav-item">
-                  <a class="nav-link" href="index.php?action=listArticles">Articles</a>
+                  <a class="nav-link" href="#">Profil</a>
                 </li>
+                {% else %}
+              </li>
+              <li class="nav-item">
+                 <a class="nav-link" href="index.php?action=displFormulContact">Inscription</a>
+              </li>
+                {% endif %}
+                {% if  session.pseudo %}
                 <li class="nav-item">
-                  <a class="nav-link" href="index.php?action=writeArticleDisplay">Rédiger</a>
+                  <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
                 </li>
-               <li class="nav-item">
-                  <a class="nav-link" href="index.php?action=displFormulContact">Connexion</a>
-                </li>
+                {% else %}
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Déconnexion</a>
+                  <a class="nav-link" href="index.php?action=displConnexion">Connexion</a>
                 </li>
-              </ul>
-              <img class=" reveal-dev pic " width="50" src="../publics/img/franck.jpg" alt="photo FranckB">
+                {% endif %}
+                </ul>
+                <span class=" text-white">{{session.pseudo}}</span>
+                <img class=" reveal-dev pic " width="50" src="../publics/img/franck.jpg" alt="photo FranckB">
             </div>
           </nav>
           {% block body %}{% endblock %}

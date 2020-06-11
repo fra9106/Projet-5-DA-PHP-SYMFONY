@@ -13,8 +13,8 @@ class ControllerUser {
     {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
 		$twig = new \Twig\Environment($loader);	
-
-		echo $twig->render("sign_in.html.twig");	
+        $twig->addGlobal('session', $_SESSION);   
+		echo $twig->render("sign_in.html.twig", ['droits' => $_SESSION == 1]);	
     }
 
     public function addMember($pseudo, $mail, $mdp, $avatar) //ajout membre après divers tests
@@ -41,8 +41,8 @@ class ControllerUser {
     {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
 		$twig = new \Twig\Environment($loader);	
-
-		echo $twig->render("log_in.html.twig");	
+        $twig->addGlobal('session', $_SESSION);   
+		echo $twig->render("log_in.html.twig", ['droits' => $_SESSION == 1]);	
     }
 
     public function login($mail, $pass) //connexion
