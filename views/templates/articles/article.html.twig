@@ -1,0 +1,33 @@
+{% extends 'basearticles.html.twig' %}
+
+{% block title %}Article{% endblock %}
+
+{% block body %}
+<div class="jumbotron text-center"><br><br>
+    <h1>
+        Article de : {{articles.pseudo}} 
+    </h1>
+</div>
+<div class="container">
+    <h2 class="card-title">{{articles.title}}</h2>
+
+    <div class="row justify-content-center text-center">
+        
+       {#<pre>
+            {{ dump(article.content) }}
+        </pre>#} 
+            <div class="col-6"><br>
+                <div class=" card mb-4">
+                    <div class="card-body">
+                        <strong>Catégorie : {{articles.category}}</strong><br><br>
+                        <p class="card-text">{{articles.mini_content }}</p>
+                        <p class="card-text">{{articles.content|striptags|raw }}</p>
+                        <small class="text-muted"><em>de la part de : {{articles.pseudo}}</em></small>
+                        <small class="text-muted"><em>le : {{articles.creation_date_fr}}</em></small>
+                        
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock %}

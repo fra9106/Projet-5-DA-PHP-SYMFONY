@@ -29,6 +29,21 @@ class ControllerArticles{
         //var_dump($articles); die;
     }
 
+    public function getArticle(){
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+
+        $articlesManager = new ArticlesManager();
+        $articles = $articlesManager->Article($_GET['id']);
+
+        $twig->addGlobal('session', $_SESSION);   
+        echo $twig->render('article.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
+
+
+    }
+
     public function listArticlesAdmin() {
 
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
