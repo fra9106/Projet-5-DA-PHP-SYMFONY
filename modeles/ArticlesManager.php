@@ -12,7 +12,7 @@ class ArticlesManager extends Manager{
     public function getArticles(){
 
         $db = $this->dbConnect();
-		$articles = $db->prepare('SELECT categories.id, categories.category, articles.id, users.user_name, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id WHERE id_category = ? ORDER BY creation_date_fr');
+		$articles = $db->query('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id ORDER BY creation_date_fr');
        
        return $articles;
         

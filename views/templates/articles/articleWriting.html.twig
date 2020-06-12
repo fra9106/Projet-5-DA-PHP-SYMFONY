@@ -49,7 +49,7 @@
 
 
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-{% block javascripts %}<script>tinymce.init({ selector:'.mytextarea', content_css : 'publics/css/style.css', 
+{% block javascripts %}<script>tinymce.init({ entity_encoding : "raw", selector:'.mytextarea', content_css : 'publics/css/style.css', 
    language_url: 'https://olli-suutari.github.io/tinyMCE-4-translations/fr_FR.js', language: 'fr_FR' });
 </script>{% endblock %}
 {% endblock %}

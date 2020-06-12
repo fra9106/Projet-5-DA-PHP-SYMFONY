@@ -11,25 +11,27 @@
     
 </div>
 <div class="container">
-    <h2>Derniers articles</h2><br><br><br><br><br><br><br><br><br><br><br><br>
+    <h2>Derniers articles</h2><br>
     <div class="row flex">
         {% for article in articles %}
-        
+       {#<pre>
+            {{ dump(article.content) }}
+        </pre>#} 
             <div class="col-3"><br>
                 <div class="card">
                     <div class="card-body">
+                        <strong>Catégorie : {{article.category}}</strong>
                         <h5 class="card-title">
-                             <h2>{{article.title}}</h2>
+                             {{article.title|nl2br}}
                         </h5>
-                        <p class="card-text">{{article.mini_content}} ({{article.content}})</p>
-                        
+                        <p class="card-text">{{article.mini_content }}</p>
+                        <p class="card-text">{{article.content|striptags|raw }}</p>
+                        <small class="text-muted"><em>de la part de : {{article.pseudo}}</em></small>
+                        <small class="text-muted"><em>le : {{article.creation_date_fr}}</em></small>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 </div>
-<pre>
-    {{ dump(article.content) }}
-</pre>
 {% endblock %}
