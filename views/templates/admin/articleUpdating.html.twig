@@ -1,0 +1,52 @@
+{% extends 'basearticles.html.twig' %}
+{% block title %}Rédaction article{% endblock %}
+{% block body %}
+
+  <div class="articlewrite">
+   
+      
+      <h3><a href="index.php?action=homePage">Accueil</a></h3>
+      <h3><a href="index.php?action=listArticlesAdmin">Articles</a></h3>
+      <h3><a href="#">Commentaires à valider</a></h3>
+      <h3><a href="#">Gestion des membres</a></h3>
+      <br/>
+      <!--formulaire pour taper un nouvel article-->
+      <h3>Modifier Article : </h3>
+      <div class="row">
+        {% for article in articles %}
+         <div class="col-lg-8 mx-auto">
+            <form class="form " method="post" action="index.php?action=updateArticleAdmin&amp;id={{article.id}}">
+               
+               <div class="control-group">
+                  <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                    <textarea class="form-control input-lg formcont  mt-0 mb-0" type="text" name="mini_content" rows="1">{{article.mini_content}}</textarea>
+                  </div>
+               </div>
+               <div class="control-group">
+                  <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                    <textarea class="form-control input-lg formcont  mt-0 mb-0" type="text" name="title" rows="1" >{{article.title}}</textarea> 
+                  </div>
+               </div>
+               <div class="control-group">
+                  <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                     <textarea class=" form-control input-lg formcont mt-0 mb-0 mytextarea" name="content"  rows="5" cols="50">{{article.content}}</textarea>
+                  </div>
+               </div>
+               <div class="control-group">
+                <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                  <textarea class="form-control input-lg formcont  mt-0 mb-0" type="text" name="creation_date_fr" rows="1">{{article.creation_date_fr}}</textarea> 
+                </div>
+             </div>
+               <button type="submit" name="updateArticleAdmin"class="btn btn-secondary mt-4">Mettre à jour!</button><br><br>
+            </form>
+         </div>
+        {% endfor %} 
+      </div>
+   </div> 
+   
+
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+{% block javascripts %}<script>tinymce.init({ entity_encoding : "raw", selector:'.mytextarea', content_css : 'publics/css/style.css', 
+   language_url: 'https://olli-suutari.github.io/tinyMCE-4-translations/fr_FR.js', language: 'fr_FR' });
+</script>{% endblock %}
+{% endblock %}

@@ -29,10 +29,63 @@ class ControllerArticles{
         //var_dump($articles); die;
     }
 
+    public function listArticlesAdmin() {
+
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+		$twig = new \Twig\Environment($loader, ['debug' => true]);	
+        $twig->addExtension(new \Twig\Extension\DebugExtension());
+        $articlesManager = new ArticlesManager();
+        $articles = $articlesManager->getArticles();
+       
+        echo $twig->render('listArticlesAdmin.html.twig',['articles' => $articles]);
+    }
+
+    public function editArticleAdmin(){
+        $articleManager = new ArticlesManager();
+        $articles = $articleManager->getArticleAdmin($_GET['id']);
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+		$twig = new \Twig\Environment($loader, ['debug' => true]);	
+        $twig->addExtension(new \Twig\Extension\DebugExtension());
+        
+        echo $twig->render("articleUpdating.html.twig", ['articles' => $articles]);	 
+    }
+
+    public function updateArticleAdmin($miniContent, $title, $content, $postId) // modifie article
+    
+    {
+        $update = new ArticlesManager();
+        $updatearticle = $update->updateArticle($miniContent, $title, $content, $postId);
+        
+        header('Location: index.php?action=listArticlesAdmin');
+    }
+
+    public function deleteArticle($dataId) // supprimme l'article
+    
+    {
+        $supprime = new ArticlesManager();
+        $deletedarticle = $supprime->supprArticle($dataId);
+
+        if ($deletedarticle === false)
+        {
+            throw new \Exception('Impossible de supprimer cet article!');
+        }
+        else
+        {
+            header('Location: index.php?action=listArticlesAdmin');
+        }
+    }
+
+
 
     public function formArticle(){
             
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
         $twig = new \Twig\Environment($loader, [
             'cache' => false
         ]);
