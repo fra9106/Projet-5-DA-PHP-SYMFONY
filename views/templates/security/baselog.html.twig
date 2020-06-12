@@ -30,15 +30,18 @@
                   <a class="nav-link" href="index.php?action=listArticles">Articles</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="index.php?action=writeArticleDisplay">Rédiger</a>
-                </li>
-               <li class="nav-item">
-                  <a class="nav-link" href="#">Connexion</a>
-                </li>
+                  <a class="nav-link" href="index.php?action=displFormulContact">Inscription</a>
+               </li>
+                {% if  session.pseudo %}
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Déconnexion</a>
+                  <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
                 </li>
-              </ul>
+                {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="index.php?action=displConnexion">Connexion</a>
+                </li>
+                {% endif %}
+               </ul>
               <img class=" reveal-dev pic " width="50" src="../publics/img/franck.jpg" alt="photo FranckB">
             </div>
           </nav>

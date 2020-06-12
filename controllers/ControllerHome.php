@@ -20,8 +20,8 @@ class ControllerHome
 		$twig = new \Twig\Environment($loader);	
 		    
 		$twig->addGlobal('session', $_SESSION);
-
-		echo $twig->render("home.html.twig", ['session' => $_SESSION['pseudo']]);	 
+		
+	  	echo $twig->render("home.html.twig", ['session' => $_SESSION], ['droits' => $_SESSION == 1]);	 
 	 }
 
 	 /**

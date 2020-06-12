@@ -22,29 +22,34 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarColor01">
               <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                  <a class="nav-link" href="index.php?action=homePage">Accueil</a>
+                <li class="nav-item active">
+                  <a class="nav-link" href="index.php?action=homePage"><span><i class="fa fa-home"></i> Accueil</span></a>
                 </li>
                 
                 <li class="nav-item">
                   <a class="nav-link" href="index.php?action=listArticles">Articles</a>
                 </li>
-                
+                {% if  session.pseudo %}
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Profil</a>
+                </li>
+                {% else %}
                 </li>
                <li class="nav-item">
                   <a class="nav-link" href="index.php?action=displFormulContact">Inscription</a>
                 </li>
-                {#{% if  {{session.pseudo}}%}#}
+                {% endif %}
+                {% if  session.pseudo %}
                 <li class="nav-item">
                   <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
                 </li>
-                {#{% else %}#}
+                {% else %}
                 <li class="nav-item">
                   <a class="nav-link" href="index.php?action=displConnexion">Connexion</a>
                 </li>
-                
-                {#{% endif %}#}
+                {% endif %}
               </ul>
+              <span class=" text-white">Bonjour {{session.pseudo}}</span>
               <img class=" reveal-dev pic " width="50" src="../publics/img/franck.jpg" alt="photo FranckB">
             </div>
           </nav>
@@ -83,8 +88,11 @@
                         </p>
                     </div>
                     <div class="container mt-4 mb-4" >
-                      <small>Copyright &copy; monpersoweb.fr 2020 | <a href="mentions_legales.htlm">Mentions légales | </a><a class="open text-center" href="index.php?action=writeArticleDisplay"">Administation</a ></small>
-                  </div>
+                      <small>Copyright &copy; monpersoweb.fr 2020 | <a href="mentions_legales.htlm">Mentions légales  
+                        {% if  session.droits %}
+                      </a><a class="open text-center" href="index.php?action=writeArticleDisplay">| Administation</a ></small>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </footer>
