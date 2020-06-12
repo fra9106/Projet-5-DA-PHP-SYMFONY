@@ -17,17 +17,20 @@
        {#<pre>
             {{ dump(article.content) }}
         </pre>#} 
-            <div class="col-3"><br>
-                <div class="card">
+            <div class="col-sm-12 col-md-6 col-lg-3"><br>
+                <div class="card  mb-4">
                     <div class="card-body">
                         <strong>Catégorie : {{article.category}}</strong>
                         <h5 class="card-title">
                              {{article.title|nl2br}}
                         </h5>
                         <p class="card-text">{{article.mini_content }}</p>
-                        <p class="card-text">{{article.content|striptags|raw }}</p>
+                        <!--<p class="card-text">{{article.content|striptags|raw }}</p>-->
                         <small class="text-muted"><em>de la part de : {{article.pseudo}}</em></small>
                         <small class="text-muted"><em>le : {{article.creation_date_fr}}</em></small>
+                        <div class="btn-group center">
+                            <a href="index.php?action=getArticle&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-secondary">Lire la suite...</button></a>
+                        </div>
                     </div>
                 </div>
             </div>

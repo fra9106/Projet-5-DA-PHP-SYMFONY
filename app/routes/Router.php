@@ -97,6 +97,21 @@ class Router
                         //var_dump($articles); die;
                     }
 
+                    elseif ($_GET['action'] == 'getArticle')
+                    { //affiche un article
+                        if (isset($_GET['id']) && $_GET['id'] > 0)
+                        {
+                            $artic = new ControllerArticles();
+                            $afficheMoiLarticle = $artic->getArticle();
+            
+                        }
+                        else
+                        {
+                            throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
+                        }
+                    }
+                
+
                 if ($_GET['action'] == 'listArticlesAdmin'){
                         $listarticles = new ControllerArticles();
                         $list = $listarticles->listArticlesAdmin();

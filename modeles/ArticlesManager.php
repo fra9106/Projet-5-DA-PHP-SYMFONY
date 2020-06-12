@@ -19,6 +19,14 @@ class ArticlesManager extends Manager{
 
     }
 
+    public function Article($idArticle){
+        $db = $this->dbConnect();
+		$req = $db->prepare('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id'); 
+		$req->execute(array($idArticle));
+		$articles = $req->fetch();
+		return $articles;
+    }
+
     public function getArticleAdmin($dataId) // méthode de récupération article à modifier (admin)
 	{
 		
