@@ -18,6 +18,23 @@ class Router
                     $contact = $display->homePage();
                     
                 }
+
+                if ($_GET['action'] == 'sendMessage')
+        {
+            if (isset($_POST['sendMessage']) and isset($_POST['username']) and isset($_POST['mail']) and isset($_POST['content']))
+            {
+                $username = htmlspecialchars($_POST['username']);
+                $mail = htmlspecialchars($_POST['mail']);
+                $content = htmlspecialchars($_POST['content']);
+
+                $contact = new ControllerHome();
+                $infoscontact = $contact->sendMessage($username, $mail, $content);
+                
+              }else
+                        {
+                            throw new Exception('Message non envoyé !');
+                        }
+        }
                 
                 if ($_GET['action'] == 'displFormulContact'){
                     $display = new ControllerUser();
@@ -79,8 +96,8 @@ class Router
                 
                 if ($_GET['action'] == 'listArticles'){
                     $listarticles = new ControllerArticles();
-                    $artic = $listarticles->listArticle();
-                    //var_dump($artic); die;
+                    $articles = $listarticles->listArticle();
+                    //var_dump($articles); die;
                     }
                 
                 if ($_GET['action'] == 'writeArticleDisplay'){
@@ -91,10 +108,10 @@ class Router
                 
                 if ($_GET['action'] == 'articleWriting'){
                     
-                    if (isset($_POST['send_article']) and isset($_POST['id_category']) and isset($_SESSION['id_user']) and isset($_POST['mini_content']) and isset($_POST['title']) and isset($_POST['content'])){
+                    if (isset($_POST['send_article']) and isset($_POST['id_category']) and isset($_SESSION['id']) and isset($_POST['mini_content']) and isset($_POST['title']) and isset($_POST['content'])){
                         
                         $idCategory = ($_POST['id_category']);
-                        $idUser = ($_SESSION['id_user']);
+                        $idUser = ($_SESSION['id']);
                         $miniContent = ($_POST['mini_content']);
                         $title = ($_POST['title']);
                         $content = ($_POST['content']);
@@ -102,7 +119,7 @@ class Router
                         if (!empty(trim($_POST['mini_content'])) and !empty(trim($_POST['title'])) and !empty(trim($_POST['content']))){
                             $articleWrite = new ControllerArticles();
                             $display = $articleWrite->articleWriting($idCategory, $idUser, $miniContent, $title, $content);
-                            
+                            var_dump($idUser); die;
                         }
                         else{
                             throw new Exception('Vous n\'avez pas saisi d\'article !');
