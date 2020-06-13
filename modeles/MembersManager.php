@@ -10,7 +10,7 @@ class MembersManager extends Manager{
     
     {
         $db = $this->dbConnect();
-        $insertmbr = $db->prepare("INSERT INTO users(pseudo, mail, pass, droits, avatar) VALUES(?, ?, ?, 0, ?)");
+        $insertmbr = $db->prepare("INSERT INTO users(pseudo, mail, pass, droits, avatar, creation_date) VALUES(?, ?, ?, 0, ?, NOW())");
         $insertmbr->execute(array(
             $pseudo,
             $mail,
@@ -58,6 +58,17 @@ class MembersManager extends Manager{
         ));
         $usercook = $requser->rowCount();
         return $usercook;
+
+    }
+
+    public function getUsers()
+    
+    {
+        $db = $this->dbConnect();
+		$users = $db->prepare('SELECT pseudo, mail, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr FROM users');
+        $users->execute(array());
+        return $users;
+
 
     }
 

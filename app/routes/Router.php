@@ -137,6 +137,11 @@ class Router
                         $list = $listarticles->listArticlesAdmin();
                 }
 
+                if ($_GET['action'] == 'listUsersAdmin'){
+                    $listUsers = new ControllerUser();
+                    $list = $listUsers->listUsersAdmin();
+            }
+
                 if ($_GET['action'] == 'editArticleAdmin'){
                     if (isset($_GET['id']) && $_GET['id'] > 0){
                         $controllerArticles = new ControllerArticles();

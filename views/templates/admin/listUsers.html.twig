@@ -1,0 +1,50 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Liste articles{% endblock %}
+
+{% block body %}
+
+<div class="articlewrite">
+    <h2>Bonjour cher admin</h2>
+    <br/>
+    <h3><a href="index.php?action=homePage">Accueil</a></h3>
+    <h3><a href="index.php?action=listArticlesAdmin">Articles</a></h3>
+    <h3><a href="index.php?action=listUsersAdmin">Commentaires à valider</a></h3>
+    
+    <br/>
+
+    <div class="container mt-4">
+    
+        <h1>Membres :</h1><br><br>
+
+        
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>PSEUDO</th>
+                    <th>MAIL</th>
+                    <th>DATE D'INSCRIPTION</th>
+
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{user.pseudo}}</td>
+                <td>{{user.mail}}</td>
+                <td>{{user.creation_date_fr}}</td>
+                <td>
+                    <button class="btn btn-danger">Supprimer</button>
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+
+
+    </div><br><br>
+</div>
+
+{% endblock %}
