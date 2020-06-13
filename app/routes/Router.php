@@ -140,7 +140,19 @@ class Router
                 if ($_GET['action'] == 'listUsersAdmin'){
                     $listUsers = new ControllerUser();
                     $list = $listUsers->listUsersAdmin();
-            }
+                }
+
+                if ($_GET['action'] == 'deleteUser'){
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){ //CONDITION DE SECURITE POUR EVITER DE POUVOIR ACCEDER A L'ADMIN PAR L'URL
+                        header('Location:index.php?action=homePage');
+                        }else{
+                                if ((isset($_GET['id'])) && (!empty($_GET['id']))){
+                                    $controlleruser = new ControllerUser();
+                                    $delete = $controlleruser->deleteUser($_GET['id']);
+                                    
+                                }
+                             }
+                }
 
                 if ($_GET['action'] == 'editArticleAdmin'){
                     if (isset($_GET['id']) && $_GET['id'] > 0){

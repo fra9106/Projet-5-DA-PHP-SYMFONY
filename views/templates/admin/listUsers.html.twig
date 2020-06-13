@@ -33,9 +33,9 @@
             <tr>
                 <td>{{user.pseudo}}</td>
                 <td>{{user.mail}}</td>
-                <td>{{user.creation_date_fr}}</td>
+                <td>{{user.create_date_fr}}</td>
                 <td>
-                    <button class="btn btn-danger">Supprimer</button>
+                    <a href="index.php?action=deleteUser&amp;id={{user.id}}"><button type="button" class="btn btn-danger">Supprimer</button></a>
                 </td>
                 
             </tr>
