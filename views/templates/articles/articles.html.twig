@@ -25,8 +25,11 @@
                              {{article.title|nl2br}}
                         </h5>
                         <p class="card-text">{{article.mini_content }}</p>
-                        <small class="text-muted"><em>de la part de : {{article.pseudo}}</em></small>
-                        <small class="text-muted"><em>le : {{article.creation_date_fr}}</em></small>
+                        <small class="text-muted"><em>De la part de : {{article.pseudo}}</em></small><br>
+                        <small class="text-muted"><em>Crée le : {{article.creation_date_fr}}</em></small>
+                        {% if article.update_date_fr %}
+                        <small class="text-muted"><em>Modifié le : {{article.update_date_fr}}</em></small><br>
+                        {% endif %}
                         <div class="btn-group center">
                             <a href="index.php?action=getArticle&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-secondary">Lire la suite...</button></a>
                         </div>

@@ -14,7 +14,7 @@ class CommentsManager extends Manager{
 		$comments = $db->prepare('SELECT comments.id, users.pseudo, comments.content, comments.valid, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM comments INNER JOIN users ON comments.id_user = users.id WHERE id_article = ? ORDER BY comment_date DESC');
 		$comments->execute(array($idArticle));
 		$comment = $comments->fetch();
-		var_dump($comment); die;
+		//var_dump($comment); die;
 		return $comment;
     }
     
@@ -29,4 +29,3 @@ class CommentsManager extends Manager{
 
 }
 
-//comments.id, users.pseudo, comments.content, comments.validation, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM comments INNER JOIN users ON comments.id_user = users.id WHERE id_article = ? ORDER BY comment_date DESC');

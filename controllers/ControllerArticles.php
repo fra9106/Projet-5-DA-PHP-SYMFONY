@@ -46,11 +46,11 @@ class ControllerArticles{
         $comment = $commentsManager->getComments($_GET['id']);
         //var_dump($comment); die;
         $twig->addGlobal('session', $_SESSION); 
-       // $validation = 'validation';  
+       // $valid = 'valid';  
        
         echo $twig->render('article.html.twig',['article' => $article],['droits' => $_SESSION == 1],['comment' => $comment]);
        
-        //, ['validation' => $validation == 1]
+        //, ['valid' => $valid == 1]
 
     }
 
