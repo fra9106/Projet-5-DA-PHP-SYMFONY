@@ -4,7 +4,7 @@ namespace Control;
 
 require '../vendor/autoload.php';
 
-use Mod\ArticlesManager;
+use Mod\{ArticlesManager, CommentsManager};
 
 
 
@@ -35,14 +35,46 @@ class ControllerArticles{
             'cache' => false
         ]);
 
+        $twig = new \Twig\Environment($loader, ['debug' => true]);	
+        $twig->addExtension(new \Twig\Extension\DebugExtension());
+
         $articlesManager = new ArticlesManager();
-        $articles = $articlesManager->Article($_GET['id']);
+        $commentsManager = new CommentsManager();
 
-        $twig->addGlobal('session', $_SESSION);   
-        echo $twig->render('article.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
-
+        $article = $articlesManager->Article($_GET['id']);
+        
+        $comment = $commentsManager->getComments($_GET['id']);
+        //var_dump($comment); die;
+        $twig->addGlobal('session', $_SESSION); 
+       // $validation = 'validation';  
+       
+        echo $twig->render('article.html.twig',['article' => $article],['droits' => $_SESSION == 1],['comment' => $comment]);
+       
+        //, ['validation' => $validation == 1]
 
     }
+
+    public function addComment($idArticle, $idUser, $content)
+    
+    {
+        $commentsManager = new CommentsManager();
+        $content = htmlspecialchars($content);
+        $affectedLines = $commentsManager->postComment($idArticle, $_SESSION['id'], $content);
+
+        if ($affectedLines === false)
+        { 
+            throw new \Exception('Oups... Impossible d\'ajouter ce commentaire !');
+            
+        }
+        else
+        {
+            header('Location: index.php?action=getArticle&id=' . $idArticle);
+            
+        }
+    }
+
+
+
 
     public function listArticlesAdmin() {
 

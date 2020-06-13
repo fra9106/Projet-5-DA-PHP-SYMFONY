@@ -84,9 +84,12 @@
                             <a class="open text-center" href="#">Administation</a></p>
                     </div>
                     <div class="container mt-4 mb-4" >
-                      <small>Copyright &copy; monpersoweb.fr 2020 | <a href="mentions_legales.htlm">Mentions légales</a></small>
+                      <small>Copyright &copy; monpersoweb.fr 2020 | <a href="mentions_legales.htlm">Mentions légales  
+                        {% if  session.droits %}
+                      </a><a class="open text-center" href="index.php?action=writeArticleDisplay">| Administation</a ></small>
+                    </div>
+                    {% endif %}
                   </div>
-                </div>
             </div>
         </footer>
        

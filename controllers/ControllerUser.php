@@ -103,7 +103,7 @@ class ControllerUser {
             }
             if (!empty($_SESSION['droits']) && $_SESSION['droits'] == '1') {
                 ////CONDITION DE SECURITE POUR EVITER DE POUVOIR ACCEDER A L'ADMIN PAR L'URL
-                header("Location: index.php?action=homePage");
+                header("Location: index.php?action=listArticles");
             }           
         }
     }
