@@ -2,7 +2,7 @@
 
 namespace App\routes;
 
-use Control\{ControllerHome, ControllerArticles, ControllerUser};
+use Control\{ConnectController, ControllerHome, ControllerArticles, ControllerUser};
 use Exception;
 
 class Router
@@ -34,12 +34,12 @@ class Router
                 }
                 
                 if ($_GET['action'] == 'displFormulContact'){
-                    $display = new ControllerUser();
+                    $display = new ConnectController();
                     $contact = $display->displFormulContact();
                 }
 
                 if ($_GET['action'] == 'displConnexion'){
-                $display = new ControllerUser();
+                $display = new ConnectController();
                 $contact = $display->displConnexion();
                 }
 
@@ -48,7 +48,7 @@ class Router
                         $mail = htmlspecialchars($_POST['mail']);
 
                         if (!empty(trim($_POST['mail'])) and !empty(trim($_POST['mdp']))){
-                        $connex = new ControllerUser();
+                        $connex = new ConnectController();
                         $newConnexion = $connex->login($_POST['mail'], $_POST['mdp']);
                         }
                         else{
@@ -58,7 +58,7 @@ class Router
                 }
 
                 if ($_GET['action'] == 'logout'){
-                $lout = new ControllerUser();
+                $lout = new ConnectController();
                 $logOut = $lout->logout();
 
                 }
@@ -93,7 +93,7 @@ class Router
                 /**
                  * list articles
                  */
-                if ($_GET['action'] == 'listArticles'){
+                elseif ($_GET['action'] == 'listArticles'){
                         $listarticles = new ControllerArticles();
                         $list = $listarticles->listArticle();
                         //var_dump($articles); die;

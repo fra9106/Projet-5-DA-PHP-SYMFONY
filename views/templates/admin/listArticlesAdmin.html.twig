@@ -3,13 +3,15 @@
 {% block title %}Liste articles{% endblock %}
 
 {% block body %}
-<div class="jumbotron text-center"><br><br>
-    <h1>
-        Liste des articles
-    </h1>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non nesciunt ducimus distinctio nostrum? Doloribus temporibus eum nulla doloremque maxime rem eveniet repellendus a deserunt velit dolorum unde tempore voluptatibus minus quidem, mollitia hic saepe? Reprehenderit cum ipsam quaerat modi recusandae.</p>
+<div class="articlewrite">
     
-</div>
+    <br/>
+    <h3><a href="index.php?action=homePage">Accueil</a></h3>
+    <h3><a href="index.php?action=listArticlesAdmin">Articles</a></h3>
+    <h3><a href="index.php?action=listUsersAdmin">Commentaires à valider</a></h3>
+    
+    <br/>
+
 <div class="container">
     <h2>Derniers articles</h2><br>
     <div class="row flex">
@@ -40,5 +42,6 @@
             </div>
         {% endfor %}
     </div>
+</div>
 </div>
 {% endblock %}
