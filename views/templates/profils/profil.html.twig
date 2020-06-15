@@ -1,6 +1,6 @@
 {% extends 'baseprofil.html.twig' %}
 
-{% block title %}Profil{% endblock %}
+{% block title %}Edit profil{% endblock %}
 
 {% block body %}
 
@@ -15,7 +15,7 @@
         <div class="col-6"><br>
                 <div class=" card mb-4">
                     <div class="card-body">
-                        <h2>Ma fiche</h2>
+                        <h2>Mettre à jour ma fiche</h2>
                         <p>Bonjour {{session.pseudo}}</p>
                         <img class="improfil" width="100" src="../publics/img/users/avatar/{{user.avatar}}"/><br>
                         <strong>Pseudo : </strong><br>
@@ -28,5 +28,5 @@
                 </div>
         </div>
     </div>
-</div><br>
+</div><br><br>
 {% endblock %}

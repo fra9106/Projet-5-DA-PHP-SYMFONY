@@ -58,7 +58,13 @@ class ControllerUser {
         }
     }
 
-    public function displayprofil(){
+    /**
+     * user profil page
+     *
+     * @return void
+     */
+    public function displayprofil()
+    {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/profils');
         $twig = new \Twig\Environment($loader, [
             'cache' => false
@@ -70,5 +76,38 @@ class ControllerUser {
         echo $twig->render('profil.html.twig',['user' => $user], ['droits' => $_SESSION == 1] );
     }
 
+    /**
+     * display edit page profil user
+     *
+     * @return void
+     */
+    public function editprofilpage() 
+    {
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/profils');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+        $infosmembre = new MembersManager();
+        $user = $infosmembre->infosProfil();
+        
+        $twig->addGlobal('session', $_SESSION);
+        echo $twig->render('editprofil.html.twig',['user' => $user], ['droits' => $_SESSION == 1] );
+    }
+
+
+    /**
+     * upload avatar file
+     *
+     * @param [type] $newavatar
+     * @return void
+     */
+    public function getAvatar($newavatar)
+    {
+        $membreManager = new MembersManager();
+        $avatarinfos = $membreManager->infosAvatar($newavatar);
+        throw new \Exception('Avatar modifié !');
+    }
+
+    
 
 }
