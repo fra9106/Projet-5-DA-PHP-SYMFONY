@@ -10,7 +10,7 @@ class MembersManager extends Manager{
     
     {
         $db = $this->dbConnect();
-        $insertmbr = $db->prepare("INSERT INTO users(pseudo, mail, pass, droits, avatar, creation_date) VALUES(?, ?, ?, 0, ?, NOW())");
+        $insertmbr = $db->prepare("INSERT INTO users(pseudo, mail, pass, droits, avatar, create_date) VALUES(?, ?, ?, 0, ?, NOW())");
         $insertmbr->execute(array(
             $pseudo,
             $mail,
@@ -52,6 +52,21 @@ class MembersManager extends Manager{
         $req->execute(array($idUser));
         
        	return $req;
+    }
+
+    /**
+     * display Profil page
+     * @return void
+     */
+    public function reqprofil(){
+        $db = $this->dbConnect();
+        $infos = $db->prepare('SELECT id, pseudo, mail, avatar, DATE_FORMAT(create_date, \'%d/%m/%Y à %Hh%imin%ss\') AS create_date_fr FROM users WHERE id = ?');
+        $infos->execute(array($_SESSION['id']));
+        $user = $infos->fetch();
+        //var_dump($user); die;
+        return $user;
+
+
     }
 
 

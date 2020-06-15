@@ -205,6 +205,15 @@ class Router
                         }
                     }
                 }
+
+                /**
+                 * user profil 
+                 */
+
+                 if ($_GET['action'] == 'diplayprofil'){
+                     $profilPage = new ControllerUser();
+                     $page = $profilPage->displayprofil();
+                 }
                 
             }
             else{

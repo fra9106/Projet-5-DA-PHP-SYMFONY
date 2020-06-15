@@ -16,16 +16,17 @@
                 <div class=" card mb-4">
                     <div class="card-body">
                         <h2>Profil</h2>
-                        <p>Bonjour{{session.pseudo}}</p>
-                        <img class="improfil" width="100" src="../publics/img/users/avatar/{{user.avatar}}"/>
-                        <strong>Pseudo : </strong><br><br>
+                        <p>Bonjour {{session.pseudo}}</p>
+                        <img class="improfil" width="100" src="../publics/img/users/avatar/{{user.avatar}}"/><br>
+                        <strong>Pseudo : </strong><br>
                         <p class="card-text">{{user.pseudo}}</p>
-                        <strong>Mail : </strong><br><br>
+                        <strong>Mail : </strong><br>
                         <p class="card-text">{{user.mail}}</p>
-                        <strong>Inscrit depuis le : </strong><br><br>
+                        <strong>Inscrit depuis le : </strong><br>
                         <p class="card-text">{{user.create_date_fr}}</p>
                     </div>
                 </div>
         </div>
     </div>
 </div>
+{% endblock %}
