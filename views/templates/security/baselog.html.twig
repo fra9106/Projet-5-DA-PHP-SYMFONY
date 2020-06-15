@@ -42,7 +42,11 @@
                 </li>
                 {% endif %}
                </ul>
-              <img class=" reveal-dev pic " width="50" src="../publics/img/franck.jpg" alt="photo FranckB">
+               {% if session.pseudo %}
+               <img class=" reveal-dev pic " width="50" src="../publics/img/users/avatar/{{session.avatar}}" alt="photo utilisateur">
+               {% else %}
+               <img class=" reveal-dev pic " width="50" src="../publics/img/franck.jpg" alt="photo franck">
+               {% endif %}
             </div>
           </nav>
           {% block body %}{% endblock %}

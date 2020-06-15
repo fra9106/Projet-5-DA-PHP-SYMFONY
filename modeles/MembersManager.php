@@ -15,7 +15,7 @@ class MembersManager extends Manager{
             $pseudo,
             $mail,
             $mdp,
-            'franck.jpg'
+            'default.jpg'
         ));
         return $insertmbr;
 
