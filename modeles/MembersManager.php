@@ -104,6 +104,57 @@ class MembersManager extends Manager{
         return $upavatar;
     }
 
+    /**
+     * update pseudo
+     *
+     * @param [type] $newpseudo
+     * @return void
+     */
+    public function infoPseudo($newpseudo)
+    {
+        $db = $this->dbConnect();
+        $insertpseudo = $db->prepare("UPDATE users SET pseudo = ? WHERE id = ?");
+        $insertpseudo->execute(array(
+            $newpseudo,
+            $_SESSION['id']
+        ));
+        return $insertpseudo;
+    }
+
+    /**
+     * update mail
+     *
+     * @param [type] $newmail
+     * @return void
+     */
+    public function infoMail($newmail)
+    {
+        $db = $this->dbConnect();
+        $insertmail = $db->prepare("UPDATE users SET mail = ? WHERE id = ?");
+        $insertmail->execute(array(
+            $newmail,
+            $_SESSION['id']
+        ));
+        return $insertmail;
+    }
+
+    /**
+     * update password
+     *
+     * @param [type] $newmdp
+     * @return void
+     */
+    public function infopwd($newpwd) 
+    {
+        $db = $this->dbConnect();
+        $insertpwd = $db->prepare("UPDATE users SET pass = ? WHERE id = ?");
+        $insertpwd->execute(array(
+            $newpwd,
+            $_SESSION['id']
+        ));
+        return $insertpwd;
+    }
+
 
 
 

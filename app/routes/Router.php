@@ -228,10 +228,8 @@ class Router
                  /**
                   * upload avatar file
                   */
-                  if ($_GET['action'] == 'getAvatar')
-                  {
-                      if (isset($_FILES['avatar']) and !empty($_FILES['avatar']['name']))
-                      {
+                  if ($_GET['action'] == 'getAvatar'){
+                      if (isset($_FILES['avatar']) and !empty($_FILES['avatar']['name'])){
                           $tailleMax = 2097152;
                           $extensionsValides = array(
                               'jpg',
@@ -239,36 +237,66 @@ class Router
                               'gif',
                               'png'
                           );
-                          if ($_FILES['avatar']['size'] <= $tailleMax)
-                          {
+                          if ($_FILES['avatar']['size'] <= $tailleMax){
                               $extensionUpload = strtolower(substr(strrchr($_FILES['avatar']['name'], '.') , 1));
-                              if (in_array($extensionUpload, $extensionsValides))
-                              {
+                              if (in_array($extensionUpload, $extensionsValides)){
                                   $chemin = "../publics/img/users/avatar/" . $_SESSION['id'] . "." . $extensionUpload;
                                   $resultat = move_uploaded_file($_FILES['avatar']['tmp_name'], $chemin);
-                                  if ($resultat)
-                                  {
+                                  if ($resultat){
                                       $newavatar = $_SESSION['id'] . "." . $extensionUpload;
                                       $controlleruser = new ControllerUser();
                                       $userAvatar = $controlleruser->getAvatar($newavatar);
-          
-                                  }
-                                  else
-                                  {
+                                    }else{
                                       throw new Exception('Erreur durant l\'importation de votre photo de profil');
-                                  }
-                              }
-                              else
-                              {
+                                    }
+                                }else{
                                   throw new Exception('Votre photo de profil doit être au format jpg, jpeg, gif ou png');
-                              }
-                          }
-                          else
-                          {
+                                }
+                            }else{
                               throw new Exception('Votre photo de profil ne doit pas dépasser 2Mo');
-                          }
-                      }
-                  }
+                            }
+                        }
+                    }
+
+                    /**
+                     * update pseudo
+                     */
+                    if ($_GET['action'] == 'updateUserPseudo')
+                    {
+                        if (isset($_POST['newpseudo']) and !empty($_POST['newpseudo']))
+                        {
+                            $newpseudo = htmlspecialchars($_POST['newpseudo']);
+                            $controlleruser = new ControllerUser();
+                            $userpseudo = $controlleruser->updateUserPseudo($newpseudo);
+                        }
+                    }
+
+                    /**
+                     * update mail
+                     */
+                    if ($_GET['action'] == 'updateUserMail')
+                    {
+                        if (isset($_POST['newmail']) and !empty($_POST['newmail']))
+                        {
+                            $newmail = htmlspecialchars($_POST['newmail']);
+                            $controlleruser = new ControllerUser();
+                            $usermail = $controlleruser->updateUserMail($newmail);
+                        }
+                    }
+
+                    /**
+                     * update password
+                     */
+                    if ($_GET['action'] == 'updateUserpwd')
+                    {
+                        if (isset($_POST['newpwd']) and !empty($_POST['newpwd']))
+                        {
+                            $newpwd = password_hash($_POST['newpwd'], PASSWORD_DEFAULT);
+                            $controlleruser = new ControllerUser();
+                            $userpwd = $controlleruser->updateUserpwd($newpwd);
+                        }
+                    }
+
 
                 
             }

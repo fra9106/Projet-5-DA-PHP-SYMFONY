@@ -108,6 +108,53 @@ class ControllerUser {
         throw new \Exception('Avatar modifié !');
     }
 
+    /**
+     *update pseudo
+     *
+     * @param [type] $newpseudo
+     * @return void
+     */
+    public function updateUserPseudo($newpseudo) 
+    {
+        $infosmembre = new MembersManager();
+        $pseudoinfos = $infosmembre->infoPseudo($newpseudo);
+        header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
+    }
+
+    /**
+     * update mail
+     *
+     * @param [type] $newmail
+     * @return void
+     */
+    public function updateUserMail($newmail)
+    {
+        $test = new MembersManager();
+        $testOk = $test->testMail($newmail);
+        if ($testOk == 0)
+        { 
+            $infosmembre = new MembersManager();
+            $mailinfos = $infosmembre->infoMail($newmail);
+            header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
+        }
+    }
+
+    /**
+     * update password
+     *
+     * @param [type] $newmdp
+     * @return void
+     */
+    public function updateUserpwd($newpwd) // update le motdepasse
+    {
+        $infosmembre = new MembersManager();
+        $pwdinfos = $infosmembre->infopwd($newpwd);
+        header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
+    }
+
+
+
+
     
 
 }
