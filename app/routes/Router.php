@@ -98,6 +98,7 @@ class Router
                         $list = $listarticles->listArticle();
                         //var_dump($articles); die;
                     }
+
                     /**
                      * get article by id
                      */
@@ -136,6 +137,7 @@ class Router
                         $listarticles = new ControllerArticles();
                         $list = $listarticles->listArticlesAdmin();
                 }
+
 
                 if ($_GET['action'] == 'listUsersAdmin'){
                     $listUsers = new ControllerUser();
@@ -176,6 +178,18 @@ class Router
                     if ((isset($_GET['id'])) && (!empty($_GET['id']))){
                     $controlleradmin = new ControllerArticles();
                     $delete = $controlleradmin->deleteArticle($_GET['id']);
+                    }
+                }
+
+                /**
+                 * confirm delete article
+                 */
+                if ($_GET['action'] == "confirmdeletearticle"){
+                    if (isset($_GET['id']) && $_GET['id'] > 0){
+                        $confdelete = new ControllerArticles();
+                        $display = $confdelete->confirmdeletearticle();
+                    }else{
+                        throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
                     }
                 }
                 
@@ -255,6 +269,8 @@ class Router
                             }else{
                               throw new Exception('Votre photo de profil ne doit pas dépasser 2Mo');
                             }
+                        }else{
+                            throw new Exception('Merci de remplir le champ');
                         }
                     }
 

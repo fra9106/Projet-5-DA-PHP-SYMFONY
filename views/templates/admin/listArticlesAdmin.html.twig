@@ -6,7 +6,7 @@
 <div class="articlewrite">
     
     <br/>
-    <h3><a href="index.php?action=homePage">Accueil</a></h3>
+    <h3><a href="index.php?action=writeArticleDisplay">Accueil admin</a></h3>
     <h3><a href="index.php?action=listArticlesAdmin">Articles</a></h3>
     <h3><a href="index.php?action=listUsersAdmin">Commentaires à valider</a></h3>
     
@@ -29,8 +29,8 @@
                         <p class="card-text">{{article.mini_content }}</p>
                         <p class="card-text">{{article.content|striptags|raw }}</p>
                         <div class="btn-group">
-                            <a href="index.php?action=editArticleAdmin&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-secondary">Modifier</button></a>
-                            <a href="index.php?action=deleteArticle&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-secondary">Supprimer</button></a>
+                            <a href="index.php?action=editArticleAdmin&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-danger">Modifier</button></a>&nbsp;&nbsp;
+                            <a href="index.php?action=confirmdeletearticle&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-success">Supprimer</button></a>
                          </div><br>
                         <small class="text-muted"><em>De la part de : {{article.pseudo}}</em></small><br>
                         <small class="text-muted"><em>Créé le : {{article.creation_date_fr}}</em></small><br>

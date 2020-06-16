@@ -42,7 +42,7 @@ class ControllerUser {
         echo $twig->render('listUsers.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
     }
 
-    public function deleteUser($idUser) // supprimme l'user
+    public function deleteUser($idUser) 
     
     {
         $deleteuser = new MembersManager();
