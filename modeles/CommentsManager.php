@@ -11,10 +11,10 @@ class CommentsManager extends Manager{
     public function getComments($idArticle)//méthode de récupération des commentaire avec une jointure dans la requete pour récupérer le pseudo de l'user
 	{
 		$db = $this->dbConnect();
-		$comments = $db->prepare('SELECT comments.id, comments.id_article, users.pseudo, comments.content, comments.valid, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM comments INNER JOIN users ON comments.id_user = users.id WHERE id_article  = ? ORDER BY comment_date DESC');
-		$comments->execute(array($idArticle));
+		$comments = $db->prepare('SELECT comments.id, comments.id_article, users.pseudo, comments.content, comments.valid, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM comments INNER JOIN users ON comments.id_user = users.id WHERE id_article  = :id_article ORDER BY comment_date DESC');
+		$comments->execute(array('id_article' => $idArticle));
 		//$comment = $comments->fetch();
-		//var_dump($comment); die;
+		//var_dump($comments); die;
 		return $comments;
     }
     
@@ -26,6 +26,18 @@ class CommentsManager extends Manager{
 
 		return $affectedLines;
 	}
+
+	public function getCommentsAdmin()//méthode de récupération des commentaire avec une jointure dans la requete pour récupérer le pseudo de l'user
+	{
+		$db = $this->dbConnect();
+		$comments = $db->prepare('SELECT comments.id, users.pseudo, comments.content, comments.valid, DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM comments INNER JOIN users ON comments.id_user = users.id  ORDER BY comment_date DESC');
+		$comments->execute(array());
+		//$comment = $comments->fetch();
+		//var_dump($comments); die;
+		return $comments;
+    }
+
+
 
 }
 

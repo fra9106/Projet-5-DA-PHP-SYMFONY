@@ -44,12 +44,13 @@ class ControllerArticles{
         $article = $articlesManager->Article($_GET['id']);
         
         $comments = $commentsManager->getComments($_GET['id']);
-        
-        //$twig->addGlobal('session', $_SESSION); 
+    
+        $twig->addGlobal('session', $_SESSION); 
         // $valid = 'valid';  
         //, ['valid' => $valid == 1]
-        //echo $twig->render('article.html.twig',['article' => $article], ['comments' => $comments],  ['droits' => $_SESSION == 1]);
-       
+        //var_dump($comment); die;
+        //echo $twig->render('article.html.twig',['article' => $article], ['comment' => $comment],  ['droits' => $_SESSION == 1]);
+    
         
         require ('../views/templates/debug.php');
     }
@@ -89,6 +90,22 @@ class ControllerArticles{
         $twig->addGlobal('session', $_SESSION);
         echo $twig->render('listArticlesAdmin.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1] );
     }
+
+    public function listCommentsAdmin()
+    {
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+		$twig = new \Twig\Environment($loader, ['debug' => true]);	
+        $twig->addExtension(new \Twig\Extension\DebugExtension());
+        $commentsManager = new CommentsManager();
+        $comments = $commentsManager->getCommentsAdmin();
+        $twig->addGlobal('session', $_SESSION);
+        echo $twig->render('listCommentsAdmin.html.twig',['comments' => $comments], ['droits' => $_SESSION == 1] );
+    }
+
+
 
     public function confirmdeletearticle ()
     {
