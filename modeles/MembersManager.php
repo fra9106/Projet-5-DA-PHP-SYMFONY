@@ -85,6 +85,22 @@ class MembersManager extends Manager{
         return $allinfos;
     }
 
+    /**
+     * confirm delete user
+     *
+     * @return void
+     */
+    public function infosUser()
+    {
+        $db = $this->dbConnect();
+        $requser = $db->prepare("SELECT * FROM users WHERE id = ?");
+        $requser->execute(array(
+            $_GET['id']
+        ));
+        $allinfos = $requser->fetch();
+        return $allinfos;
+    }
+
 
     /**
      * upload new profil picture

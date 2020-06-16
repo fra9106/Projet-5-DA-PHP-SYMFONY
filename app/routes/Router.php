@@ -156,6 +156,18 @@ class Router
                              }
                 }
 
+                /**
+                 * confirm delete user
+                 */
+                if ($_GET['action'] == "confirmdeleteuser"){
+                    if (isset($_GET['id']) && $_GET['id'] > 0){
+                        $confdelete = new ControllerUser();
+                        $display = $confdelete->confirmdeleteuser();
+                    }else{
+                        throw new Exception('Oups... Aucun identifiant membre envoyé !');
+                    }
+                }
+
                 if ($_GET['action'] == 'editArticleAdmin'){
                     if (isset($_GET['id']) && $_GET['id'] > 0){
                         $controllerArticles = new ControllerArticles();
