@@ -4,7 +4,12 @@ require '../vendor/autoload.php';
 
 class Manager
 {
-   protected function dbConnect()
+    /**
+     * connect to database
+     *
+     * @return db
+     */
+    protected function dbConnect()
     
     {
         $db = new \PDO('mysql:host=localhost;dbname=projet5_da_php;charset=utf8', 'root', '');

@@ -6,11 +6,13 @@ require '../vendor/autoload.php';
 
 use Mod\{ArticlesManager, CommentsManager};
 
-
-
-
 class ControllerArticles{
 
+    /**
+     * listing articles
+     *
+     * @return void
+     */
     public function listArticle() {
 
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
@@ -29,6 +31,11 @@ class ControllerArticles{
         //var_dump($articles); die;
     }
 
+    /**
+     * getting article and his comments
+     *
+     * @return void
+     */
     public function getArticle(){
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
         $twig = new \Twig\Environment($loader, [
@@ -57,6 +64,14 @@ class ControllerArticles{
         
     }
 
+    /**
+     * add comment
+     *
+     * @param [type] $idArticle
+     * @param [type] $idUser
+     * @param [type] $content
+     * @return void
+     */
     public function addComment($idArticle, $idUser, $content)
     
     {
@@ -76,7 +91,13 @@ class ControllerArticles{
         }
     }
 
-    public function validComment($commentId) // signale un article
+    /**
+     *valid comment admin
+     *
+     * @param [type] $commentId
+     * @return void
+     */
+    public function validComment($commentId) 
     
     {
         $commentManager = new CommentsManager();
@@ -90,6 +111,12 @@ class ControllerArticles{
         }
 
     }
+
+    /**
+     * list articles admin
+     *
+     * @return void
+     */
     public function listArticlesAdmin() 
     {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
@@ -104,6 +131,11 @@ class ControllerArticles{
         echo $twig->render('listArticlesAdmin.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1] );
     }
 
+    /**
+     * list comments admin
+     *
+     * @return void
+     */
     public function listCommentsAdmin()
     {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
@@ -118,8 +150,11 @@ class ControllerArticles{
         echo $twig->render('listCommentsAdmin.html.twig',['comments' => $comments], ['droits' => $_SESSION == 1] );
     }
 
-
-
+    /**
+     * confirm page delete article admin
+     *
+     * @return void
+     */
     public function confirmdeletearticle ()
     {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
@@ -133,10 +168,13 @@ class ControllerArticles{
      
     
         echo $twig->render('confirmdeletearticle.html.twig',['article' => $article], ['droits' => $_SESSION == 1]);
-
-
     }
 
+    /**
+     * edit article admin
+     *
+     * @return void
+     */
     public function editArticleAdmin(){
         $articleManager = new ArticlesManager();
         $articles = $articleManager->getArticleAdmin($_GET['id']);
@@ -150,8 +188,16 @@ class ControllerArticles{
         echo $twig->render("articleUpdating.html.twig", ['articles' => $articles], ['droits' => $_SESSION == 1]);	 
     }
 
-    public function updateArticleAdmin($miniContent, $title, $content, $postId) // modifie article
-    
+    /**
+     * update article admin
+     *
+     * @param [type] $miniContent
+     * @param [type] $title
+     * @param [type] $content
+     * @param [type] $postId
+     * @return void
+     */
+    public function updateArticleAdmin($miniContent, $title, $content, $postId) 
     {
         $update = new ArticlesManager();
         $updatearticle = $update->updateArticle($miniContent, $title, $content, $postId);
@@ -159,6 +205,12 @@ class ControllerArticles{
         header('Location: index.php?action=listArticlesAdmin');
     }
 
+    /**
+     * delete article
+     *
+     * @param [type] $dataId
+     * @return void
+     */
     public function deleteArticle($dataId)
     {
         $supprime = new ArticlesManager();
@@ -174,31 +226,46 @@ class ControllerArticles{
         }
     }
 
-        public function formArticle(){
-            
+    /**
+     * display form to write article
+     *
+     * @return void
+     */
+    public function formArticle()
+    {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
         $twig = new \Twig\Environment($loader, [
             'cache' => false
         ]);
-		$twig = new \Twig\Environment($loader, ['debug' => true]);	
+        $twig = new \Twig\Environment($loader, ['debug' => true]);	
         $twig->addExtension(new \Twig\Extension\DebugExtension());
         $twig->addGlobal('session', $_SESSION);
         echo $twig->render("articleWriting.html.twig",['droits' => $_SESSION == 1] );	 
-        
+            
     }  
     
+    /**
+     * send written article 
+     *
+     * @param [type] $idCategory
+     * @param [type] $idUser
+     * @param [type] $miniContent
+     * @param [type] $title
+     * @param [type] $content
+     * @return void
+     */
     public function articleWriting($idCategory, $idUser, $miniContent, $title, $content){
-    $articleEdit = new ArticlesManager(); 
-    $createarticle = $articleEdit->postArticle($idCategory, $idUser, $miniContent, $title, $content);
-    
-    if ($createarticle === false)
-    {
-        throw new \Exception('Impossible d \'ajouter un article...');
-
-    }else
+        $articleEdit = new ArticlesManager(); 
+        $createarticle = $articleEdit->postArticle($idCategory, $idUser, $miniContent, $title, $content);
+        
+        if ($createarticle === false)
         {
-            header('Location:index.php?action=homePage');
+            throw new \Exception('Impossible d \'ajouter un article...');
+
+        }else
+            {
+                header('Location:index.php?action=homePage');
+            }
         }
-    }
 
 }
