@@ -83,7 +83,7 @@ class ArticlesManager extends Manager{
     public function supprArticle($dataId)
 	{ 
         $db = $this->dbConnect();
-        $comment = $db->prepare('DELETE FROM avis WHERE id_article = ?');
+        $comment = $db->prepare('DELETE FROM comments WHERE id_article = ?');
         $comment->execute([$dataId]);
         $req = $db->prepare('DELETE FROM articles WHERE id = ?');
         $req->execute(array($dataId));

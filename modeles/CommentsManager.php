@@ -54,6 +54,21 @@ class CommentsManager extends Manager{
 		
 		return $comments;
 	}
+
+	/**
+	 * get comment 
+	 *
+	 * @return void
+	 */
+	public function getComment($idComment)
+	{
+		$db = $this->dbConnect();
+		$req = $db->prepare('SELECT * FROM comments WHERE id = ?');
+		$req->execute(array($idComment));
+		$comment = $req->fetch();
+		return $comment;
+	}
+
 	
 	/**
 	 * comments validation
@@ -69,6 +84,21 @@ class CommentsManager extends Manager{
 
 		return $req;
 	}
+
+	/**
+     * delete comment
+     *
+     * @param [type] $dataId
+     * @return void
+     */
+    public function supprComment($dataId)
+	{ 
+        $db = $this->dbConnect();
+        $comment = $db->prepare('DELETE FROM comments WHERE id = ?');
+        $comment->execute([$dataId]);
+        
+        return $comment;
+    }
 
 
 

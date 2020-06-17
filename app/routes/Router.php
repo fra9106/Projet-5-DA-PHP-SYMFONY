@@ -192,8 +192,6 @@ class Router
                     $list = $listUsers->listCommentsAdmin();
                 }
 
-
-
                 /**
                  * delete user
                  */
@@ -248,8 +246,8 @@ class Router
                  */
                 if ($_GET['action'] == 'deleteArticle'){
                     if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                    $controlleradmin = new ControllerArticles();
-                    $delete = $controlleradmin->deleteArticle($_GET['id']);
+                    $controllerarticle = new ControllerArticles();
+                    $delete = $controllerarticle->deleteArticle($_GET['id']);
                     }
                 }
 
@@ -260,6 +258,29 @@ class Router
                     if (isset($_GET['id']) && $_GET['id'] > 0){
                         $confdelete = new ControllerArticles();
                         $display = $confdelete->confirmdeletearticle();
+                    }else{
+                        throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
+                    }
+                }
+
+                 /**
+                 * delete comment
+                 */
+                if ($_GET['action'] == 'deleteComment'){
+                    if ((isset($_GET['id'])) && (!empty($_GET['id']))){
+                    $controllerarticle = new ControllerArticles();
+                    $delete = $controllerarticle->deleteComment($_GET['id']);
+                    }
+                }
+
+
+                /**
+                 * confirm delete comment
+                 */
+                if ($_GET['action'] == "confirmdeletecomment"){
+                    if (isset($_GET['id']) && $_GET['id'] > 0){
+                        $confdelete = new ControllerArticles();
+                        $display = $confdelete->confirmdeletecomment();
                     }else{
                         throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
                     }

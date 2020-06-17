@@ -171,6 +171,26 @@ class ControllerArticles{
     }
 
     /**
+     * confirm page delete comment admin
+     *
+     * @return void
+     */
+    public function confirmdeletecomment ()
+    {
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+        $commentManager = new CommentsManager();
+        $comment = $commentManager->getComment($_GET['id']);
+
+        $twig->addGlobal('session', $_SESSION); 
+     
+    
+        echo $twig->render('confirmdeletecomment.html.twig',['comment' => $comment], ['droits' => $_SESSION == 1]);
+    }
+
+    /**
      * edit article admin
      *
      * @return void
@@ -227,6 +247,28 @@ class ControllerArticles{
     }
 
     /**
+     * delete comment
+     *
+     * @param [type] $dataId
+     * @return void
+     */
+    public function deleteComment($dataId)
+    {
+        $supprime = new CommentsManager();
+        $deletedarticle = $supprime->supprComment($dataId);
+
+        if ($deletedarticle === false)
+        {
+            throw new \Exception('Impossible de supprimer ce commentaire!');
+        }
+        else
+        {
+            header('Location: index.php?action=listCommentsAdmin');
+        }
+    }
+
+
+    /**
      * display form to write article
      *
      * @return void
@@ -264,7 +306,7 @@ class ControllerArticles{
 
         }else
             {
-                header('Location:index.php?action=homePage');
+                header('Location:index.php?action=listArticlesAdmin');
             }
         }
 
