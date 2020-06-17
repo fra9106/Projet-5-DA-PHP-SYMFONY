@@ -49,8 +49,8 @@ class ArticlesManager extends Manager{
     public function supprArticle($dataId) //supprime un article et ses commentaires (admin)
 	{ 
         $db = $this->dbConnect();
-        /*$comment = $db->prepare('DELETE FROM avis WHERE id_article = ?');
-        $comment->execute([$dataId]);*/
+        $comment = $db->prepare('DELETE FROM avis WHERE id_article = ?');
+        $comment->execute([$dataId]);
         $req = $db->prepare('DELETE FROM articles WHERE id = ?');
         $req->execute(array($dataId));
        	return $req;

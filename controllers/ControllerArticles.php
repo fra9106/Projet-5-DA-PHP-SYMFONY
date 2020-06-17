@@ -39,20 +39,22 @@ class ControllerArticles{
         $twig->addExtension(new \Twig\Extension\DebugExtension());
 
         $articlesManager = new ArticlesManager();
-        $commentsManager = new CommentsManager();
-
         $article = $articlesManager->Article($_GET['id']);
+
+     
         
+        $commentsManager = new CommentsManager();
         $comments = $commentsManager->getComments($_GET['id']);
-    
+        
         $twig->addGlobal('session', $_SESSION); 
-        // $valid = 'valid';  
-        //, ['valid' => $valid == 1]
+       
+        
         //var_dump($comment); die;
-        //echo $twig->render('article.html.twig',['article' => $article], ['comment' => $comment],  ['droits' => $_SESSION == 1]);
-    
+        //echo $twig->render('article.html.twig',['article' => $article], ['comments' => $comments],  ['droits' => $_SESSION == 1]);
+        
         
         require ('../views/templates/debug.php');
+        
     }
 
     public function addComment($idArticle, $idUser, $content)
@@ -74,9 +76,20 @@ class ControllerArticles{
         }
     }
 
+    public function validComment($commentId) // signale un article
+    
+    {
+        $commentManager = new CommentsManager();
+        $signal = $commentManager->validation($commentId);
 
+        if ($signal === false)
+        {
+            throw new \Exception('Oups... Impossible de signaler ce commentaire !');
+        }else{
+            header('Location: index.php?action=listCommentsAdmin');
+        }
 
-
+    }
     public function listArticlesAdmin() 
     {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
@@ -161,9 +174,7 @@ class ControllerArticles{
         }
     }
 
-
-
-    public function formArticle(){
+        public function formArticle(){
             
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
         $twig = new \Twig\Environment($loader, [

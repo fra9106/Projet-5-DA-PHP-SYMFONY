@@ -107,7 +107,7 @@ class Router
                         {
                             $article = new ControllerArticles();
                             $display = $article->getArticle();
-                            
+                           
                         }
                         else
                         {
@@ -131,7 +131,22 @@ class Router
                             }
                     }
 
-                
+                /**
+                 * valid comment
+                 */
+                if ($_GET['action'] == 'validComment'){
+                    if ((isset($_GET['id'])) && (!empty($_GET['id'])))
+                    {
+                        $controlleruser = new ControllerArticles();
+                        $signale = $controlleruser->validComment($_GET['id']);
+
+                    }
+                    else
+                    {
+                        throw new Exception('Oups....erreur de validation !');
+                    }
+                }
+                        
                 /**
                  * display list articles admin
                  */
