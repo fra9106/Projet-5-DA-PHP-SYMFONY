@@ -6,7 +6,14 @@ require '../vendor/autoload.php';
 
 use Mod\{ConnectManager};
 
+
 class ConnectController {
+
+    public function __construct()
+    {
+        $this->loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
+        $this->twig = new \Twig\Environment($this->loader);
+    }
 
     /**
      * display contact form
@@ -15,10 +22,7 @@ class ConnectController {
      */
     public function displFormulContact()
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
-		$twig = new \Twig\Environment($loader);	
-        $twig->addGlobal('session', $_SESSION);   
-		echo $twig->render("sign_in.html.twig", ['droits' => $_SESSION == 1]);	
+        echo $this->twig->render("sign_in.html.twig");	
     }
 
     /**
@@ -28,10 +32,7 @@ class ConnectController {
      */
     public function displConnexion()
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
-		$twig = new \Twig\Environment($loader);	
-        $twig->addGlobal('session', $_SESSION);   
-		echo $twig->render("log_in.html.twig", ['droits' => $_SESSION == 1]);	
+        echo $this->twig->render("log_in.html.twig");	
     }
 
     /**

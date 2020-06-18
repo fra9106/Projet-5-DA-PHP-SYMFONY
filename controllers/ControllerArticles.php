@@ -8,6 +8,18 @@ use Mod\{ArticlesManager, CommentsManager};
 
 class ControllerArticles{
 
+    
+
+    public function __construct()
+    {
+        $this->loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
+        $this->twig = new \Twig\Environment($this->loader);
+        $this->loadAdmin = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
+        $this->adminTwig = new \Twig\Environment($this->loadAdmin);
+        $this->loaderSecurit = new \Twig\Loader\FilesystemLoader('../views/templates/security');
+        $this->twigySecur = new \Twig\Environment($this->loaderSecurit);
+    }
+
     /**
      * listing articles
      *
@@ -15,17 +27,11 @@ class ControllerArticles{
      */
     public function listArticle() 
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
-		$twig = new \Twig\Environment($loader, ['debug' => true]);	
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
         $articlesManager = new ArticlesManager();
         $articles = $articlesManager->getArticles();
        
-        $twig->addGlobal('session', $_SESSION);   
-        echo $twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
+        $this->twig->addGlobal('session', $_SESSION);   
+        echo $this->twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
     }
 
     /**
@@ -35,12 +41,7 @@ class ControllerArticles{
      */
     public function getArticle()
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
-        $twig = new \Twig\Environment($loader, ['debug' => true]);	
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
+        
 
         $articlesManager = new ArticlesManager();
         $article = $articlesManager->Article($_GET['id']);
@@ -48,8 +49,8 @@ class ControllerArticles{
         $commentsManager = new CommentsManager();
         $comments = $commentsManager->getComments($_GET['id']);
         
-        $twig->addGlobal('session', $_SESSION);
-        echo $twig->render('article.html.twig',['comments' => $comments,'article' => $article],  ['droits' => $_SESSION == 1]);
+        $this->twig->addGlobal('session', $_SESSION);
+        echo $this->twig->render('article.html.twig',['comments' => $comments,'article' => $article],  ['droits' => $_SESSION == 1]);
     }
 
     /**
@@ -99,17 +100,11 @@ class ControllerArticles{
      */
     public function listArticlesAdmin() 
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
-		$twig = new \Twig\Environment($loader, ['debug' => true]);	
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
         $articlesManager = new ArticlesManager();
         $articles = $articlesManager->getArticles();
 
-        $twig->addGlobal('session', $_SESSION);
-        echo $twig->render('listArticlesAdmin.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1] );
+        $this->adminTwig->addGlobal('session', $_SESSION);
+        echo $this->adminTwig->render('listArticlesAdmin.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1] );
     }
 
     /**
@@ -119,17 +114,11 @@ class ControllerArticles{
      */
     public function listCommentsAdmin()
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
-		$twig = new \Twig\Environment($loader, ['debug' => true]);	
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
         $commentsManager = new CommentsManager();
         $comments = $commentsManager->getCommentsAdmin();
 
-        $twig->addGlobal('session', $_SESSION);
-        echo $twig->render('listCommentsAdmin.html.twig',['comments' => $comments], ['droits' => $_SESSION == 1] );
+        $this->adminTwig->addGlobal('session', $_SESSION);
+        echo $this->adminTwig->render('listCommentsAdmin.html.twig',['comments' => $comments], ['droits' => $_SESSION == 1] );
     }
 
     /**
@@ -139,15 +128,11 @@ class ControllerArticles{
      */
     public function confirmdeletearticle ()
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
         $articlesManager = new ArticlesManager();
         $article = $articlesManager->Article($_GET['id']);
 
-        $twig->addGlobal('session', $_SESSION);
-        echo $twig->render('confirmdeletearticle.html.twig',['article' => $article], ['droits' => $_SESSION == 1]);
+        $this->twigySecur->addGlobal('session', $_SESSION);
+        echo $this->twigySecur->render('confirmdeletearticle.html.twig',['article' => $article], ['droits' => $_SESSION == 1]);
     }
 
     /**
@@ -157,15 +142,11 @@ class ControllerArticles{
      */
     public function confirmdeletecomment ()
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
         $commentManager = new CommentsManager();
         $comment = $commentManager->getComment($_GET['id']);
 
-        $twig->addGlobal('session', $_SESSION);
-        echo $twig->render('confirmdeletecomment.html.twig',['comment' => $comment], ['droits' => $_SESSION == 1]);
+        $this->twigySecur->addGlobal('session', $_SESSION);
+        echo $this->twigySecur->render('confirmdeletecomment.html.twig',['comment' => $comment], ['droits' => $_SESSION == 1]);
     }
 
     /**
@@ -177,15 +158,9 @@ class ControllerArticles{
     {
         $articleManager = new ArticlesManager();
         $articles = $articleManager->getArticleAdmin($_GET['id']);
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
-		$twig = new \Twig\Environment($loader, ['debug' => true]);	
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
-
-        $twig->addGlobal('session', $_SESSION);
-        echo $twig->render("articleUpdating.html.twig", ['articles' => $articles], ['droits' => $_SESSION == 1]);	 
+       
+        $this->adminTwig->addGlobal('session', $_SESSION);
+        echo $this->adminTwig->render("articleUpdating.html.twig", ['articles' => $articles], ['droits' => $_SESSION == 1]);	 
     }
 
     /**
@@ -213,8 +188,8 @@ class ControllerArticles{
      */
     public function deleteArticle($dataId)
     {
-        $supprime = new ArticlesManager();
-        $deletedarticle = $supprime->supprArticle($dataId);
+        $delete = new ArticlesManager();
+        $deletedarticle = $delete->supprArticle($dataId);
 
         if ($deletedarticle === false){
             throw new \Exception('Impossible de supprimer cet article!');
@@ -231,8 +206,8 @@ class ControllerArticles{
      */
     public function deleteComment($dataId)
     {
-        $supprime = new CommentsManager();
-        $deletedarticle = $supprime->supprComment($dataId);
+        $delete = new CommentsManager();
+        $deletedarticle = $delete->supprComment($dataId);
 
         if ($deletedarticle === false){
             throw new \Exception('Impossible de supprimer ce commentaire!');
@@ -249,15 +224,8 @@ class ControllerArticles{
      */
     public function formArticle()
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
-        $twig = new \Twig\Environment($loader, ['debug' => true]);	
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
-
-        $twig->addGlobal('session', $_SESSION);
-        echo $twig->render("articleWriting.html.twig",['droits' => $_SESSION == 1] );	 
+        $this->adminTwig->addGlobal('session', $_SESSION);
+        echo $this->adminTwig->render("articleWriting.html.twig",['droits' => $_SESSION == 1] );	 
             
     }  
     
