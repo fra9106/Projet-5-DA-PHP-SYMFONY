@@ -1,5 +1,7 @@
 <?php
+
 namespace Mod;
+
 require '../vendor/autoload.php';
 
 use Mod\Manager;
@@ -73,8 +75,7 @@ class MembersManager extends Manager{
         $comment->execute([$idUser]);
         $req = $db->prepare('DELETE FROM users WHERE id = ?');
         $req->execute(array($idUser));
-        
-       	return $req;
+        return $req;
     }
 
     /**
@@ -88,7 +89,6 @@ class MembersManager extends Manager{
         $infos = $db->prepare('SELECT id, pseudo, mail, avatar, DATE_FORMAT(create_date, \'%d/%m/%Y à %Hh%imin%ss\') AS create_date_fr FROM users WHERE id = ?');
         $infos->execute(array($_SESSION['id']));
         $user = $infos->fetch();
-        //var_dump($user); die;
         return $user;
     }
 

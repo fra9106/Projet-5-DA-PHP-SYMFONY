@@ -1,11 +1,10 @@
 <?php
 
 namespace Mod;
+
 require '../vendor/autoload.php';
 
-
 use Mod\Manager;
-
 
 class ArticlesManager extends Manager{
 
@@ -21,8 +20,6 @@ class ArticlesManager extends Manager{
 		$articles = $db->prepare('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr, DATE_FORMAT(update_date, \'%d/%m/%Y à %Hh%imin%ss\') AS update_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id ORDER BY creation_date_fr DESC');
         $articles->execute(array());
         return $articles;
-        
-
     }
 
     /**
@@ -37,8 +34,7 @@ class ArticlesManager extends Manager{
 		$req = $db->prepare('SELECT articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr, DATE_FORMAT(update_date, \'%d/%m/%Y à %Hh%imin%ss\') AS update_date_fr  FROM articles INNER JOIN users ON articles.id_user = users.id  WHERE articles.id = ?');
 		$req->execute(array($idArticle));
         $article = $req->fetch();
-        
-		return $article;
+        return $article;
     }
 
     /**
@@ -49,12 +45,10 @@ class ArticlesManager extends Manager{
      */
     public function getArticleAdmin($dataId) 
 	{
-		
 		$db = $this->dbConnect();
     	$articles = $db->prepare('SELECT id, mini_content, title, content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr FROM articles WHERE id = ?');
-		$articles->execute(array($dataId));
-	
-    	return $articles;
+        $articles->execute(array($dataId));
+        return $articles;
     } 
     
     /**
@@ -105,9 +99,7 @@ class ArticlesManager extends Manager{
 		$db = $this->dbConnect();
 		$inserarticle = $db->prepare('INSERT INTO articles(id_category, id_user, mini_content, title, content, creation_date) VALUES (?, ?, ?, ?, ?, NOW())');
         $article = $inserarticle->execute(array($idCategory, $idUser, $miniContent, $title, $content));
-		
 		return $article;
-
-	}
+    }
 }
 

@@ -1,5 +1,6 @@
 <?php
 namespace Mod;
+
 require '../vendor/autoload.php';
 
 use Mod\Manager;
@@ -18,7 +19,6 @@ class ConnectManager extends Manager{
         $req = $db->prepare('SELECT * FROM users WHERE mail =  :mail');
         $req->execute(array(
             'mail' => $mail
-        
         ));
         $connect = $req->fetch();
         return $connect;
