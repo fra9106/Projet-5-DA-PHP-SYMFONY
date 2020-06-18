@@ -8,8 +8,9 @@ use Mod\{ArticlesManager, CommentsManager};
 
 class ControllerArticles{
 
-    
-
+    /**
+     * twig instanciations
+     */
     public function __construct()
     {
         $this->loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
@@ -18,6 +19,8 @@ class ControllerArticles{
         $this->adminTwig = new \Twig\Environment($this->loadAdmin);
         $this->loaderSecurit = new \Twig\Loader\FilesystemLoader('../views/templates/security');
         $this->twigySecur = new \Twig\Environment($this->loaderSecurit);
+        $this->articlesManager = new ArticlesManager();
+        $this->commentsManager = new CommentsManager();
     }
 
     /**
@@ -27,9 +30,7 @@ class ControllerArticles{
      */
     public function listArticle() 
     {
-        $articlesManager = new ArticlesManager();
-        $articles = $articlesManager->getArticles();
-       
+        $articles = $this->articlesManager->getArticles();
         $this->twig->addGlobal('session', $_SESSION);   
         echo $this->twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
     }
@@ -41,14 +42,8 @@ class ControllerArticles{
      */
     public function getArticle()
     {
-        
-
-        $articlesManager = new ArticlesManager();
-        $article = $articlesManager->Article($_GET['id']);
-        
-        $commentsManager = new CommentsManager();
-        $comments = $commentsManager->getComments($_GET['id']);
-        
+        $article = $this->articlesManager->Article($_GET['id']);
+        $comments = $this->commentsManager->getComments($_GET['id']);
         $this->twig->addGlobal('session', $_SESSION);
         echo $this->twig->render('article.html.twig',['comments' => $comments,'article' => $article],  ['droits' => $_SESSION == 1]);
     }
@@ -63,14 +58,13 @@ class ControllerArticles{
      */
     public function addComment($idArticle, $idUser, $content)
     {
-        $commentsManager = new CommentsManager();
+        
         $content = htmlspecialchars($content);
-        $affectedLines = $commentsManager->postComment($idArticle, $_SESSION['id'], $content);
+        $affectedLines = $this->commentsManager->postComment($idArticle, $_SESSION['id'], $content);
 
         if ($affectedLines === false){ 
             throw new \Exception('Oups... Impossible d\'ajouter ce commentaire !');
         }else{
-
             header('Location: index.php?action=getArticle&id=' . $idArticle);
             }
     }
@@ -83,9 +77,7 @@ class ControllerArticles{
      */
     public function validComment($commentId) 
     {
-        $commentManager = new CommentsManager();
-        $signal = $commentManager->validation($commentId);
-
+        $signal = $this->commentManager->validation($commentId);
         if ($signal === false){
             throw new \Exception('Oups... Impossible de signaler ce commentaire !');
         }else{
@@ -100,11 +92,9 @@ class ControllerArticles{
      */
     public function listArticlesAdmin() 
     {
-        $articlesManager = new ArticlesManager();
-        $articles = $articlesManager->getArticles();
-
-        $this->adminTwig->addGlobal('session', $_SESSION);
-        echo $this->adminTwig->render('listArticlesAdmin.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1] );
+       $articles = $this->articlesManager->getArticles();
+       $this->adminTwig->addGlobal('session', $_SESSION);
+       echo $this->adminTwig->render('listArticlesAdmin.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1] );
     }
 
     /**
@@ -114,9 +104,7 @@ class ControllerArticles{
      */
     public function listCommentsAdmin()
     {
-        $commentsManager = new CommentsManager();
-        $comments = $commentsManager->getCommentsAdmin();
-
+        $comments = $this->commentsManager->getCommentsAdmin();
         $this->adminTwig->addGlobal('session', $_SESSION);
         echo $this->adminTwig->render('listCommentsAdmin.html.twig',['comments' => $comments], ['droits' => $_SESSION == 1] );
     }
@@ -128,9 +116,7 @@ class ControllerArticles{
      */
     public function confirmdeletearticle ()
     {
-        $articlesManager = new ArticlesManager();
-        $article = $articlesManager->Article($_GET['id']);
-
+        $article = $this->articlesManager->Article($_GET['id']);
         $this->twigySecur->addGlobal('session', $_SESSION);
         echo $this->twigySecur->render('confirmdeletearticle.html.twig',['article' => $article], ['droits' => $_SESSION == 1]);
     }
@@ -142,9 +128,7 @@ class ControllerArticles{
      */
     public function confirmdeletecomment ()
     {
-        $commentManager = new CommentsManager();
-        $comment = $commentManager->getComment($_GET['id']);
-
+        $comment = $this->commentManager->getComment($_GET['id']);
         $this->twigySecur->addGlobal('session', $_SESSION);
         echo $this->twigySecur->render('confirmdeletecomment.html.twig',['comment' => $comment], ['droits' => $_SESSION == 1]);
     }
@@ -156,11 +140,9 @@ class ControllerArticles{
      */
     public function editArticleAdmin()
     {
-        $articleManager = new ArticlesManager();
-        $articles = $articleManager->getArticleAdmin($_GET['id']);
-       
-        $this->adminTwig->addGlobal('session', $_SESSION);
-        echo $this->adminTwig->render("articleUpdating.html.twig", ['articles' => $articles], ['droits' => $_SESSION == 1]);	 
+       $articles = $this->articleManager->getArticleAdmin($_GET['id']);
+       $this->adminTwig->addGlobal('session', $_SESSION);
+       echo $this->adminTwig->render("articleUpdating.html.twig", ['articles' => $articles], ['droits' => $_SESSION == 1]);	 
     }
 
     /**
@@ -174,9 +156,7 @@ class ControllerArticles{
      */
     public function updateArticleAdmin($miniContent, $title, $content, $postId) 
     {
-        $update = new ArticlesManager();
-        $updatearticle = $update->updateArticle($miniContent, $title, $content, $postId);
-        
+        $this->articlesManager->updateArticle($miniContent, $title, $content, $postId);
         header('Location: index.php?action=listArticlesAdmin');
     }
 
@@ -188,10 +168,8 @@ class ControllerArticles{
      */
     public function deleteArticle($dataId)
     {
-        $delete = new ArticlesManager();
-        $deletedarticle = $delete->supprArticle($dataId);
-
-        if ($deletedarticle === false){
+        $deletearticle = $this->articlesManager->supprArticle($dataId);
+        if ($deletearticle === false){
             throw new \Exception('Impossible de supprimer cet article!');
         }else{
             header('Location: index.php?action=listArticlesAdmin');
@@ -206,10 +184,8 @@ class ControllerArticles{
      */
     public function deleteComment($dataId)
     {
-        $delete = new CommentsManager();
-        $deletedarticle = $delete->supprComment($dataId);
-
-        if ($deletedarticle === false){
+        $deletecomment = $this->commentsManager->supprComment($dataId);
+        if ($deletecomment === false){
             throw new \Exception('Impossible de supprimer ce commentaire!');
         }else{
             header('Location: index.php?action=listCommentsAdmin');
@@ -226,7 +202,6 @@ class ControllerArticles{
     {
         $this->adminTwig->addGlobal('session', $_SESSION);
         echo $this->adminTwig->render("articleWriting.html.twig",['droits' => $_SESSION == 1] );	 
-            
     }  
     
     /**
@@ -239,10 +214,9 @@ class ControllerArticles{
      * @param [type] $content
      * @return void
      */
-    public function articleWriting($idCategory, $idUser, $miniContent, $title, $content){
-        $articleEdit = new ArticlesManager(); 
-        $createarticle = $articleEdit->postArticle($idCategory, $idUser, $miniContent, $title, $content);
-        
+    public function articleWriting($idCategory, $idUser, $miniContent, $title, $content)
+    {
+        $createarticle = $this->articlesManager->postArticle($idCategory, $idUser, $miniContent, $title, $content);
         if ($createarticle === false){
             throw new \Exception('Impossible d \'ajouter un article...');
 
@@ -250,5 +224,4 @@ class ControllerArticles{
                 header('Location:index.php?action=listArticlesAdmin');
             }
         }
-
 }
