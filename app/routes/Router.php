@@ -471,25 +471,18 @@ class Router
                             throw new Exception('Merci de remplir le champ password');
                         }
                     }
-
-
-                
-            }
-            else{
+                }else{
                 $vue = new ControllerHome();
                 $accueil = $vue->homePage();
             }
-        }
-        catch(Exception $e){
-           
-            $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
+        }catch(Exception $e){
+           $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
             $twig = new \Twig\Environment($loader, [
             'cache' => false
         ]);
             $errorMessage = $e->getMessage();
             $twig->addGlobal('session', $_SESSION);
             echo $twig->render('error.html.twig', ['error' => $errorMessage], ['droits' => $_SESSION == 1]);
-            
         }
     }
 }
