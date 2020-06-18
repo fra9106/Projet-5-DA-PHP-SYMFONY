@@ -5,11 +5,12 @@ namespace Control;
 require '../vendor/autoload.php';
 
 use Mod\{ArticlesManager, CommentsManager};
+use App\session\SessionTwig;
 
 class ControllerArticles{
 
     /**
-     * twig instanciations
+     * instanciations
      */
     public function __construct()
     {
@@ -21,6 +22,8 @@ class ControllerArticles{
         $this->twigySecur = new \Twig\Environment($this->loaderSecurit);
         $this->articlesManager = new ArticlesManager();
         $this->commentsManager = new CommentsManager();
+        $this->session = new SessionTwig();
+        
     }
 
     /**
@@ -30,8 +33,10 @@ class ControllerArticles{
      */
     public function listArticle() 
     {
+        $this->twig->addGlobal('session', $_SESSION);
+        //$tss = $this->session->twigSession();
+        //var_dump($tss); die;
         $articles = $this->articlesManager->getArticles();
-        $this->twig->addGlobal('session', $_SESSION);   
         echo $this->twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
     }
 
@@ -191,7 +196,6 @@ class ControllerArticles{
             header('Location: index.php?action=listCommentsAdmin');
         }
     }
-
 
     /**
      * display form to write article
