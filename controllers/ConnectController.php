@@ -48,28 +48,20 @@ class ConnectController {
         $isPasswordCorrect = password_verify($_POST['mdp'], $connect['pass']);
         $mdp = $connect['pass'];
 
-        if (!$connect)
-        {
+        if (!$connect){
             throw new \Exception('Oups... Mauvais identifiant ou mot de passe !');
-        }
-        else
-        {
-
-            if ($isPasswordCorrect)
-            {
+        }else{
+            if ($isPasswordCorrect){
                 if (isset($_POST['rememberme']))
                 { 
                     setcookie('mail', $mail, time() + 365 * 24 * 3600, null, null, false, true); 
                     setcookie('mdp', $mdp, time() + 365 * 24 * 3600, null, null, false, true);
                 }
-                if (!isset($_SESSION['id']) and isset($_COOKIE['mail'], $_COOKIE['pass']) and !empty($_COOKIE['mail']) and !empty($_COOKIE['pass']))
-                { //si pas de session mais cookies pseudo et mdp...
+                if (!isset($_SESSION['id']) and isset($_COOKIE['mail'], $_COOKIE['pass']) and !empty($_COOKIE['mail']) and !empty($_COOKIE['pass'])){ //si pas de session mais cookies pseudo et mdp...
                     $member = new ConnectManager(); //on instancie la class MembersManager...
                     $usercook = $member->remember($_COOKIE['mail'], $_COOKIE['pass']); //et on appelle la fonction remember avec les infos rapportés du modèle
-                
-                    if ($usercook == 1) // si cookies pseuso et mdp == à 1
-                    
-                    { // on ouvre les différentes sessions et rdv à la page d'accueil
+                    if ($usercook == 1) {
+                        
                         session_start();
                         $_SESSION['id'] = $connect['id'];
                         $_SESSION['pseudo'] = $connect['pseudo'];
@@ -78,9 +70,7 @@ class ConnectController {
                         $_SESSION['avatar'] = $connect['avatar'];
 
                         header("Location: index.php?action=homePage");
-                    }
-                    else
-                    { 
+                    }else{ 
                         throw new \Exception('Oups... Veuillez vous reconnecter !');
                     }
                 }
@@ -93,17 +83,15 @@ class ConnectController {
                 
                 header("Location: index.php?action=homePage");
 
-            }
-            else
-            {
+            }else{
                 throw new \Exception('Mauvais identifiant ou mot de passe !');
             }
             if (!empty($_SESSION['droits']) && $_SESSION['droits'] == '1') {
             
                 header("Location: index.php?action=writeArticleDisplay");
             }
+        }
     }
-}
 
     /**
      * logout
