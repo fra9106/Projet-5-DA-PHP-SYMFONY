@@ -76,8 +76,8 @@ class Router
                  * logout
                  */
                 if ($_GET['action'] == 'logout'){
-                $lout = new ConnectController();
-                $logOut = $lout->logout();
+                    $lout = new ConnectController();
+                    $logOut = $lout->logout();
 
                 }
                 
@@ -117,7 +117,6 @@ class Router
                 elseif ($_GET['action'] == 'listArticles'){
                         $listarticles = new ControllerArticles();
                         $list = $listarticles->listArticle();
-                        //var_dump($articles); die;
                     }
 
                     /**
@@ -173,16 +172,24 @@ class Router
                  * display list articles admin
                  */
                 if ($_GET['action'] == 'listArticlesAdmin'){
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                        header("Location: index.php?action=homePage");
+                    }else{
                         $listarticles = new ControllerArticles();
                         $list = $listarticles->listArticlesAdmin();
+                    }
                 }
 
                 /**
                  * display list membres admin
                  */
                 if ($_GET['action'] == 'listUsersAdmin'){
-                    $listUsers = new ControllerUser();
-                    $list = $listUsers->listUsersAdmin();
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                        header("Location: index.php?action=homePage");
+                    }else{
+                        $listUsers = new ControllerUser();
+                        $list = $listUsers->listUsersAdmin();
+                    }
                 }
 
                 /**
@@ -201,7 +208,7 @@ class Router
                  * delete user
                  */
                 if ($_GET['action'] == 'deleteUser'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){ //CONDITION DE SECURITE POUR EVITER DE POUVOIR ACCEDER A L'ADMIN PAR L'URL
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
                                 if ((isset($_GET['id'])) && (!empty($_GET['id']))){
@@ -216,21 +223,32 @@ class Router
                  * confirm delete user
                  */
                 if ($_GET['action'] == "confirmdeleteuser"){
-                    if (isset($_GET['id']) && $_GET['id'] > 0){
-                        $confdelete = new ControllerUser();
-                        $display = $confdelete->confirmdeleteuser();
-                    }else{
-                        throw new Exception('Oups... Aucun identifiant membre envoyé !');
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                        header('Location:index.php?action=homePage');
+                        }else{
+                            if (isset($_GET['id']) && $_GET['id'] > 0){
+                                $confdelete = new ControllerUser();
+                                $display = $confdelete->confirmdeleteuser();
+                            }else{
+                                throw new Exception('Oups... Aucun identifiant membre !');
+                            }
                     }
+
                 }
                 /**
                  * edit article admin
                  */
                 if ($_GET['action'] == 'editArticleAdmin'){
-                    if (isset($_GET['id']) && $_GET['id'] > 0){
-                        $controllerArticles = new ControllerArticles();
-                        $display = $controllerArticles->editArticleAdmin();
-                    }
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                        header('Location:index.php?action=homePage');
+                        }else{
+                            if (isset($_GET['id']) && $_GET['id'] > 0){
+                                $controllerArticles = new ControllerArticles();
+                                $display = $controllerArticles->editArticleAdmin();
+                            }else{
+                                throw new Exception('Oups... Aucun identifiant article !');
+                            }
+                        }
                 }
                 /**
                  * update article admin
@@ -250,46 +268,62 @@ class Router
                  * delete article
                  */
                 if ($_GET['action'] == 'deleteArticle'){
-                    if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                    $controllerarticle = new ControllerArticles();
-                    $delete = $controllerarticle->deleteArticle($_GET['id']);
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                        header('Location:index.php?action=homePage');
+                        }else{
+                            if ((isset($_GET['id'])) && (!empty($_GET['id']))){
+                            $controllerarticle = new ControllerArticles();
+                            $delete = $controllerarticle->deleteArticle($_GET['id']);
+                            }
+                        }
                     }
-                }
 
                 /**
                  * confirm delete article
                  */
                 if ($_GET['action'] == "confirmdeletearticle"){
-                    if (isset($_GET['id']) && $_GET['id'] > 0){
-                        $confdelete = new ControllerArticles();
-                        $display = $confdelete->confirmdeletearticle();
-                    }else{
-                        throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                        header('Location:index.php?action=homePage');
+                        }else{
+                            if (isset($_GET['id']) && $_GET['id'] > 0){
+                                $confdelete = new ControllerArticles();
+                                $display = $confdelete->confirmdeletearticle();
+                            }else{
+                                throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
+                            }
+                        }
                     }
-                }
 
                  /**
                  * delete comment
                  */
                 if ($_GET['action'] == 'deleteComment'){
-                    if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                    $controllerarticle = new ControllerArticles();
-                    $delete = $controllerarticle->deleteComment($_GET['id']);
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                        header('Location:index.php?action=homePage');
+                        }else{
+                            if ((isset($_GET['id'])) && (!empty($_GET['id']))){
+                            $controllerarticle = new ControllerArticles();
+                            $delete = $controllerarticle->deleteComment($_GET['id']);
+                            }
+                        }
                     }
-                }
 
 
                 /**
                  * confirm delete comment
                  */
                 if ($_GET['action'] == "confirmdeletecomment"){
-                    if (isset($_GET['id']) && $_GET['id'] > 0){
-                        $confdelete = new ControllerArticles();
-                        $display = $confdelete->confirmdeletecomment();
-                    }else{
-                        throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                        header('Location:index.php?action=homePage');
+                        }else{
+                            if (isset($_GET['id']) && $_GET['id'] > 0){
+                                $confdelete = new ControllerArticles();
+                                $display = $confdelete->confirmdeletecomment();
+                            }else{
+                                throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
+                            }
+                        }
                     }
-                }
                 
                 /**
                  * display form to write article
@@ -304,27 +338,30 @@ class Router
                     
                     }
                 
-                
                 /**
                  * send written article 
                  */
                 if ($_GET['action'] == 'articleWriting'){
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                        header('Location: index.php?action=homePage');
+                    }else{
                     
-                    if (isset($_POST['send_article']) and isset($_POST['id_category']) and isset($_SESSION['id']) and isset($_POST['mini_content']) and isset($_POST['title']) and isset($_POST['content'])){
-                        
-                        $idCategory = ($_POST['id_category']);
-                        $idUser = ($_SESSION['id']);
-                        $miniContent = ($_POST['mini_content']);
-                        $title = ($_POST['title']);
-                        $content = ($_POST['content']);
-                        
-                        if (!empty(trim($_POST['mini_content'])) and !empty(trim($_POST['title'])) and !empty(trim($_POST['content']))){
-                            $articleWrite = new ControllerArticles();
-                            $display = $articleWrite->articleWriting($idCategory, $idUser, $miniContent, $title, $content);
-                            //var_dump($idUser); die;
-                        }
-                        else{
-                            throw new Exception('Vous n\'avez pas saisi d\'article !');
+                        if (isset($_POST['send_article']) and isset($_POST['id_category']) and isset($_SESSION['id']) and isset($_POST['mini_content']) and isset($_POST['title']) and isset($_POST['content'])){
+                            
+                            $idCategory = ($_POST['id_category']);
+                            $idUser = ($_SESSION['id']);
+                            $miniContent = ($_POST['mini_content']);
+                            $title = ($_POST['title']);
+                            $content = ($_POST['content']);
+                            
+                            if (!empty(trim($_POST['mini_content'])) and !empty(trim($_POST['title'])) and !empty(trim($_POST['content']))){
+                                $articleWrite = new ControllerArticles();
+                                $display = $articleWrite->articleWriting($idCategory, $idUser, $miniContent, $title, $content);
+                                //var_dump($idUser); die;
+                            }
+                            else{
+                                throw new Exception('Vous n\'avez pas saisi d\'article !');
+                            }
                         }
                     }
                 }
@@ -333,9 +370,14 @@ class Router
                  * user profil page
                  */
                 if ($_GET['action'] == 'diplayprofil'){
-                     $profilPage = new ControllerUser();
-                     $page = $profilPage->displayprofil();
-                 }
+                    if (isset($_SESSION['id'])){
+                        $profilPage = new ControllerUser();
+                        $page = $profilPage->displayprofil();
+
+                    }else{
+                        throw new Exception('Impossible d\'afficher la page profil, veuillez vous connecter !');
+                    }
+                }
 
                  /**
                   * display edit page profil user
@@ -345,6 +387,8 @@ class Router
                     {
                         $all = new ControllerUser();
                         $user = $all->editprofilpage();
+                    }else{
+                        throw new Exception('Impossible d\'afficher la page edition de profil, veuillez vous connecter !');
                     }
                 }
 
@@ -370,16 +414,16 @@ class Router
                                       $controlleruser = new ControllerUser();
                                       $userAvatar = $controlleruser->getAvatar($newavatar);
                                     }else{
-                                      throw new Exception('Erreur durant l\'importation de votre photo de profil');
+                                      throw new Exception('Erreur durant l\'importation de votre photo de profil !');
                                     }
                                 }else{
-                                  throw new Exception('Votre photo de profil doit être au format jpg, jpeg, gif ou png');
+                                  throw new Exception('Votre photo de profil doit être au format jpg, jpeg, gif ou png !');
                                 }
                             }else{
-                              throw new Exception('Votre photo de profil ne doit pas dépasser 2Mo');
+                              throw new Exception('Votre photo de profil ne doit pas dépasser 2Mo !');
                             }
                         }else{
-                            throw new Exception('Merci de remplir le champ');
+                            throw new Exception('Merci de selectionner une photo !');
                         }
                     }
 
@@ -393,6 +437,8 @@ class Router
                             $newpseudo = htmlspecialchars($_POST['newpseudo']);
                             $controlleruser = new ControllerUser();
                             $userpseudo = $controlleruser->updateUserPseudo($newpseudo);
+                        }else{
+                            throw new Exception('Merci de remplir le champ pseudo');
                         }
                     }
 
@@ -406,6 +452,8 @@ class Router
                             $newmail = htmlspecialchars($_POST['newmail']);
                             $controlleruser = new ControllerUser();
                             $usermail = $controlleruser->updateUserMail($newmail);
+                        }else{
+                            throw new Exception('Merci de remplir le champ mail');
                         }
                     }
 
@@ -419,6 +467,8 @@ class Router
                             $newpwd = password_hash($_POST['newpwd'], PASSWORD_DEFAULT);
                             $controlleruser = new ControllerUser();
                             $userpwd = $controlleruser->updateUserpwd($newpwd);
+                        }else{
+                            throw new Exception('Merci de remplir le champ password');
                         }
                     }
 
