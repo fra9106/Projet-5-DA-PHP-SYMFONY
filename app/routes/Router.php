@@ -156,15 +156,16 @@ class Router
                  * valid comment
                  */
                 if ($_GET['action'] == 'validComment'){
-                    if ((isset($_GET['id'])) && (!empty($_GET['id'])))
-                    {
-                        $controlleruser = new ControllerArticles();
-                        $signale = $controlleruser->validComment($_GET['id']);
-
-                    }
-                    else
-                    {
-                        throw new Exception('Oups....erreur de validation !');
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                        header("Location: index.php?action=homePage");
+                    }else{
+                        if ((isset($_GET['id'])) && (!empty($_GET['id'])))
+                        {
+                            $controlleruser = new ControllerArticles();
+                            $signale = $controlleruser->validComment($_GET['id']);
+                        }else{
+                            throw new Exception('Oups....erreur de validation !');
+                        }
                     }
                 }
                         
@@ -188,8 +189,12 @@ class Router
                  * display list comments admin
                  */
                 if ($_GET['action'] == 'listCommentsAdmin'){
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                        header("Location: index.php?action=homePage");
+                    }else{
                     $listUsers = new ControllerArticles();
                     $list = $listUsers->listCommentsAdmin();
+                    }
                 }
 
                 /**
@@ -290,10 +295,15 @@ class Router
                  * display form to write article
                  */
                 if ($_GET['action'] == 'writeArticleDisplay'){
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                        header('Location: index.php?action=homePage');
+                    }else{
+                        $controlleradmin = new ControllerArticles();
+                        $adminconnect = $controlleradmin->formArticle();
+                        }
                     
-                    $controlleradmin = new ControllerArticles();
-                    $adminconnect = $controlleradmin->formArticle();
                     }
+                
                 
                 /**
                  * send written article 

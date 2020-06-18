@@ -99,11 +99,11 @@ class ConnectController {
                 throw new \Exception('Mauvais identifiant ou mot de passe !');
             }
             if (!empty($_SESSION['droits']) && $_SESSION['droits'] == '1') {
-                //CONDITION DE SECURITE POUR EVITER DE POUVOIR ACCEDER A L'ADMIN PAR L'URL
-                header("Location: index.php?action=homePage");
-            }           
-        }
+            
+                header("Location: index.php?action=writeArticleDisplay");
+            }
     }
+}
 
     /**
      * logout

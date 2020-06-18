@@ -57,10 +57,7 @@ class ControllerArticles{
        
         
         //var_dump($comment); die;
-        //echo $twig->render('article.html.twig',['article' => $article], ['comments' => $comments],  ['droits' => $_SESSION == 1]);
-        
-        
-        require ('../views/templates/debug.php');
+        echo $twig->render('article.html.twig',['comments' => $comments,'article' => $article],  ['droits' => $_SESSION == 1]);
         
     }
 
