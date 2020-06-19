@@ -1,31 +1,29 @@
 {% extends 'baselog.html.twig' %}
 
-
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
 
 <div class="register" align="center">
-<div class="container mt-4">
-<form action="index.php?action=login" method="post">
-    <div class="form-group">
-        <input type="email" placeholder="mail" id="mail" required name="mail" class="form-control">
-    </div>
-    <div class="form-group">
-        <input type="password" placeholder="Mot de passe" id="mdp" required name="mdp" class="form-control">
-    </div>
-    <br>
-    <div class="form-group">
-         <input type="checkbox" name="rememberme" id="remembercheckbox" />
-         <label for="remembercheckbox">Se souvenir de moi</label>
-         <br><br>
-    </div>
-    <div class="form-group">
-        <button type="submit" name="login" class="btn btn-success">Je me connecte</button>
-    </div><br><br><br><br>
-</form>
+    <div class="container mt-4">
+        <form action="index.php?action=login" method="post">
+            <div class="form-group">
+                <input type="email" placeholder="mail" id="mail" required name="mail" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Mot de passe" id="mdp" required name="mdp" class="form-control">
+            </div>
+            <br>
+            <div class="form-group">
+                <input type="checkbox" name="rememberme" id="remembercheckbox" />
+                <label for="remembercheckbox">Se souvenir de moi</label>
+                <br><br>
+            </div>
+            <div class="form-group">
+                <button type="submit" name="login" class="btn btn-success">Je me connecte</button>
+            </div><br><br><br><br>
+        </form>
 
+    </div>
 </div>
-</div>
-
 {% endblock %}

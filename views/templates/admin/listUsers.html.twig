@@ -5,27 +5,19 @@
 {% block body %}
 
 <div class="articlewrite">
-    
     <br/>
     <h3><a href="index.php?action=writeArticleDisplay">Accueil admin</a></h3>
     <h3><a href="index.php?action=listArticlesAdmin">Gestion des articles</a></h3>
     <h3><a href="index.php?action=listCommentsAdmin">Gestion des commentaires</a></h3>
-    
     <br/>
-
     <div class="container mt-4">
-    
         <h1>Membres :</h1><br><br>
-
-        
-
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>PSEUDO</th>
                     <th>MAIL</th>
                     <th>DATE D'INSCRIPTION</th>
-
                 </tr>
             </thead>
             <tbody>
@@ -37,14 +29,10 @@
                 <td>
                     <a href="index.php?action=confirmdeleteuser&amp;id={{user.id}}"><button type="button" class="btn btn-outline-danger">Supprimer</button></a>
                 </td>
-                
             </tr>
             {% endfor %}
         </tbody>
         </table>
-
-
     </div><br><br>
 </div>
-
 {% endblock %}

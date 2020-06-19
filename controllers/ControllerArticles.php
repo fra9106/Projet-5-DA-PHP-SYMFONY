@@ -13,8 +13,8 @@ class ControllerArticles{
      *
      * @return void
      */
-    public function listArticle() {
-
+    public function listArticle() 
+    {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
         $twig = new \Twig\Environment($loader, [
             'cache' => false
@@ -26,9 +26,6 @@ class ControllerArticles{
        
         $twig->addGlobal('session', $_SESSION);   
         echo $twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
-    
-        
-        //var_dump($articles); die;
     }
 
     /**
@@ -36,29 +33,23 @@ class ControllerArticles{
      *
      * @return void
      */
-    public function getArticle(){
+    public function getArticle()
+    {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
         $twig = new \Twig\Environment($loader, [
             'cache' => false
         ]);
-
         $twig = new \Twig\Environment($loader, ['debug' => true]);	
         $twig->addExtension(new \Twig\Extension\DebugExtension());
 
         $articlesManager = new ArticlesManager();
         $article = $articlesManager->Article($_GET['id']);
-
-     
         
         $commentsManager = new CommentsManager();
         $comments = $commentsManager->getComments($_GET['id']);
         
-        $twig->addGlobal('session', $_SESSION); 
-       
-        
-        //var_dump($comment); die;
+        $twig->addGlobal('session', $_SESSION);
         echo $twig->render('article.html.twig',['comments' => $comments,'article' => $article],  ['droits' => $_SESSION == 1]);
-        
     }
 
     /**
@@ -70,22 +61,17 @@ class ControllerArticles{
      * @return void
      */
     public function addComment($idArticle, $idUser, $content)
-    
     {
         $commentsManager = new CommentsManager();
         $content = htmlspecialchars($content);
         $affectedLines = $commentsManager->postComment($idArticle, $_SESSION['id'], $content);
 
-        if ($affectedLines === false)
-        { 
+        if ($affectedLines === false){ 
             throw new \Exception('Oups... Impossible d\'ajouter ce commentaire !');
-            
-        }
-        else
-        {
+        }else{
+
             header('Location: index.php?action=getArticle&id=' . $idArticle);
-            
-        }
+            }
     }
 
     /**
@@ -95,18 +81,15 @@ class ControllerArticles{
      * @return void
      */
     public function validComment($commentId) 
-    
     {
         $commentManager = new CommentsManager();
         $signal = $commentManager->validation($commentId);
 
-        if ($signal === false)
-        {
+        if ($signal === false){
             throw new \Exception('Oups... Impossible de signaler ce commentaire !');
         }else{
             header('Location: index.php?action=listCommentsAdmin');
         }
-
     }
 
     /**
@@ -124,6 +107,7 @@ class ControllerArticles{
         $twig->addExtension(new \Twig\Extension\DebugExtension());
         $articlesManager = new ArticlesManager();
         $articles = $articlesManager->getArticles();
+
         $twig->addGlobal('session', $_SESSION);
         echo $twig->render('listArticlesAdmin.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1] );
     }
@@ -143,6 +127,7 @@ class ControllerArticles{
         $twig->addExtension(new \Twig\Extension\DebugExtension());
         $commentsManager = new CommentsManager();
         $comments = $commentsManager->getCommentsAdmin();
+
         $twig->addGlobal('session', $_SESSION);
         echo $twig->render('listCommentsAdmin.html.twig',['comments' => $comments], ['droits' => $_SESSION == 1] );
     }
@@ -161,9 +146,7 @@ class ControllerArticles{
         $articlesManager = new ArticlesManager();
         $article = $articlesManager->Article($_GET['id']);
 
-        $twig->addGlobal('session', $_SESSION); 
-     
-    
+        $twig->addGlobal('session', $_SESSION);
         echo $twig->render('confirmdeletearticle.html.twig',['article' => $article], ['droits' => $_SESSION == 1]);
     }
 
@@ -181,9 +164,7 @@ class ControllerArticles{
         $commentManager = new CommentsManager();
         $comment = $commentManager->getComment($_GET['id']);
 
-        $twig->addGlobal('session', $_SESSION); 
-     
-    
+        $twig->addGlobal('session', $_SESSION);
         echo $twig->render('confirmdeletecomment.html.twig',['comment' => $comment], ['droits' => $_SESSION == 1]);
     }
 
@@ -192,7 +173,8 @@ class ControllerArticles{
      *
      * @return void
      */
-    public function editArticleAdmin(){
+    public function editArticleAdmin()
+    {
         $articleManager = new ArticlesManager();
         $articles = $articleManager->getArticleAdmin($_GET['id']);
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
@@ -201,6 +183,7 @@ class ControllerArticles{
         ]);
 		$twig = new \Twig\Environment($loader, ['debug' => true]);	
         $twig->addExtension(new \Twig\Extension\DebugExtension());
+
         $twig->addGlobal('session', $_SESSION);
         echo $twig->render("articleUpdating.html.twig", ['articles' => $articles], ['droits' => $_SESSION == 1]);	 
     }
@@ -233,12 +216,9 @@ class ControllerArticles{
         $supprime = new ArticlesManager();
         $deletedarticle = $supprime->supprArticle($dataId);
 
-        if ($deletedarticle === false)
-        {
+        if ($deletedarticle === false){
             throw new \Exception('Impossible de supprimer cet article!');
-        }
-        else
-        {
+        }else{
             header('Location: index.php?action=listArticlesAdmin');
         }
     }
@@ -254,12 +234,9 @@ class ControllerArticles{
         $supprime = new CommentsManager();
         $deletedarticle = $supprime->supprComment($dataId);
 
-        if ($deletedarticle === false)
-        {
+        if ($deletedarticle === false){
             throw new \Exception('Impossible de supprimer ce commentaire!');
-        }
-        else
-        {
+        }else{
             header('Location: index.php?action=listCommentsAdmin');
         }
     }
@@ -278,6 +255,7 @@ class ControllerArticles{
         ]);
         $twig = new \Twig\Environment($loader, ['debug' => true]);	
         $twig->addExtension(new \Twig\Extension\DebugExtension());
+
         $twig->addGlobal('session', $_SESSION);
         echo $twig->render("articleWriting.html.twig",['droits' => $_SESSION == 1] );	 
             
@@ -297,12 +275,10 @@ class ControllerArticles{
         $articleEdit = new ArticlesManager(); 
         $createarticle = $articleEdit->postArticle($idCategory, $idUser, $miniContent, $title, $content);
         
-        if ($createarticle === false)
-        {
+        if ($createarticle === false){
             throw new \Exception('Impossible d \'ajouter un article...');
 
-        }else
-            {
+        }else{
                 header('Location:index.php?action=listArticlesAdmin');
             }
         }

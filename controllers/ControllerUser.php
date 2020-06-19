@@ -36,7 +36,6 @@ class ControllerUser {
             }else{
                 throw new \Exception('Oups... Adresse email déjà utilisée');
             }
-        
         }
 
     /**
@@ -54,6 +53,7 @@ class ControllerUser {
         $twig->addExtension(new \Twig\Extension\DebugExtension());
         $usersManager = new MembersManager();
         $users = $usersManager->getUsers();
+
         $twig->addGlobal('session', $_SESSION);
         echo $twig->render('listUsers.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
     }
@@ -69,12 +69,9 @@ class ControllerUser {
         $deleteuser = new MembersManager();
         $delete = $deleteuser->deleteUse($idUser);
        
-        if ($delete === false)
-        {
+        if ($delete === false){
             throw new \Exception('Impossible de supprimer cet article!');
-        }
-        else
-        {
+        }else{
             header('Location: index.php?action=listUsersAdmin');
         }
     }
@@ -86,7 +83,6 @@ class ControllerUser {
      */
     public function confirmdeleteuser() 
     {
-
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
         $twig = new \Twig\Environment($loader, [
             'cache' => false
@@ -95,10 +91,10 @@ class ControllerUser {
         $twig->addExtension(new \Twig\Extension\DebugExtension());
         $usersManager = new MembersManager();
         $users = $usersManager->infosUser();
+
         $twig->addGlobal('session', $_SESSION);
         echo $twig->render('confirmdeleteuser.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
     }
-
 
     /**
      * user profil page
@@ -136,7 +132,6 @@ class ControllerUser {
         echo $twig->render('editprofil.html.twig',['user' => $user], ['droits' => $_SESSION == 1] );
     }
 
-
     /**
      * upload avatar file
      *
@@ -147,7 +142,7 @@ class ControllerUser {
     {
         $membreManager = new MembersManager();
         $avatarinfos = $membreManager->infosAvatar($newavatar);
-        throw new \Exception('Avatar modifié !');
+        header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
     }
 
     /**
@@ -173,8 +168,7 @@ class ControllerUser {
     {
         $test = new MembersManager();
         $testOk = $test->testMail($newmail);
-        if ($testOk == 0)
-        { 
+        if ($testOk == 0){ 
             $infosmembre = new MembersManager();
             $mailinfos = $infosmembre->infoMail($newmail);
             header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
