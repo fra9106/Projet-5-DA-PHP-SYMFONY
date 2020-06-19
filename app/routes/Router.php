@@ -132,17 +132,32 @@ class Router
                     }
 
                 
-
+                /**
+                 * display list articles admin
+                 */
                 if ($_GET['action'] == 'listArticlesAdmin'){
                         $listarticles = new ControllerArticles();
                         $list = $listarticles->listArticlesAdmin();
                 }
 
-
+                /**
+                 * display list membres admin
+                 */
                 if ($_GET['action'] == 'listUsersAdmin'){
                     $listUsers = new ControllerUser();
                     $list = $listUsers->listUsersAdmin();
                 }
+
+                /**
+                 * display list comments admin
+                 */
+                if ($_GET['action'] == 'listCommentsAdmin'){
+                    $listUsers = new ControllerArticles();
+                    $list = $listUsers->listCommentsAdmin();
+                }
+
+
+
 
                 if ($_GET['action'] == 'deleteUser'){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){ //CONDITION DE SECURITE POUR EVITER DE POUVOIR ACCEDER A L'ADMIN PAR L'URL

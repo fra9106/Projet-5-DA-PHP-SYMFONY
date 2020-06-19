@@ -1,0 +1,54 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Liste Membres{% endblock %}
+
+{% block body %}
+
+<div class="articlewrite">
+    
+    <br/>
+    <h3><a href="index.php?action=writeArticleDisplay">Accueil admin</a></h3>
+    <h3><a href="index.php?action=listArticlesAdmin">Articles</a></h3>
+    <h3><a href="index.php?action=listUsersAdmin">Gestion des membres</a></h3>
+    
+    <br/>
+
+    <div class="container mt-4">
+    
+        <h1>Commentaires :</h1><br><br>
+
+        
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Membre</th>
+                    <th>Contenu</th>
+                    <th>Validation</th>
+                    <th>Date de création</th>
+
+                </tr>
+            </thead>
+            <tbody>
+            {% for comment in comments %}
+            <tr>
+                <td>{{comment.pseudo}}</td>
+                <td>{{comment.content}}</td>
+                <td>{{comment.valid}}</td>
+                <td>{{comment.comment_date_fr}}</td>
+                <td>
+                    <a href="index.php?action=validecomment&amp;id={{comment.id}}"><button type="button" class="btn btn-success">Valider</button></a>
+                </td>
+                <td>
+                    <a href="index.php?action=confirmdeletecomment&amp;id={{comment.id}}"><button type="button" class="btn btn-outline-danger">Supprimer</button></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+
+
+    </div><br><br>
+</div>
+
+{% endblock %}
