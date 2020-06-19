@@ -7,6 +7,16 @@ use Exception;
 
 class Router
 {
+    public function __construct()
+    {
+        $this->home = new ControllerHome();
+        $this->connect = new ConnectController();
+        $this->user = new ControllerUser();
+        $this->articles = new ControllerArticles();
+        $this->loaderSecurit = new \Twig\Loader\FilesystemLoader('../views/templates/security');
+        $this->twigySecur = new \Twig\Environment($this->loaderSecurit);
+    }
+    
     public function run()
     {
         try
@@ -17,8 +27,7 @@ class Router
                  * home page
                  */
                 if ($_GET['action'] == 'homePage'){
-                    $display = new ControllerHome();
-                    $contact = $display->homePage();
+                    $this->home->homePage();
                 }
 
                 /**
@@ -29,37 +38,30 @@ class Router
                     $username = htmlspecialchars($_POST['username']);
                     $mail = htmlspecialchars($_POST['mail']);
                     $content = htmlspecialchars($_POST['content']);
-
-                    $contact = new ControllerHome();
-                    $infoscontact = $contact->sendMessage($username, $mail, $content);
-                
-                    }else{
-                            throw new Exception('Message non envoyé !');
-                         }
+                    $this->home->sendMessage($username, $mail, $content);
+                }else{
+                    throw new Exception('Message non envoyé !');
                 }
-
+            }
                 /**
                  * Legal Notice
                  */
                 if ($_GET['action'] == 'legalPage'){
-                    $display = new ControllerHome();
-                    $contact = $display->legalPage();
+                    $contact = $this->home->legalPage();
                 }
 
                 /**
                  * display contact form 
                  */
                 if ($_GET['action'] == 'displFormulContact'){
-                    $display = new ConnectController();
-                    $contact = $display->displFormulContact();
+                    $this->connect->displFormulContact();
                 }
 
                 /**
                  * display connect form
                  */
                 if ($_GET['action'] == 'displConnexion'){
-                $display = new ConnectController();
-                $contact = $display->displConnexion();
+                    $this->connect->displConnexion();
                 }
 
                 /**
@@ -68,12 +70,9 @@ class Router
                 if ($_GET['action'] == 'login'){
                     if (isset($_POST['login']) and isset($_POST['mail']) and isset($_POST['mdp'])){
                         $mail = htmlspecialchars($_POST['mail']);
-
                         if (!empty(trim($_POST['mail'])) and !empty(trim($_POST['mdp']))){
-                        $connex = new ConnectController();
-                        $newConnexion = $connex->login($_POST['mail'], $_POST['mdp']);
-                        }
-                        else{
+                            $this->connect->login($_POST['mail'], $_POST['mdp']);
+                        }else{
                         throw new Exception('Oups...Tous les champs doivent être complétés !');
                         }
                     }
@@ -83,9 +82,7 @@ class Router
                  * logout
                  */
                 if ($_GET['action'] == 'logout'){
-                    $lout = new ConnectController();
-                    $logOut = $lout->logout();
-
+                    $this->connect->logout();
                 }
                 
                 /**
@@ -98,22 +95,17 @@ class Router
                         $mail = htmlspecialchars($_POST['mail']);
                         if (!empty($_POST['pseudo']) and !empty($_POST['mail']) and !empty($_POST['mdp']) and !empty($_POST['mdp2']) ){
                             $pseudolength = strlen($pseudo);
-                            if ($pseudolength > 2)
-                            {
+                            if ($pseudolength > 2){
                                 if (filter_var($mail, FILTER_VALIDATE_EMAIL)){
-                                    $inscription = new ControllerUser();
-                                    $contact = $inscription->addMember($_POST['pseudo'], $_POST['mail'], $_POST['mdp'], 'default.jpg');
+                                    $contact = $this->user->addMember($_POST['pseudo'], $_POST['mail'], $_POST['mdp'], 'default.jpg');
                                     return $contact;
-                                }
-                                else{
+                                }else{
                                     throw new Exception('Adresse mail non valide !');
                                 }
-                            }
-                            else{
+                            }else{
                                 throw new Exception('Votre pseudo doit contenir plus de deux caractères !');
                             }
-                        }
-                        else{
+                        }else{
                             throw new Exception('Tous les champs doivent être complétés');
                         }
                     }
@@ -122,22 +114,16 @@ class Router
                  * list articles
                  */
                 elseif ($_GET['action'] == 'listArticles'){
-                        $listarticles = new ControllerArticles();
-                        $list = $listarticles->listArticle();
+                       $this->articles->listArticle();
                     }
 
                     /**
                      * get article by id
                      */
                   if ($_GET['action'] == 'getArticle'){ 
-                        if (isset($_GET['id']) && $_GET['id'] > 0)
-                        {
-                            $article = new ControllerArticles();
-                            $display = $article->getArticle();
-                           
-                        }
-                        else
-                        {
+                        if (isset($_GET['id']) && $_GET['id'] > 0){
+                            $this->articles->getArticle();
+                        }else{
                             throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
                         }
                     }
@@ -147,9 +133,7 @@ class Router
                     if ($_GET['action'] == 'addComment'){
                         if (isset($_GET['id']) && $_GET['id'] > 0){
                             if (!empty($_GET['id']) && ($_POST['content'])){
-
-                                $controlleruser = new ControllerArticles();
-                                $addcomment = $controlleruser->addComment($_GET['id'], $_SESSION['id'], $_POST['content']);
+                                $this->articles->addComment($_GET['id'], $_SESSION['id'], $_POST['content']);
                             }else{
                                 throw new Exception('Oups... Tous les champs ne sont pas remplis !');
                                 }
@@ -165,10 +149,8 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
                         header("Location: index.php?action=homePage");
                     }else{
-                        if ((isset($_GET['id'])) && (!empty($_GET['id'])))
-                        {
-                            $controlleruser = new ControllerArticles();
-                            $signale = $controlleruser->validComment($_GET['id']);
+                        if ((isset($_GET['id'])) && (!empty($_GET['id']))){
+                            $this->articles->validComment($_GET['id']);
                         }else{
                             throw new Exception('Oups....erreur de validation !');
                         }
@@ -182,8 +164,7 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
                         header("Location: index.php?action=homePage");
                     }else{
-                        $listarticles = new ControllerArticles();
-                        $list = $listarticles->listArticlesAdmin();
+                        $this->articles->listArticlesAdmin();
                     }
                 }
 
@@ -194,8 +175,7 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
                         header("Location: index.php?action=homePage");
                     }else{
-                        $listUsers = new ControllerUser();
-                        $list = $listUsers->listUsersAdmin();
+                        $this->user->listUsersAdmin();
                     }
                 }
 
@@ -206,8 +186,7 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
                         header("Location: index.php?action=homePage");
                     }else{
-                    $listUsers = new ControllerArticles();
-                    $list = $listUsers->listCommentsAdmin();
+                        $this->articles->listCommentsAdmin();
                     }
                 }
 
@@ -219,11 +198,10 @@ class Router
                         header('Location:index.php?action=homePage');
                         }else{
                                 if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                                    $controlleruser = new ControllerUser();
-                                    $delete = $controlleruser->deleteUser($_GET['id']);
+                                    $this->user->deleteUser($_GET['id']);
                                     
                                 }
-                             }
+                            }
                 }
 
                 /**
@@ -234,8 +212,7 @@ class Router
                         header('Location:index.php?action=homePage');
                         }else{
                             if (isset($_GET['id']) && $_GET['id'] > 0){
-                                $confdelete = new ControllerUser();
-                                $display = $confdelete->confirmdeleteuser();
+                                $this->user->confirmdeleteuser();
                             }else{
                                 throw new Exception('Oups... Aucun identifiant membre !');
                             }
@@ -250,8 +227,7 @@ class Router
                         header('Location:index.php?action=homePage');
                         }else{
                             if (isset($_GET['id']) && $_GET['id'] > 0){
-                                $controllerArticles = new ControllerArticles();
-                                $display = $controllerArticles->editArticleAdmin();
+                                $this->articles->editArticleAdmin();
                             }else{
                                 throw new Exception('Oups... Aucun identifiant article !');
                             }
@@ -262,10 +238,8 @@ class Router
                  */
                 if ($_GET['action'] == "updateArticleAdmin"){
                     if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                        $controlleradmin = new ControllerArticles();
-                        $edit = $controlleradmin->updateArticleAdmin($_POST['mini_content'], $_POST['title'], $_POST['content'], $_GET['id']);
-                        
-                    }else{
+                        $this->articles->updateArticleAdmin($_POST['mini_content'], $_POST['title'], $_POST['content'], $_GET['id']);
+                        }else{
                         throw new Exception('Impossible de modifier l\'article !');
                     }
 
@@ -279,8 +253,7 @@ class Router
                         header('Location:index.php?action=homePage');
                         }else{
                             if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                            $controllerarticle = new ControllerArticles();
-                            $delete = $controllerarticle->deleteArticle($_GET['id']);
+                            $this->articles->deleteArticle($_GET['id']);
                             }
                         }
                     }
@@ -293,8 +266,7 @@ class Router
                         header('Location:index.php?action=homePage');
                         }else{
                             if (isset($_GET['id']) && $_GET['id'] > 0){
-                                $confdelete = new ControllerArticles();
-                                $display = $confdelete->confirmdeletearticle();
+                            $this->articles->confirmdeletearticle();
                             }else{
                                 throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
                             }
@@ -309,8 +281,7 @@ class Router
                         header('Location:index.php?action=homePage');
                         }else{
                             if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                            $controllerarticle = new ControllerArticles();
-                            $delete = $controllerarticle->deleteComment($_GET['id']);
+                                $this->articles->deleteComment($_GET['id']);
                             }
                         }
                     }
@@ -324,8 +295,7 @@ class Router
                         header('Location:index.php?action=homePage');
                         }else{
                             if (isset($_GET['id']) && $_GET['id'] > 0){
-                                $confdelete = new ControllerArticles();
-                                $display = $confdelete->confirmdeletecomment();
+                                $display = $this->articles->confirmdeletecomment();
                             }else{
                                 throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
                             }
@@ -339,10 +309,8 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location: index.php?action=homePage');
                     }else{
-                        $controlleradmin = new ControllerArticles();
-                        $adminconnect = $controlleradmin->formArticle();
+                        $this->articles->formArticle();
                         }
-                    
                     }
                 
                 /**
@@ -352,21 +320,15 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location: index.php?action=homePage');
                     }else{
-                    
                         if (isset($_POST['send_article']) and isset($_POST['id_category']) and isset($_SESSION['id']) and isset($_POST['mini_content']) and isset($_POST['title']) and isset($_POST['content'])){
-                            
                             $idCategory = ($_POST['id_category']);
                             $idUser = ($_SESSION['id']);
                             $miniContent = ($_POST['mini_content']);
                             $title = ($_POST['title']);
                             $content = ($_POST['content']);
-                            
                             if (!empty(trim($_POST['mini_content'])) and !empty(trim($_POST['title'])) and !empty(trim($_POST['content']))){
-                                $articleWrite = new ControllerArticles();
-                                $display = $articleWrite->articleWriting($idCategory, $idUser, $miniContent, $title, $content);
-                                //var_dump($idUser); die;
-                            }
-                            else{
+                                $this->articles->articleWriting($idCategory, $idUser, $miniContent, $title, $content);
+                            }else{
                                 throw new Exception('Vous n\'avez pas saisi d\'article !');
                             }
                         }
@@ -378,9 +340,7 @@ class Router
                  */
                 if ($_GET['action'] == 'diplayprofil'){
                     if (isset($_SESSION['id'])){
-                        $profilPage = new ControllerUser();
-                        $page = $profilPage->displayprofil();
-
+                        $this->user->displayprofil();
                     }else{
                         throw new Exception('Impossible d\'afficher la page profil, veuillez vous connecter !');
                     }
@@ -390,10 +350,8 @@ class Router
                   * display edit page profil user
                   */
                  if ($_GET['action'] == 'editprofilpage'){
-                    if (isset($_SESSION['id']))
-                    {
-                        $all = new ControllerUser();
-                        $user = $all->editprofilpage();
+                    if (isset($_SESSION['id'])){
+                        $this->user->editprofilpage();
                     }else{
                         throw new Exception('Impossible d\'afficher la page edition de profil, veuillez vous connecter !');
                     }
@@ -418,8 +376,7 @@ class Router
                                   $resultat = move_uploaded_file($_FILES['avatar']['tmp_name'], $chemin);
                                   if ($resultat){
                                       $newavatar = $_SESSION['id'] . "." . $extensionUpload;
-                                      $controlleruser = new ControllerUser();
-                                      $userAvatar = $controlleruser->getAvatar($newavatar);
+                                      $this->user->getAvatar($newavatar);
                                     }else{
                                       throw new Exception('Erreur durant l\'importation de votre photo de profil !');
                                     }
@@ -442,8 +399,7 @@ class Router
                         if (isset($_POST['newpseudo']) and !empty($_POST['newpseudo']))
                         {
                             $newpseudo = htmlspecialchars($_POST['newpseudo']);
-                            $controlleruser = new ControllerUser();
-                            $userpseudo = $controlleruser->updateUserPseudo($newpseudo);
+                            $this->user->updateUserPseudo($newpseudo);
                         }else{
                             throw new Exception('Merci de remplir le champ pseudo');
                         }
@@ -452,13 +408,10 @@ class Router
                     /**
                      * update mail
                      */
-                    if ($_GET['action'] == 'updateUserMail')
-                    {
-                        if (isset($_POST['newmail']) and !empty($_POST['newmail']))
-                        {
+                    if ($_GET['action'] == 'updateUserMail'){
+                        if (isset($_POST['newmail']) and !empty($_POST['newmail'])){
                             $newmail = htmlspecialchars($_POST['newmail']);
-                            $controlleruser = new ControllerUser();
-                            $usermail = $controlleruser->updateUserMail($newmail);
+                            $this->user->updateUserMail($newmail);
                         }else{
                             throw new Exception('Merci de remplir le champ mail');
                         }
@@ -467,29 +420,22 @@ class Router
                     /**
                      * update password
                      */
-                    if ($_GET['action'] == 'updateUserpwd')
-                    {
-                        if (isset($_POST['newpwd']) and !empty($_POST['newpwd']))
-                        {
+                    if ($_GET['action'] == 'updateUserpwd'){
+                        if (isset($_POST['newpwd']) and !empty($_POST['newpwd'])){
                             $newpwd = password_hash($_POST['newpwd'], PASSWORD_DEFAULT);
-                            $controlleruser = new ControllerUser();
-                            $userpwd = $controlleruser->updateUserpwd($newpwd);
+                            $this->user->updateUserpwd($newpwd);
                         }else{
                             throw new Exception('Merci de remplir le champ password');
                         }
                     }
                 }else{
-                $vue = new ControllerHome();
-                $accueil = $vue->homePage();
+                    $this->home->homePage();
             }
         }catch(Exception $e){
-           $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
-            $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
+           
             $errorMessage = $e->getMessage();
-            $twig->addGlobal('session', $_SESSION);
-            echo $twig->render('error.html.twig', ['error' => $errorMessage], ['droits' => $_SESSION == 1]);
+            $this->twigySecur->addGlobal('session', $_SESSION);
+            echo $this->twigySecur ->render('error.html.twig', ['error' => $errorMessage], ['droits' => $_SESSION == 1]);
         }
     }
 }
