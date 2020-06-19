@@ -12,19 +12,20 @@ class ArticlesManager extends Manager{
     public function getArticles(){
 
         $db = $this->dbConnect();
-		$articles = $db->query('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id ORDER BY creation_date_fr DESC');
-       
-       return $articles;
+		$articles = $db->prepare('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr, DATE_FORMAT(update_date, \'%d/%m/%Y à %Hh%imin%ss\') AS update_date_fr  FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id ORDER BY creation_date_fr DESC');
+        $articles->execute(array());
+        return $articles;
         
 
     }
 
     public function Article($idArticle){
         $db = $this->dbConnect();
-		$req = $db->prepare('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id'); 
+		$req = $db->prepare('SELECT articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr, DATE_FORMAT(update_date, \'%d/%m/%Y à %Hh%imin%ss\') AS update_date_fr  FROM articles INNER JOIN users ON articles.id_user = users.id  WHERE articles.id = ?');
 		$req->execute(array($idArticle));
-		$articles = $req->fetch();
-		return $articles;
+        $article = $req->fetch();
+        
+		return $article;
     }
 
     public function getArticleAdmin($dataId) // méthode de récupération article à modifier (admin)
@@ -40,7 +41,7 @@ class ArticlesManager extends Manager{
     public function updateArticle($miniContent, $title, $content, $postId) //modifie article (admin)
     {
     	$db = $this->dbConnect();
-		$updArticle = $db->prepare('UPDATE articles SET mini_content = ?, title = ?, content = ?, creation_date = NOW() WHERE id = ?');
+		$updArticle = $db->prepare('UPDATE articles SET mini_content = ?, title = ?, content = ?, update_date = NOW()  WHERE id = ?');
         $artOk = $updArticle->execute(array($miniContent, $title, $content, $postId));
 		return $artOk;
     }
@@ -66,3 +67,4 @@ class ArticlesManager extends Manager{
 
 	}
 }
+

@@ -29,9 +29,12 @@
                         <div class="btn-group">
                             <a href="index.php?action=editArticleAdmin&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-secondary">Modifier</button></a>
                             <a href="index.php?action=deleteArticle&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-secondary">Supprimer</button></a>
-                         </div>
-                        <small class="text-muted"><em>de la part de : {{article.pseudo}}</em></small>
-                        <small class="text-muted"><em>le : {{article.creation_date_fr}}</em></small>
+                         </div><br>
+                        <small class="text-muted"><em>De la part de : {{article.pseudo}}</em></small><br>
+                        <small class="text-muted"><em>Créé le : {{article.creation_date_fr}}</em></small><br>
+                        {% if article.update_date_fr %}
+                        <small class="text-muted"><em>Modifié le : {{article.update_date_fr}}</em></small>
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -90,26 +90,46 @@ class Router
                         }
                     }
                 }
-                
+                /**
+                 * list articles
+                 */
                 if ($_GET['action'] == 'listArticles'){
                         $listarticles = new ControllerArticles();
                         $list = $listarticles->listArticle();
                         //var_dump($articles); die;
                     }
-
-                    elseif ($_GET['action'] == 'getArticle')
-                    { //affiche un article
+                    /**
+                     * get article by id
+                     */
+                  if ($_GET['action'] == 'getArticle'){ 
                         if (isset($_GET['id']) && $_GET['id'] > 0)
                         {
-                            $artic = new ControllerArticles();
-                            $afficheMoiLarticle = $artic->getArticle();
-            
+                            $article = new ControllerArticles();
+                            $display = $article->getArticle();
+                            
                         }
                         else
                         {
                             throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
                         }
                     }
+                    /**
+                     * add comment
+                     */
+                    if ($_GET['action'] == 'addComment'){
+                        if (isset($_GET['id']) && $_GET['id'] > 0){
+                            if (!empty($_GET['id']) && ($_POST['content'])){
+
+                                $controlleruser = new ControllerArticles();
+                                $addcomment = $controlleruser->addComment($_GET['id'], $_SESSION['id'], $_POST['content']);
+                            }else{
+                                throw new Exception('Oups... Tous les champs ne sont pas remplis !');
+                                }
+                        }else{
+                            throw new Exception('Oups... Aucun identifiant article !');
+                            }
+                    }
+
                 
 
                 if ($_GET['action'] == 'listArticlesAdmin'){
@@ -176,9 +196,14 @@ class Router
             }
         }
         catch(Exception $e){
+           
+            $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
+            $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
             $errorMessage = $e->getMessage();
-            //require ('views/frontend/errorView.php');
-            echo "error";
+            echo $twig->render('error.html.twig', ['error' => $errorMessage]);
+            
         }
     }
 }
