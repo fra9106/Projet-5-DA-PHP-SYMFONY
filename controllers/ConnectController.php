@@ -4,77 +4,9 @@ namespace Control;
 
 require '../vendor/autoload.php';
 
-use Mod\{MembersManager};
+use Mod\{ConnectManager};
 
-class ControllerUser {
-
-    public function addMember($pseudo, $mail, $mdp, $avatar) //ajout membre après divers tests
-    
-    {
-        $membre = new MembersManager();
-        $test = new MembersManager();
-
-        $mdp = password_hash($_POST['mdp'], PASSWORD_DEFAULT); //hash mot de passe
-        $testOk = $test->testMail($mail); // test pour ne pas avoir de mail en doublon
-        if ($testOk == 0)
-        {
-            $newMembre = $membre->insertMembre($pseudo, $mail, $mdp, 'default.jpg');
-            header("Location:index.php?action=displConnexion ");
-        }
-        else
-        {
-            throw new \Exception('Oups... Adresse email déjà utilisée');
-        }
-    }
-
-
-    public function listUsersAdmin() {
-
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
-		$twig = new \Twig\Environment($loader, ['debug' => true]);	
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
-        $usersManager = new MembersManager();
-        $users = $usersManager->getUsers();
-        $twig->addGlobal('session', $_SESSION);
-        echo $twig->render('listUsers.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
-    }
-
-    public function deleteUser($idUser) // supprimme l'user
-    
-    {
-        $deleteuser = new MembersManager();
-        $delete = $deleteuser->deleteUse($idUser);
-       
-        if ($delete === false)
-        {
-            throw new \Exception('Impossible de supprimer cet article!');
-        }
-        else
-        {
-            header('Location: index.php?action=listUsersAdmin');
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+class ConnectController {
 
     public function displFormulContact() // affichage formulaire de contact
     
@@ -85,24 +17,7 @@ class ControllerUser {
 		echo $twig->render("sign_in.html.twig", ['droits' => $_SESSION == 1]);	
     }
 
-    public function addMember($pseudo, $mail, $mdp, $avatar) //ajout membre après divers tests
     
-    {
-        $membre = new MembersManager();
-        $test = new MembersManager();
-
-        $mdp = password_hash($_POST['mdp'], PASSWORD_DEFAULT); //hash mot de passe
-        $testOk = $test->testMail($mail); // test pour ne pas avoir de mail en doublon
-        if ($testOk == 0)
-        {
-            $newMembre = $membre->insertMembre($pseudo, $mail, $mdp, 'default.jpg');
-            header("Location:index.php?action=displConnexion ");
-        }
-        else
-        {
-            throw new \Exception('Oups... Adresse email déjà utilisée');
-        }
-    }
 
     public function displConnexion() //affichage formulaire connexion
     
@@ -116,7 +31,7 @@ class ControllerUser {
     public function login($mail, $pass) //connexion
     
     {
-        $membre = new MembersManager();
+        $membre = new ConnectManager();
         $connect = $membre->getConnect($mail);
         $isPasswordCorrect = password_verify($_POST['mdp'], $connect['pass']);
         $mdp = $connect['pass'];
@@ -137,7 +52,7 @@ class ControllerUser {
                 }
                 if (!isset($_SESSION['id']) and isset($_COOKIE['mail'], $_COOKIE['pass']) and !empty($_COOKIE['mail']) and !empty($_COOKIE['pass']))
                 { //si pas de session mais cookies pseudo et mdp...
-                    $member = new MembersManager(); //on instancie la class MembersManager...
+                    $member = new ConnectManager(); //on instancie la class MembersManager...
                     $usercook = $member->remember($_COOKIE['mail'], $_COOKIE['pass']); //et on appelle la fonction remember avec les infos rapportés du modèle
                 
                     if ($usercook == 1) // si cookies pseuso et mdp == à 1
@@ -186,10 +101,4 @@ class ControllerUser {
         session_destroy();
         header("Location: index.php?action=homePage");
     }
-
-    
-    
-
-
-
 }

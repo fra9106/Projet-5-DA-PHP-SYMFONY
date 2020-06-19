@@ -32,7 +32,7 @@ class ControllerArticles{
     public function getArticle(){
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
         $twig = new \Twig\Environment($loader, [
-            'cache' => false
+            'cache' => '../views/templates/cache',
         ]);
 
         $twig = new \Twig\Environment($loader, ['debug' => true]);	
@@ -43,15 +43,15 @@ class ControllerArticles{
 
         $article = $articlesManager->Article($_GET['id']);
         
-        $comment = $commentsManager->getComments($_GET['id']);
-        //var_dump($comment); die;
-        $twig->addGlobal('session', $_SESSION); 
-       // $valid = 'valid';  
-       
-        echo $twig->render('article.html.twig',['article' => $article],['droits' => $_SESSION == 1],['comment' => $comment]);
-       
+        $comments = $commentsManager->getComments($_GET['id']);
+        
+        //$twig->addGlobal('session', $_SESSION); 
+        // $valid = 'valid';  
         //, ['valid' => $valid == 1]
-
+        //echo $twig->render('article.html.twig',['article' => $article], ['comments' => $comments],  ['droits' => $_SESSION == 1]);
+       
+        
+        require ('../views/templates/debug.php');
     }
 
     public function addComment($idArticle, $idUser, $content)
