@@ -4,7 +4,7 @@ namespace Control;
 
 require '../vendor/autoload.php';
 
-use Mod\{MembersManager};
+use Mod\MembersManager;
 
 class ControllerUser {
 
