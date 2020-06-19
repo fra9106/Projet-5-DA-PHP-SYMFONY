@@ -13,6 +13,7 @@ class ConnectController {
     {
         $this->loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
         $this->twig = new \Twig\Environment($this->loader);
+        $this->member = new ConnectManager();
     }
 
     /**
@@ -44,8 +45,7 @@ class ConnectController {
      */
     public function login($mail, $pass) 
     {
-        $membre = new ConnectManager();
-        $connect = $membre->getConnect($mail);
+        $connect = $this->member->getConnect($mail);
         $isPasswordCorrect = password_verify($_POST['mdp'], $connect['pass']);
         $mdp = $connect['pass'];
 
@@ -59,8 +59,7 @@ class ConnectController {
                     setcookie('mdp', $mdp, time() + 365 * 24 * 3600, null, null, false, true);
                 }
                 if (!isset($_SESSION['id']) and isset($_COOKIE['mail'], $_COOKIE['pass']) and !empty($_COOKIE['mail']) and !empty($_COOKIE['pass'])){ //si pas de session mais cookies pseudo et mdp...
-                    $member = new ConnectManager(); //on instancie la class MembersManager...
-                    $usercook = $member->remember($_COOKIE['mail'], $_COOKIE['pass']); //et on appelle la fonction remember avec les infos rapportés du modèle
+                    $usercook = $this->member->remember($_COOKIE['mail'], $_COOKIE['pass']); //et on appelle la fonction remember avec les infos rapportés du modèle
                     if ($usercook == 1) {
                         
                         session_start();
