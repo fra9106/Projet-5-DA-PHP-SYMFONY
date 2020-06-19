@@ -1,17 +1,17 @@
-html, body{
-
-    min-height: 100%;
-    
-}
+html,
 body {
 
-   text-align: center !important;
-   overflow-x: hidden;
-   background-color: #ede7e3 !important;
-
+    min-height: 100%;
 }
 
-footer{
+body {
+
+    text-align: center !important;
+    overflow-x: hidden;
+    background-color: #ede7e3 !important;
+}
+
+footer {
 
     padding-top: 30px;
     padding-bottom: 30px;
@@ -20,133 +20,112 @@ footer{
     margin-bottom: 0;
 }
 
-.scroll-to-top a 
-{
+.scroll-to-top a {
     width: 3.5rem;
     height: 3.5rem;
-    background-color: rgba(33,37,41,.5);
+    background-color: rgba(33, 37, 41, .5);
     line-height: 3.1rem;
 }
 
-.scroll-to-top 
-{
+.scroll-to-top {
     z-index: 1042;
     right: 1rem;
     bottom: 1rem;
 }
 
-.fa-chevron-up{
+.fa-chevron-up {
     font-size: 17px;
 }
 
-.card{
+.card {
     -webkit-box-shadow: 0 10px 6px -6px #777;
-	-moz-box-shadow: 0 10px 6px -6px #777;
-	 box-shadow: 0 10px 6px -6px #777;
+    -moz-box-shadow: 0 10px 6px -6px #777;
+    box-shadow: 0 10px 6px -6px #777;
 }
-.btn-xl{
+
+.btn-xl {
     margin-top: 10px;
 }
 
-.slider{
+.slider {
 
-    background: url('../img/buro.png')center center/cover no-repeat!important;
+    background: url('../img/buro.png')center center/cover no-repeat !important;
 }
 
-.fa-desktop{
+.fa-desktop {
     font-size: 50px;
-    margin-bottom: 30px;;
+    margin-bottom: 30px;
 }
 
-.bienvenu{
+.bienvenu {
     font-family: 'Pinyon Script', serif;
     color: #C89446;
-    
 }
 
-.articlewrite{
+.articlewrite {
     margin-top: 150px;
 }
 
-.masthead{
-    height: 800px;;
+.masthead {
+    height: 800px;
 }
 
-.pic{
+.pic {
     border: solid black 1px;
     border-radius: 100%;
+}
+
+.accroche {
+    font-size: 18px;
     
 }
 
-.accroche{
-    font-size: 18px;;
-}
-
-
-
-.bg.prim{
+.bg.prim {
 
     background: url('../img/buro2.png')center center/cover no-repeat;
 }
 
-.fa-envelope-open{
+.fa-envelope-open {
     font-size: 25px;
 }
-
-
 
 .btn-social {
     border-radius: 100% !important;
     width: 3.25rem;
     height: 3.25rem;
-    
+
 }
 
-.register{
+.register {
 
     margin-top: 250px;
 }
 
-.fa-linkedin-in, .fa-twitter, .fa-facebook-f, .fa-github-square {
+.fa-linkedin-in,
+.fa-twitter,
+.fa-facebook-f,
+.fa-github-square {
     font-size: 28px;
     text-align: center;
     margin-top: 4px;
     margin-left: -2px;
 }
 
-@media only screen and (min-width: 360px) /*Samsung Galaxie*/
-{
-    
-    
-}
+@media only screen and (min-width: 700px)
 
-@media only screen and (min-width: 375px) /*iphone6*/
-{
-    
-}
-
-
-@media only screen and (min-width: 414px) /*6plus*/
-{
-    
-}
-
-
-@media only screen and (min-width: 700px) /*tablette-*/
-{
-    
-    
-    .bienvenu
+/*tablette-*/
     {
+
+
+    .bienvenu {
 
         font-size: 50px;
         line-height: 250px;
         margin-bottom: 240px;
     }
 
+    .container {
+        margin-bottom: -15px;
+    }
 }
-.container{
-    margin-bottom: -15px;
-}
-
 
