@@ -1,0 +1,85 @@
+{% extends 'baseprofil.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+
+<div class="jumbotron text-center"><br><br>
+   
+    <h1>
+        Profil  : {{user.pseudo}} 
+    </h1>
+</div><br>
+<div class="container">
+    <div class="row justify-content-center text-center">
+        <div class="col-6"><br>
+                <div class=" card mb-4">
+                    <form method="POST" action="index.php?action=getAvatar" enctype="multipart/form-data">
+                        <table>
+                           <tr>
+                              <td align="center">
+                                 <label>Ajouter une photo de profil : </label>
+                              </td>
+                              <td>
+                                 <input type="file" name="avatar"><br><br>
+                                 <a href="index.php?action=getAvatar&amp;id={{session.id}}"><button type="submit" name="getAvatar"class="btn btn-secondary">Ajouter une photo</button></a><br><br>
+                              </td>
+                           </tr>
+                        </table>
+                     </form>
+                     <form method="POST" action="index.php?action=updateUserPseudo">
+                        <table>
+                           <tr>
+                              <td align="right">
+                                 <label>Pseudo :</label>
+                              </td>
+                              <td><br>
+                                 <input type="text" name="newpseudo" placeholder="Pseudo" value="{{session.pseudo}}" />
+                                 <a href="index.php?action=updateUserPseudo&amp;id={{session.id}} ?>"><button type="submit" name="updateUserPseudo"class="btn btn-secondary">Je modifie mon Pseudo</button></a><br><br>
+                              </td>
+                           </tr>
+                        </table>
+                     </form>
+                     <form method="POST" action="index.php?action=updateUserMail">
+                        <table>
+                           <td align="right">
+                              <label>Mail :</label>
+                           </td>
+                           <td><br>
+                              <input type="text" name="newmail" placeholder="Mail" value="{{session.mail}}" />
+                              <a href="index.php?action=updateUserMail&amp;id={{session.id}}"><button type="submit" name="updateUserMail"class="btn btn-secondary">Je modifie mon Mail</button></a><br><br>
+                           </td>
+                           </tr>
+                        </table>
+                     </form>
+                     <form method="POST" action="index.php?action=updateUserpwd">
+                        <table>
+                           <tr>
+                              <td align="right">
+                                 <label>Mot de passe :</label>
+                              </td>
+                              <td><br>
+                                 <input type="password" name="newpwd" placeholder="Mot de passe" value="password"/>
+                                 <a href="index.php?action=updateUserpwd&amp;id={{session.id}}"><button type="submit" name="updateUserpwd"class="btn btn-secondary">Je modifie mon Mot de passe</button></a><br><br>
+                              </td>
+                           </tr>
+                           <tr>
+                        </table>
+                     </form>
+                    
+                </div>
+        </div>
+    </div>
+</div><br><br>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

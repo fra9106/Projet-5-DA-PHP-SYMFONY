@@ -58,138 +58,103 @@ class ControllerUser {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function displFormulContact() // affichage formulaire de contact
-    
+    /**
+     * user profil page
+     *
+     * @return void
+     */
+    public function displayprofil()
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
-		$twig = new \Twig\Environment($loader);	
-        $twig->addGlobal('session', $_SESSION);   
-		echo $twig->render("sign_in.html.twig", ['droits' => $_SESSION == 1]);	
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/profils');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+        $page = new MembersManager();
+        $user = $page->reqprofil();
+        
+        $twig->addGlobal('session', $_SESSION);
+        echo $twig->render('profil.html.twig',['user' => $user], ['droits' => $_SESSION == 1] );
     }
 
-    public function addMember($pseudo, $mail, $mdp, $avatar) //ajout membre après divers tests
-    
+    /**
+     * display edit page profil user
+     *
+     * @return void
+     */
+    public function editprofilpage() 
     {
-        $membre = new MembersManager();
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/profils');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+        $infosmembre = new MembersManager();
+        $user = $infosmembre->infosProfil();
+        
+        $twig->addGlobal('session', $_SESSION);
+        echo $twig->render('editprofil.html.twig',['user' => $user], ['droits' => $_SESSION == 1] );
+    }
+
+
+    /**
+     * upload avatar file
+     *
+     * @param [type] $newavatar
+     * @return void
+     */
+    public function getAvatar($newavatar)
+    {
+        $membreManager = new MembersManager();
+        $avatarinfos = $membreManager->infosAvatar($newavatar);
+        throw new \Exception('Avatar modifié !');
+    }
+
+    /**
+     *update pseudo
+     *
+     * @param [type] $newpseudo
+     * @return void
+     */
+    public function updateUserPseudo($newpseudo) 
+    {
+        $infosmembre = new MembersManager();
+        $pseudoinfos = $infosmembre->infoPseudo($newpseudo);
+        header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
+    }
+
+    /**
+     * update mail
+     *
+     * @param [type] $newmail
+     * @return void
+     */
+    public function updateUserMail($newmail)
+    {
         $test = new MembersManager();
-
-        $mdp = password_hash($_POST['mdp'], PASSWORD_DEFAULT); //hash mot de passe
-        $testOk = $test->testMail($mail); // test pour ne pas avoir de mail en doublon
+        $testOk = $test->testMail($newmail);
         if ($testOk == 0)
-        {
-            $newMembre = $membre->insertMembre($pseudo, $mail, $mdp, 'default.jpg');
-            header("Location:index.php?action=displConnexion ");
-        }
-        else
-        {
-            throw new \Exception('Oups... Adresse email déjà utilisée');
+        { 
+            $infosmembre = new MembersManager();
+            $mailinfos = $infosmembre->infoMail($newmail);
+            header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
         }
     }
 
-    public function displConnexion() //affichage formulaire connexion
-    
+    /**
+     * update password
+     *
+     * @param [type] $newmdp
+     * @return void
+     */
+    public function updateUserpwd($newpwd) // update le motdepasse
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
-		$twig = new \Twig\Environment($loader);	
-        $twig->addGlobal('session', $_SESSION);   
-		echo $twig->render("log_in.html.twig", ['droits' => $_SESSION == 1]);	
+        $infosmembre = new MembersManager();
+        $pwdinfos = $infosmembre->infopwd($newpwd);
+        header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
     }
 
-    public function login($mail, $pass) //connexion
-    
-    {
-        $membre = new MembersManager();
-        $connect = $membre->getConnect($mail);
-        $isPasswordCorrect = password_verify($_POST['mdp'], $connect['pass']);
-        $mdp = $connect['pass'];
 
-        if (!$connect)
-        {
-            throw new \Exception('Oups... Mauvais identifiant ou mot de passe !');
-        }
-        else
-        {
 
-            if ($isPasswordCorrect)
-            {
-                if (isset($_POST['rememberme']))
-                { //checkbox se souvenir de moi
-                    setcookie('mail', $mail, time() + 365 * 24 * 3600, null, null, false, true); //chargement des cookies pseudo et mdp
-                    setcookie('mdp', $mdp, time() + 365 * 24 * 3600, null, null, false, true);
-                }
-                if (!isset($_SESSION['id']) and isset($_COOKIE['mail'], $_COOKIE['pass']) and !empty($_COOKIE['mail']) and !empty($_COOKIE['pass']))
-                { //si pas de session mais cookies pseudo et mdp...
-                    $member = new MembersManager(); //on instancie la class MembersManager...
-                    $usercook = $member->remember($_COOKIE['mail'], $_COOKIE['pass']); //et on appelle la fonction remember avec les infos rapportés du modèle
-                
-                    if ($usercook == 1) // si cookies pseuso et mdp == à 1
-                    
-                    { // on ouvre les différentes sessions et rdv à la page d'accueil
-                        session_start();
-                        $_SESSION['id'] = $connect['id'];
-                        $_SESSION['pseudo'] = $connect['pseudo'];
-                        $_SESSION['mail'] = $mail; 
-                        $_SESSION['droits'] = $connect['droits'];
-
-                        header("Location: index.php?action=homePage");
-                    }
-                    else
-                    { //sinon message:
-                        throw new \Exception('Oups... Veuillez vous reconnecter !');
-                    }
-                }
-                session_start();
-                $_SESSION['id'] = $connect['id'];
-                $_SESSION['pseudo'] = $connect['pseudo'];
-                $_SESSION['mail'] = $mail;
-                $_SESSION['droits'] = $connect['droits'];
-
-                header("Location: index.php?action=homePage");
-
-            }
-            else
-            {
-                throw new \Exception('Mauvais identifiant ou mot de passe !');
-            }
-            if (!empty($_SESSION['droits']) && $_SESSION['droits'] == '1') {
-                ////CONDITION DE SECURITE POUR EVITER DE POUVOIR ACCEDER A L'ADMIN PAR L'URL
-                header("Location: index.php?action=homePage");
-            }           
-        }
-    }
-
-    public function logout() //déconnexion
-    
-    {
-        session_start();
-        setcookie('mail', '', time() - 3600);
-        setcookie('mdp', '', time() - 3600);
-        $_SESSION = array();
-        session_destroy();
-        header("Location: index.php?action=homePage");
-    }
 
     
-    
-
-
 
 }

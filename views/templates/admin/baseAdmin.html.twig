@@ -28,12 +28,19 @@
                 <li class="nav-item">
                   <a class="nav-link" href="index.php?action=listArticles">Articles</a>
                 </li>
+                <li class="nav-item">
+                <a class="nav-link" href="index.php?action=diplayprofil&amp;id={{session.id}}">Profil</a>
+                </li>
                 <li class="nav-item"></li>
                   <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
                 </li>
               </ul>
               <span class=" text-white">{{session.pseudo}}</span>
-              <img class=" reveal-dev pic " width="50" src="../publics/img/franck.jpg" alt="photo FranckB">
+              {% if session.pseudo %}
+              <img class=" reveal-dev pic " width="50" src="../publics/img/users/avatar/{{session.avatar}}" alt="photo utilisateur">
+              {% else %}
+              <img class=" reveal-dev pic " width="50" src="../publics/img/franck.jpg" alt="photo franck">
+              {% endif %}
             </div>
           </nav>
           {% block body %}{% endblock %}

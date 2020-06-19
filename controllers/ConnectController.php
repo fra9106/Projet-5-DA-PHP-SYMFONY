@@ -63,6 +63,7 @@ class ConnectController {
                         $_SESSION['pseudo'] = $connect['pseudo'];
                         $_SESSION['mail'] = $mail; 
                         $_SESSION['droits'] = $connect['droits'];
+                        $_SESSION['avatar'] = $connect['avatar'];
 
                         header("Location: index.php?action=homePage");
                     }
@@ -76,7 +77,8 @@ class ConnectController {
                 $_SESSION['pseudo'] = $connect['pseudo'];
                 $_SESSION['mail'] = $mail;
                 $_SESSION['droits'] = $connect['droits'];
-
+                $_SESSION['avatar'] = $connect['avatar'];
+                
                 header("Location: index.php?action=homePage");
 
             }
