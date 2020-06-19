@@ -10,7 +10,7 @@ class MembersManager extends Manager{
     
     {
         $db = $this->dbConnect();
-        $insertmbr = $db->prepare("INSERT INTO users(pseudo, mail, pass, droits, avatar) VALUES(?, ?, ?, 0, ?)");
+        $insertmbr = $db->prepare("INSERT INTO users(pseudo, mail, pass, droits, avatar, creation_date) VALUES(?, ?, ?, 0, ?, NOW())");
         $insertmbr->execute(array(
             $pseudo,
             $mail,
@@ -60,6 +60,28 @@ class MembersManager extends Manager{
         return $usercook;
 
     }
+
+    public function getUsers()
+    
+    {
+        $db = $this->dbConnect();
+		$users = $db->prepare('SELECT id, pseudo, mail, DATE_FORMAT(create_date, \'%d/%m/%Y à %Hh%imin%ss\') AS create_date_fr FROM users');
+        $users->execute(array());
+        return $users;
+
+
+    }
+    public function deleteUse($idUser) //supprime un user et ses commentaires (admin)
+	{ 
+        $db = $this->dbConnect();
+        $comment = $db->prepare('DELETE FROM comments WHERE id_user = ?');
+        $comment->execute([$idUser]);
+        $req = $db->prepare('DELETE FROM users WHERE id = ?');
+        $req->execute(array($idUser));
+        
+       	return $req;
+    }
+
 
 
 

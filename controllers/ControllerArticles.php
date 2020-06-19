@@ -86,8 +86,8 @@ class ControllerArticles{
         $twig->addExtension(new \Twig\Extension\DebugExtension());
         $articlesManager = new ArticlesManager();
         $articles = $articlesManager->getArticles();
-       
-        echo $twig->render('listArticlesAdmin.html.twig',['articles' => $articles]);
+        $twig->addGlobal('session', $_SESSION);
+        echo $twig->render('listArticlesAdmin.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1] );
     }
 
     public function editArticleAdmin(){
@@ -99,8 +99,8 @@ class ControllerArticles{
         ]);
 		$twig = new \Twig\Environment($loader, ['debug' => true]);	
         $twig->addExtension(new \Twig\Extension\DebugExtension());
-        
-        echo $twig->render("articleUpdating.html.twig", ['articles' => $articles]);	 
+        $twig->addGlobal('session', $_SESSION);
+        echo $twig->render("articleUpdating.html.twig", ['articles' => $articles], ['droits' => $_SESSION == 1]);	 
     }
 
     public function updateArticleAdmin($miniContent, $title, $content, $postId) // modifie article
@@ -138,8 +138,8 @@ class ControllerArticles{
         ]);
 		$twig = new \Twig\Environment($loader, ['debug' => true]);	
         $twig->addExtension(new \Twig\Extension\DebugExtension());
-        
-        echo $twig->render("articleWriting.html.twig");	 
+        $twig->addGlobal('session', $_SESSION);
+        echo $twig->render("articleWriting.html.twig",['droits' => $_SESSION == 1] );	 
         
     }  
     

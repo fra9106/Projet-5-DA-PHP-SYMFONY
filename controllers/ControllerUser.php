@@ -103,7 +103,7 @@ class ControllerUser {
             }
             if (!empty($_SESSION['droits']) && $_SESSION['droits'] == '1') {
                 ////CONDITION DE SECURITE POUR EVITER DE POUVOIR ACCEDER A L'ADMIN PAR L'URL
-                header("Location: index.php?action=listArticles");
+                header("Location: index.php?action=homePage");
             }           
         }
     }
@@ -117,6 +117,36 @@ class ControllerUser {
         $_SESSION = array();
         session_destroy();
         header("Location: index.php?action=homePage");
+    }
+
+    public function listUsersAdmin() {
+
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+		$twig = new \Twig\Environment($loader, ['debug' => true]);	
+        $twig->addExtension(new \Twig\Extension\DebugExtension());
+        $usersManager = new MembersManager();
+        $users = $usersManager->getUsers();
+        $twig->addGlobal('session', $_SESSION);
+        echo $twig->render('listUsers.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
+    }
+
+    public function deleteUser($idUser) // supprimme l'user
+    
+    {
+        $deleteuser = new MembersManager();
+        $delete = $deleteuser->deleteUse($idUser);
+       
+        if ($delete === false)
+        {
+            throw new \Exception('Impossible de supprimer cet article!');
+        }
+        else
+        {
+            header('Location: index.php?action=listUsersAdmin');
+        }
     }
 
     
