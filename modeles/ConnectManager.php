@@ -6,8 +6,13 @@ use Mod\Manager;
 
 class ConnectManager extends Manager{
 
-   public function getConnect($mail) //récupère les information relative à la connexion de l'utilisateur inscrit en db
-    
+    /**
+     * login by mail
+     *
+     * @param [type] $mail
+     * @return void
+     */
+    public function getConnect($mail) 
     {
         $db = $this->dbConnect();
         $req = $db->prepare('SELECT * FROM users WHERE mail =  :mail');
@@ -19,8 +24,14 @@ class ConnectManager extends Manager{
         return $connect;
     }
 
-    public function remember($mail, $mdp) // fonction se souvenir de moi
-    
+    /**
+     * function remember me (checkbox)
+     *
+     * @param [type] $mail
+     * @param [type] $mdp
+     * @return void
+     */
+    public function remember($mail, $mdp)
     {
         $db = $this->dbConnect();
         $requser = $db->prepare("SELECT * FROM users WHERE mail = ? AND pass = ?");

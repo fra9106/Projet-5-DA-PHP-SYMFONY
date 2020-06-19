@@ -9,7 +9,13 @@ use Mod\Manager;
 
 class ArticlesManager extends Manager{
 
-    public function getArticles(){
+    /**
+     * get articles list
+     *
+     * @return void
+     */
+    public function getArticles()
+    {
 
         $db = $this->dbConnect();
 		$articles = $db->prepare('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr, DATE_FORMAT(update_date, \'%d/%m/%Y à %Hh%imin%ss\') AS update_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id ORDER BY creation_date_fr DESC');
@@ -19,7 +25,14 @@ class ArticlesManager extends Manager{
 
     }
 
-    public function Article($idArticle){
+    /**
+     * get article by id
+     *
+     * @param [type] $idArticle
+     * @return void
+     */
+    public function Article($idArticle)
+    {
         $db = $this->dbConnect();
 		$req = $db->prepare('SELECT articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr, DATE_FORMAT(update_date, \'%d/%m/%Y à %Hh%imin%ss\') AS update_date_fr  FROM articles INNER JOIN users ON articles.id_user = users.id  WHERE articles.id = ?');
 		$req->execute(array($idArticle));
@@ -28,7 +41,13 @@ class ArticlesManager extends Manager{
 		return $article;
     }
 
-    public function getArticleAdmin($dataId) // méthode de récupération article à modifier (admin)
+    /**
+     * get article admin
+     *
+     * @param [type] $dataId
+     * @return void
+     */
+    public function getArticleAdmin($dataId) 
 	{
 		
 		$db = $this->dbConnect();
@@ -38,7 +57,16 @@ class ArticlesManager extends Manager{
     	return $articles;
     } 
     
-    public function updateArticle($miniContent, $title, $content, $postId) //modifie article (admin)
+    /**
+     * update article
+     *
+     * @param [type] $miniContent
+     * @param [type] $title
+     * @param [type] $content
+     * @param [type] $postId
+     * @return void
+     */
+    public function updateArticle($miniContent, $title, $content, $postId)
     {
     	$db = $this->dbConnect();
 		$updArticle = $db->prepare('UPDATE articles SET mini_content = ?, title = ?, content = ?, update_date = NOW()  WHERE id = ?');
@@ -46,17 +74,32 @@ class ArticlesManager extends Manager{
 		return $artOk;
     }
 
-    public function supprArticle($dataId) //supprime un article et ses commentaires (admin)
+    /**
+     * delete article and his comments
+     *
+     * @param [type] $dataId
+     * @return void
+     */
+    public function supprArticle($dataId)
 	{ 
         $db = $this->dbConnect();
-        /*$comment = $db->prepare('DELETE FROM avis WHERE id_article = ?');
-        $comment->execute([$dataId]);*/
+        $comment = $db->prepare('DELETE FROM comments WHERE id_article = ?');
+        $comment->execute([$dataId]);
         $req = $db->prepare('DELETE FROM articles WHERE id = ?');
         $req->execute(array($dataId));
        	return $req;
     }
     
-
+    /**
+     * post article admin
+     *
+     * @param [type] $idCategory
+     * @param [type] $idUser
+     * @param [type] $miniContent
+     * @param [type] $title
+     * @param [type] $content
+     * @return void
+     */
     public function postArticle($idCategory, $idUser, $miniContent, $title, $content)
 	{
 		$db = $this->dbConnect();

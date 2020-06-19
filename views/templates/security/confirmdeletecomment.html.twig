@@ -1,0 +1,29 @@
+{% extends 'baselog.html.twig' %}
+
+
+{% block title %}Confirmer supprimer{% endblock %}
+
+{% block body %}
+
+<div class="jumbotron text-center"><br><br>
+   
+    <h3>
+        Vous êtes sur le point de supprimer un commentaire !
+    </h3>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center text-center">
+        <div class="col-6"><br>
+            <div class=" card mb-4">
+                <div class="card-body">
+                    <p class="card-text">Voulez-vous vraiment supprimer le commentaire suivant : <br> "{{comment.content}}" ... ?</p>
+                    <a href="index.php?action=deleteComment&amp;id={{comment.id}}"><button type="button" class="btn  btn-danger">Supprimer</button></a><br><br>
+                    <p class="card-text">Retour à la liste des commentaires</p>
+                    <a href="index.php?action=listCommentsAdmin"><button type="button" class="btn btn-success">Retour</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -6,8 +6,16 @@ use Mod\Manager;
 
 class MembersManager extends Manager{
 
-    public function insertMembre($pseudo, $mail, $mdp, $avatar) //insertion infos nouveau membre en db
-    
+    /**
+     * new member add
+     *
+     * @param [type] $pseudo
+     * @param [type] $mail
+     * @param [type] $mdp
+     * @param [type] $avatar
+     * @return void
+     */
+    public function insertMembre($pseudo, $mail, $mdp, $avatar)
     {
         $db = $this->dbConnect();
         $insertmbr = $db->prepare("INSERT INTO users(pseudo, mail, pass, droits, avatar, create_date) VALUES(?, ?, ?, 0, ?, NOW())");
@@ -18,9 +26,14 @@ class MembersManager extends Manager{
             'default.jpg'
         ));
         return $insertmbr;
-
     }
 
+    /**
+     * test same mail
+     *
+     * @param [type] $mail
+     * @return void
+     */
     public function testMail($mail) //test pour contrer doublon mail
     
     {
@@ -33,6 +46,11 @@ class MembersManager extends Manager{
         return $mailexist;
     }
 
+    /**
+     * get members admin
+     *
+     * @return void
+     */
     public function getUsers()
     
     {
@@ -40,10 +58,15 @@ class MembersManager extends Manager{
 		$users = $db->prepare('SELECT id, pseudo, mail, DATE_FORMAT(create_date, \'%d/%m/%Y à %Hh%imin%ss\') AS create_date_fr FROM users');
         $users->execute(array());
         return $users;
-
-
     }
-    public function deleteUse($idUser) //supprime un user et ses commentaires (admin)
+
+    /**
+     * delete member and his comments
+     *
+     * @param [type] $idUser
+     * @return void
+     */
+    public function deleteUse($idUser) 
 	{ 
         $db = $this->dbConnect();
         $comment = $db->prepare('DELETE FROM comments WHERE id_user = ?');
@@ -100,7 +123,6 @@ class MembersManager extends Manager{
         $allinfos = $requser->fetch();
         return $allinfos;
     }
-
 
     /**
      * upload new profil picture
@@ -170,9 +192,5 @@ class MembersManager extends Manager{
         ));
         return $insertpwd;
     }
-
-
-
-
 
 }

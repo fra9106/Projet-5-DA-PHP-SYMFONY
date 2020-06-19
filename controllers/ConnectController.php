@@ -8,8 +8,12 @@ use Mod\{ConnectManager};
 
 class ConnectController {
 
-    public function displFormulContact() // affichage formulaire de contact
-    
+    /**
+     * display contact form
+     *
+     * @return void
+     */
+    public function displFormulContact()
     {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
 		$twig = new \Twig\Environment($loader);	
@@ -17,10 +21,12 @@ class ConnectController {
 		echo $twig->render("sign_in.html.twig", ['droits' => $_SESSION == 1]);	
     }
 
-    
-
-    public function displConnexion() //affichage formulaire connexion
-    
+    /**
+     * display login form
+     *
+     * @return void
+     */
+    public function displConnexion()
     {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
 		$twig = new \Twig\Environment($loader);	
@@ -28,8 +34,14 @@ class ConnectController {
 		echo $twig->render("log_in.html.twig", ['droits' => $_SESSION == 1]);	
     }
 
-    public function login($mail, $pass) //connexion
-    
+    /**
+     * login
+     *
+     * @param [type] $mail
+     * @param [type] $pass
+     * @return void
+     */
+    public function login($mail, $pass) 
     {
         $membre = new ConnectManager();
         $connect = $membre->getConnect($mail);
@@ -46,8 +58,8 @@ class ConnectController {
             if ($isPasswordCorrect)
             {
                 if (isset($_POST['rememberme']))
-                { //checkbox se souvenir de moi
-                    setcookie('mail', $mail, time() + 365 * 24 * 3600, null, null, false, true); //chargement des cookies pseudo et mdp
+                { 
+                    setcookie('mail', $mail, time() + 365 * 24 * 3600, null, null, false, true); 
                     setcookie('mdp', $mdp, time() + 365 * 24 * 3600, null, null, false, true);
                 }
                 if (!isset($_SESSION['id']) and isset($_COOKIE['mail'], $_COOKIE['pass']) and !empty($_COOKIE['mail']) and !empty($_COOKIE['pass']))
@@ -68,7 +80,7 @@ class ConnectController {
                         header("Location: index.php?action=homePage");
                     }
                     else
-                    { //sinon message:
+                    { 
                         throw new \Exception('Oups... Veuillez vous reconnecter !');
                     }
                 }
@@ -87,14 +99,18 @@ class ConnectController {
                 throw new \Exception('Mauvais identifiant ou mot de passe !');
             }
             if (!empty($_SESSION['droits']) && $_SESSION['droits'] == '1') {
-                ////CONDITION DE SECURITE POUR EVITER DE POUVOIR ACCEDER A L'ADMIN PAR L'URL
-                header("Location: index.php?action=homePage");
-            }           
-        }
+            
+                header("Location: index.php?action=writeArticleDisplay");
+            }
     }
+}
 
-    public function logout() //déconnexion
-    
+    /**
+     * logout
+     *
+     * @return void
+     */
+    public function logout()
     {
         session_start();
         setcookie('mail', '', time() - 3600);

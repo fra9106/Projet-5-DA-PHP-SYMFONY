@@ -13,12 +13,18 @@ class Router
         {
             if (isset($_GET['action'])){
                 
+                /**
+                 * home page
+                 */
                 if ($_GET['action'] == 'homePage'){
                     $display = new ControllerHome();
                     $contact = $display->homePage();
                     
                 }
 
+                /**
+                 * send message home page
+                 */
                 if ($_GET['action'] == 'sendMessage'){
                     if (isset($_POST['sendMessage']) and isset($_POST['username']) and isset($_POST['mail']) and isset($_POST['content'])){
                     $username = htmlspecialchars($_POST['username']);
@@ -33,16 +39,25 @@ class Router
                          }
                 }
                 
+                /**
+                 * display contact form 
+                 */
                 if ($_GET['action'] == 'displFormulContact'){
                     $display = new ConnectController();
                     $contact = $display->displFormulContact();
                 }
 
+                /**
+                 * display connect form
+                 */
                 if ($_GET['action'] == 'displConnexion'){
                 $display = new ConnectController();
                 $contact = $display->displConnexion();
                 }
 
+                /**
+                 * login
+                 */
                 if ($_GET['action'] == 'login'){
                     if (isset($_POST['login']) and isset($_POST['mail']) and isset($_POST['mdp'])){
                         $mail = htmlspecialchars($_POST['mail']);
@@ -57,12 +72,18 @@ class Router
                     }
                 }
 
+                /**
+                 * logout
+                 */
                 if ($_GET['action'] == 'logout'){
                 $lout = new ConnectController();
                 $logOut = $lout->logout();
 
                 }
                 
+                /**
+                 * add member
+                 */
                 if ($_GET['action'] == 'addMember'){
                     if (isset($_POST['addMember']) and isset($_POST['pseudo']) and isset($_POST['mail']) and isset($_POST['mdp']) and isset($_POST['mdp2']) )
                     {
@@ -107,7 +128,7 @@ class Router
                         {
                             $article = new ControllerArticles();
                             $display = $article->getArticle();
-                            
+                           
                         }
                         else
                         {
@@ -131,7 +152,23 @@ class Router
                             }
                     }
 
-                
+                /**
+                 * valid comment
+                 */
+                if ($_GET['action'] == 'validComment'){
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                        header("Location: index.php?action=homePage");
+                    }else{
+                        if ((isset($_GET['id'])) && (!empty($_GET['id'])))
+                        {
+                            $controlleruser = new ControllerArticles();
+                            $signale = $controlleruser->validComment($_GET['id']);
+                        }else{
+                            throw new Exception('Oups....erreur de validation !');
+                        }
+                    }
+                }
+                        
                 /**
                  * display list articles admin
                  */
@@ -152,13 +189,17 @@ class Router
                  * display list comments admin
                  */
                 if ($_GET['action'] == 'listCommentsAdmin'){
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                        header("Location: index.php?action=homePage");
+                    }else{
                     $listUsers = new ControllerArticles();
                     $list = $listUsers->listCommentsAdmin();
+                    }
                 }
 
-
-
-
+                /**
+                 * delete user
+                 */
                 if ($_GET['action'] == 'deleteUser'){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){ //CONDITION DE SECURITE POUR EVITER DE POUVOIR ACCEDER A L'ADMIN PAR L'URL
                         header('Location:index.php?action=homePage');
@@ -182,14 +223,18 @@ class Router
                         throw new Exception('Oups... Aucun identifiant membre envoyé !');
                     }
                 }
-
+                /**
+                 * edit article admin
+                 */
                 if ($_GET['action'] == 'editArticleAdmin'){
                     if (isset($_GET['id']) && $_GET['id'] > 0){
                         $controllerArticles = new ControllerArticles();
                         $display = $controllerArticles->editArticleAdmin();
                     }
                 }
-
+                /**
+                 * update article admin
+                 */
                 if ($_GET['action'] == "updateArticleAdmin"){
                     if ((isset($_GET['id'])) && (!empty($_GET['id']))){
                         $controlleradmin = new ControllerArticles();
@@ -201,10 +246,13 @@ class Router
 
                 }
 
+                /**
+                 * delete article
+                 */
                 if ($_GET['action'] == 'deleteArticle'){
                     if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                    $controlleradmin = new ControllerArticles();
-                    $delete = $controlleradmin->deleteArticle($_GET['id']);
+                    $controllerarticle = new ControllerArticles();
+                    $delete = $controllerarticle->deleteArticle($_GET['id']);
                     }
                 }
 
@@ -219,13 +267,47 @@ class Router
                         throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
                     }
                 }
+
+                 /**
+                 * delete comment
+                 */
+                if ($_GET['action'] == 'deleteComment'){
+                    if ((isset($_GET['id'])) && (!empty($_GET['id']))){
+                    $controllerarticle = new ControllerArticles();
+                    $delete = $controllerarticle->deleteComment($_GET['id']);
+                    }
+                }
+
+
+                /**
+                 * confirm delete comment
+                 */
+                if ($_GET['action'] == "confirmdeletecomment"){
+                    if (isset($_GET['id']) && $_GET['id'] > 0){
+                        $confdelete = new ControllerArticles();
+                        $display = $confdelete->confirmdeletecomment();
+                    }else{
+                        throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
+                    }
+                }
                 
+                /**
+                 * display form to write article
+                 */
                 if ($_GET['action'] == 'writeArticleDisplay'){
+                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                        header('Location: index.php?action=homePage');
+                    }else{
+                        $controlleradmin = new ControllerArticles();
+                        $adminconnect = $controlleradmin->formArticle();
+                        }
                     
-                    $controlleradmin = new ControllerArticles();
-                    $adminconnect = $controlleradmin->formArticle();
                     }
                 
+                
+                /**
+                 * send written article 
+                 */
                 if ($_GET['action'] == 'articleWriting'){
                     
                     if (isset($_POST['send_article']) and isset($_POST['id_category']) and isset($_SESSION['id']) and isset($_POST['mini_content']) and isset($_POST['title']) and isset($_POST['content'])){
