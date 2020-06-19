@@ -6,6 +6,14 @@ use Mod\HomeManager;
 
 class ControllerHome
 {
+
+	public function __construct()
+    {
+        $this->loader = new \Twig\Loader\FilesystemLoader('../views/templates/home');
+        $this->twig = new \Twig\Environment($this->loader);
+        $this->newMessage = new HomeManager();
+    }
+
 	/**
 	 * Display home page
 	 * @return void
@@ -13,13 +21,8 @@ class ControllerHome
 
 	public function homePage()
 	{
-		$loader = new \Twig\Loader\FilesystemLoader('../views/templates/home');
-		$twig = new \Twig\Environment($loader);	
-		$twig = new \Twig\Environment($loader, ['debug' => true]);	
-        $twig->addExtension(new \Twig\Extension\DebugExtension());   
-		
-		$twig->addGlobal('session', $_SESSION);
-		echo $twig->render("home.html.twig", ['session' => $_SESSION], ['droits' => $_SESSION == 1]);	 
+		$this->twig->addGlobal('session', $_SESSION);
+		echo $this->twig->render("home.html.twig", ['session' => $_SESSION], ['droits' => $_SESSION == 1]);	 
 	 }
 
 	 /**
@@ -28,8 +31,7 @@ class ControllerHome
 	 * */
 	 public function sendMessage($username, $mail, $content)
 	{
-		$newMessage = new HomeManager();
-		$send = $newMessage->addMessage($username, $mail, $content);
+		$this->newMessage->addMessage($username, $mail, $content);
 		header("Location:index.php?action=homePage");
 	}
 }
