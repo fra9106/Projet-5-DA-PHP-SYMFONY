@@ -8,6 +8,18 @@ use Mod\{MembersManager};
 
 class ControllerUser {
 
+    public function __construct()
+    {
+        $this->loader = new \Twig\Loader\FilesystemLoader('../views/templates/profils');
+        $this->twig = new \Twig\Environment($this->loader);
+        $this->loadAdmin = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
+        $this->adminTwig = new \Twig\Environment($this->loadAdmin);
+        $this->loaderSecurit = new \Twig\Loader\FilesystemLoader('../views/templates/security');
+        $this->twigySecur = new \Twig\Environment($this->loaderSecurit);
+        $this->member = new MembersManager();
+        $this->test = new MembersManager();
+    }
+
     /**
      * add member
      *
@@ -19,9 +31,6 @@ class ControllerUser {
      */
     public function addMember($pseudo, $mail, $mdp, $avatar)
     {
-        $membre = new MembersManager();
-        $test = new MembersManager();
-
         $mdp = $_POST['mdp']; 
         $mdp2 = $_POST['mdp2'];
         if ($mdp == $mdp2) {
@@ -29,9 +38,9 @@ class ControllerUser {
         }else{
             throw new \Exception('Oups... mots de passe différent');
         }
-        $testOk = $test->testMail($mail);  
+        $testOk = $this->test->testMail($mail);  
         if ($testOk == 0 ){
-            $newMembre = $membre->insertMembre($pseudo, $mail, $mdp, 'default.jpg');
+            $this->member->insertMembre($pseudo, $mail, $mdp, 'default.jpg');
             header("Location:index.php?action=displConnexion ");
             }else{
                 throw new \Exception('Oups... Adresse email déjà utilisée');
@@ -45,17 +54,9 @@ class ControllerUser {
      */
     public function listUsersAdmin() 
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
-		$twig = new \Twig\Environment($loader, ['debug' => true]);	
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
-        $usersManager = new MembersManager();
-        $users = $usersManager->getUsers();
-
-        $twig->addGlobal('session', $_SESSION);
-        echo $twig->render('listUsers.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
+        $users = $this->member->getUsers();
+        $this->twig->addGlobal('session', $_SESSION);
+        echo $this->twig->render('listUsers.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
     }
 
     /**
@@ -66,9 +67,7 @@ class ControllerUser {
      */
     public function deleteUser($idUser) 
     {
-        $deleteuser = new MembersManager();
-        $delete = $deleteuser->deleteUse($idUser);
-       
+        $delete = $this->member->deleteUse($idUser);
         if ($delete === false){
             throw new \Exception('Impossible de supprimer cet article!');
         }else{
@@ -83,17 +82,9 @@ class ControllerUser {
      */
     public function confirmdeleteuser() 
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
-		$twig = new \Twig\Environment($loader, ['debug' => true]);	
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
-        $usersManager = new MembersManager();
-        $users = $usersManager->infosUser();
-
-        $twig->addGlobal('session', $_SESSION);
-        echo $twig->render('confirmdeleteuser.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
+        $users = $this->member->infosUser();
+        $this->twig->addGlobal('session', $_SESSION);
+        echo $this->twig->render('confirmdeleteuser.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
     }
 
     /**
@@ -103,15 +94,9 @@ class ControllerUser {
      */
     public function displayprofil()
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/profils');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
-        $page = new MembersManager();
-        $user = $page->reqprofil();
-        
-        $twig->addGlobal('session', $_SESSION);
-        echo $twig->render('profil.html.twig',['user' => $user], ['droits' => $_SESSION == 1] );
+        $user = $this->member->reqprofil();
+        $this->twig->addGlobal('session', $_SESSION);
+        echo $this->twig->render('profil.html.twig',['user' => $user], ['droits' => $_SESSION == 1] );
     }
 
     /**
@@ -121,15 +106,9 @@ class ControllerUser {
      */
     public function editprofilpage() 
     {
-        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/profils');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false
-        ]);
-        $infosmembre = new MembersManager();
-        $user = $infosmembre->infosProfil();
-        
-        $twig->addGlobal('session', $_SESSION);
-        echo $twig->render('editprofil.html.twig',['user' => $user], ['droits' => $_SESSION == 1] );
+        $user = $this->member->infosProfil();
+        $this->twig->addGlobal('session', $_SESSION);
+        echo $this->twig->render('editprofil.html.twig',['user' => $user], ['droits' => $_SESSION == 1] );
     }
 
     /**
@@ -140,8 +119,7 @@ class ControllerUser {
      */
     public function getAvatar($newavatar)
     {
-        $membreManager = new MembersManager();
-        $avatarinfos = $membreManager->infosAvatar($newavatar);
+        $this->member->infosAvatar($newavatar);
         header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
     }
 
@@ -153,8 +131,7 @@ class ControllerUser {
      */
     public function updateUserPseudo($newpseudo) 
     {
-        $infosmembre = new MembersManager();
-        $pseudoinfos = $infosmembre->infoPseudo($newpseudo);
+        $this->member->infoPseudo($newpseudo);
         header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
     }
 
@@ -166,11 +143,9 @@ class ControllerUser {
      */
     public function updateUserMail($newmail)
     {
-        $test = new MembersManager();
-        $testOk = $test->testMail($newmail);
+        $testOk = $this->test->testMail($newmail);
         if ($testOk == 0){ 
-            $infosmembre = new MembersManager();
-            $mailinfos = $infosmembre->infoMail($newmail);
+            $this->membre->infoMail($newmail);
             header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
         }
     }
@@ -183,8 +158,8 @@ class ControllerUser {
      */
     public function updateUserpwd($newpwd) // update le motdepasse
     {
-        $infosmembre = new MembersManager();
-        $pwdinfos = $infosmembre->infopwd($newpwd);
+    
+        $this->member->infopwd($newpwd);
         header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
     }
 
