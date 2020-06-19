@@ -93,7 +93,14 @@ footer {
     border-radius: 100% !important;
     width: 3.25rem;
     height: 3.25rem;
+}
 
+.legalM{
+    text-align:center;
+}
+
+.legal{
+    text-align:justify;
 }
 
 .register {

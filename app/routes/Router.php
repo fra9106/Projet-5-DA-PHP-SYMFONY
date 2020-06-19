@@ -19,7 +19,6 @@ class Router
                 if ($_GET['action'] == 'homePage'){
                     $display = new ControllerHome();
                     $contact = $display->homePage();
-                    
                 }
 
                 /**
@@ -38,7 +37,15 @@ class Router
                             throw new Exception('Message non envoyé !');
                          }
                 }
-                
+
+                /**
+                 * Legal Notice
+                 */
+                if ($_GET['action'] == 'legalPage'){
+                    $display = new ControllerHome();
+                    $contact = $display->legalPage();
+                }
+
                 /**
                  * display contact form 
                  */

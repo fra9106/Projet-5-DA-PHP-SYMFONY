@@ -18,7 +18,6 @@ class ControllerHome
 	 * Display home page
 	 * @return void
 	 * */
-
 	public function homePage()
 	{
 		$this->twig->addGlobal('session', $_SESSION);
@@ -33,5 +32,10 @@ class ControllerHome
 	{
 		$this->newMessage->addMessage($username, $mail, $content);
 		header("Location:index.php?action=homePage");
+	}
+
+	public function legalPage()
+	{
+		require('../views/templates/legalNotice.php');
 	}
 }
