@@ -32,7 +32,7 @@ class ControllerArticles{
     public function getArticle(){
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/articles');
         $twig = new \Twig\Environment($loader, [
-            'cache' => '../views/templates/cache',
+            'cache' => false
         ]);
 
         $twig = new \Twig\Environment($loader, ['debug' => true]);	
@@ -76,8 +76,8 @@ class ControllerArticles{
 
 
 
-    public function listArticlesAdmin() {
-
+    public function listArticlesAdmin() 
+    {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
         $twig = new \Twig\Environment($loader, [
             'cache' => false
@@ -88,6 +88,23 @@ class ControllerArticles{
         $articles = $articlesManager->getArticles();
         $twig->addGlobal('session', $_SESSION);
         echo $twig->render('listArticlesAdmin.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1] );
+    }
+
+    public function confirmdeletearticle ()
+    {
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+        $articlesManager = new ArticlesManager();
+        $article = $articlesManager->Article($_GET['id']);
+
+        $twig->addGlobal('session', $_SESSION); 
+     
+    
+        echo $twig->render('confirmdeletearticle.html.twig',['article' => $article], ['droits' => $_SESSION == 1]);
+
+
     }
 
     public function editArticleAdmin(){
@@ -112,8 +129,7 @@ class ControllerArticles{
         header('Location: index.php?action=listArticlesAdmin');
     }
 
-    public function deleteArticle($dataId) // supprimme l'article
-    
+    public function deleteArticle($dataId)
     {
         $supprime = new ArticlesManager();
         $deletedarticle = $supprime->supprArticle($dataId);

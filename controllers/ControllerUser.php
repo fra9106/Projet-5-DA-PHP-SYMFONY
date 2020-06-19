@@ -42,7 +42,7 @@ class ControllerUser {
         echo $twig->render('listUsers.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
     }
 
-    public function deleteUser($idUser) // supprimme l'user
+    public function deleteUser($idUser) 
     
     {
         $deleteuser = new MembersManager();
@@ -57,6 +57,26 @@ class ControllerUser {
             header('Location: index.php?action=listUsersAdmin');
         }
     }
+
+    /**
+     * confirm delete user
+     *
+     * @return void
+     */
+    public function confirmdeleteuser() {
+
+        $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false
+        ]);
+		$twig = new \Twig\Environment($loader, ['debug' => true]);	
+        $twig->addExtension(new \Twig\Extension\DebugExtension());
+        $usersManager = new MembersManager();
+        $users = $usersManager->infosUser();
+        $twig->addGlobal('session', $_SESSION);
+        echo $twig->render('confirmdeleteuser.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
+    }
+
 
     /**
      * user profil page
