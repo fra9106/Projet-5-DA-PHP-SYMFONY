@@ -64,11 +64,11 @@ class Router
                 }
                 
                 if ($_GET['action'] == 'addMember'){
-                    if (isset($_POST['addMember']) and isset($_POST['pseudo']) and isset($_POST['mail']) and isset($_POST['mdp']))
+                    if (isset($_POST['addMember']) and isset($_POST['pseudo']) and isset($_POST['mail']) and isset($_POST['mdp']) and isset($_POST['mdp2']) )
                     {
                         $pseudo = htmlspecialchars($_POST['pseudo']);
                         $mail = htmlspecialchars($_POST['mail']);
-                        if (!empty($_POST['pseudo']) and !empty($_POST['mail']) and !empty($_POST['mdp'])){
+                        if (!empty($_POST['pseudo']) and !empty($_POST['mail']) and !empty($_POST['mdp']) and !empty($_POST['mdp2']) ){
                             $pseudolength = strlen($pseudo);
                             if ($pseudolength > 2)
                             {

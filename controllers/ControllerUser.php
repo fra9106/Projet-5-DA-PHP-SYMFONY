@@ -8,28 +8,44 @@ use Mod\{MembersManager};
 
 class ControllerUser {
 
-    public function addMember($pseudo, $mail, $mdp, $avatar) //ajout membre après divers tests
-    
+    /**
+     * add member
+     *
+     * @param [type] $pseudo
+     * @param [type] $mail
+     * @param [type] $mdp
+     * @param [type] $avatar
+     * @return void
+     */
+    public function addMember($pseudo, $mail, $mdp, $avatar)
     {
         $membre = new MembersManager();
         $test = new MembersManager();
 
-        $mdp = password_hash($_POST['mdp'], PASSWORD_DEFAULT); //hash mot de passe
-        $testOk = $test->testMail($mail); // test pour ne pas avoir de mail en doublon
-        if ($testOk == 0)
-        {
+        $mdp = $_POST['mdp']; 
+        $mdp2 = $_POST['mdp2'];
+        if ($mdp == $mdp2) {
+            $mdp = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
+        }else{
+            throw new \Exception('Oups... mots de passe différent');
+        }
+        $testOk = $test->testMail($mail);  
+        if ($testOk == 0 ){
             $newMembre = $membre->insertMembre($pseudo, $mail, $mdp, 'default.jpg');
             header("Location:index.php?action=displConnexion ");
+            }else{
+                throw new \Exception('Oups... Adresse email déjà utilisée');
+            }
+        
         }
-        else
-        {
-            throw new \Exception('Oups... Adresse email déjà utilisée');
-        }
-    }
 
-
-    public function listUsersAdmin() {
-
+    /**
+     * list members
+     *
+     * @return void
+     */
+    public function listUsersAdmin() 
+    {
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/admin');
         $twig = new \Twig\Environment($loader, [
             'cache' => false
@@ -42,8 +58,13 @@ class ControllerUser {
         echo $twig->render('listUsers.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
     }
 
+    /**
+     * delete member
+     *
+     * @param [type] $idUser
+     * @return void
+     */
     public function deleteUser($idUser) 
-    
     {
         $deleteuser = new MembersManager();
         $delete = $deleteuser->deleteUse($idUser);
@@ -63,7 +84,8 @@ class ControllerUser {
      *
      * @return void
      */
-    public function confirmdeleteuser() {
+    public function confirmdeleteuser() 
+    {
 
         $loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');
         $twig = new \Twig\Environment($loader, [
@@ -171,10 +193,5 @@ class ControllerUser {
         $pwdinfos = $infosmembre->infopwd($newpwd);
         header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
     }
-
-
-
-
-    
 
 }
