@@ -7,7 +7,7 @@ use Mod\HomeManager;
 class ControllerHome
 {
 	/**
-	 * instanciation variables
+	 * class properties
 	 *
 	 * @var [type]
 	 */

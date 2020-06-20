@@ -10,7 +10,7 @@ use Mod\ConnectManager;
 class ConnectController 
 {
     /**
-     * instantiation variables
+     * class properties
      *
      * @var [type]
      */

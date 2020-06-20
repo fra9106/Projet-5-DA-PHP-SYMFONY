@@ -9,7 +9,7 @@ use Mod\MembersManager;
 class ControllerUser 
 {
     /**
-	 * instanciation variables
+	 * class properties
 	 *
 	 * @var [type]
 	 */

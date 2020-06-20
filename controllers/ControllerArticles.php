@@ -9,7 +9,7 @@ use Mod\{ArticlesManager, CommentsManager};
 class ControllerArticles
 {
     /**
-     * instantiation variables
+     * class properties
      *
      * @var [type]
      */
@@ -91,7 +91,7 @@ class ControllerArticles
      */
     public function validComment($commentId) 
     {
-        $signal = $this->commentManager->validation($commentId);
+        $signal = $this->commentsManager->validation($commentId);
         if ($signal === false){
             throw new \Exception('Oups... Impossible de signaler ce commentaire !');
         }else{
@@ -142,7 +142,7 @@ class ControllerArticles
      */
     public function confirmdeletecomment ()
     {
-        $comment = $this->commentManager->getComment($_GET['id']);
+        $comment = $this->commentsManager->getComment($_GET['id']);
         $this->twigySecur->addGlobal('session', $_SESSION);
         echo $this->twigySecur->render('confirmdeletecomment.html.twig',['comment' => $comment], ['droits' => $_SESSION == 1]);
     }
@@ -154,7 +154,7 @@ class ControllerArticles
      */
     public function editArticleAdmin()
     {
-       $articles = $this->articleManager->getArticleAdmin($_GET['id']);
+       $articles = $this->articlesManager->getArticleAdmin($_GET['id']);
        $this->adminTwig->addGlobal('session', $_SESSION);
        echo $this->adminTwig->render("articleUpdating.html.twig", ['articles' => $articles], ['droits' => $_SESSION == 1]);	 
     }
