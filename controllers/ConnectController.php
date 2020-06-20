@@ -7,8 +7,20 @@ require '../vendor/autoload.php';
 use Mod\ConnectManager;
 
 
-class ConnectController {
+class ConnectController 
+{
+    /**
+     * instantiation variables
+     *
+     * @var [type]
+     */
+    private $loader;
+    private $twig;
+    private $member;
 
+    /**
+     * builder
+     */
     public function __construct()
     {
         $this->loader = new \Twig\Loader\FilesystemLoader('../views/templates/security');

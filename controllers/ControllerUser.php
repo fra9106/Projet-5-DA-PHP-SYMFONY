@@ -6,8 +6,24 @@ require '../vendor/autoload.php';
 
 use Mod\MembersManager;
 
-class ControllerUser {
+class ControllerUser 
+{
+    /**
+	 * instanciation variables
+	 *
+	 * @var [type]
+	 */
+    private $loader;
+    private $twig;
+    private $loadAdmin;
+    private $loaderSecurit;
+    private $twigySecur;
+    private $member;
+    private $test;
 
+    /**
+     * builder
+     */
     public function __construct()
     {
         $this->loader = new \Twig\Loader\FilesystemLoader('../views/templates/profils');
@@ -56,7 +72,7 @@ class ControllerUser {
     {
         $users = $this->member->getUsers();
         $this->twig->addGlobal('session', $_SESSION);
-        echo $this->twig->render('listUsers.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
+        echo $this->adminTwig->render('listUsers.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
     }
 
     /**
@@ -84,7 +100,7 @@ class ControllerUser {
     {
         $users = $this->member->infosUser();
         $this->twig->addGlobal('session', $_SESSION);
-        echo $this->twig->render('confirmdeleteuser.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
+        echo $this->twigySecur->render('confirmdeleteuser.html.twig',['users' => $users], ['droits' => $_SESSION == 1] );
     }
 
     /**

@@ -6,10 +6,24 @@ require '../vendor/autoload.php';
 
 use Mod\{ArticlesManager, CommentsManager};
 
-class ControllerArticles{
+class ControllerArticles
+{
+    /**
+     * instantiation variables
+     *
+     * @var [type]
+     */
+    private $loader;
+    private $twig;
+    private $loadAdmin;
+    private $adminTwig;
+    private $loaderSecurit;
+    private $twigySecur;
+    private $articlesManager;
+    private $commentsManager;
 
     /**
-     * twig instanciations
+     * builder
      */
     public function __construct()
     {

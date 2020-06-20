@@ -23,7 +23,7 @@
                     <div class="card-body">
                         <p class="legalM">MENTIONS LEGALES :</p>
 
-                        <p class="legal">Conformément aux dispositions des articles 6-III et 19 de la Loi n° 2004-575 du 21 juin 2004 pour la Confiance dans l'économie numérique, dite L.C.E.N., nous portons à la connaissance des utilisateurs et visiteurs du site : <a href="http://monpersoweb.fr" target="_blank">monpersoweb.fr</a> les informations suivantes :</p>
+                        <p class="legal">Conformément aux dispositions des articles 6-III et 19 de la Loi n° 2004-575 du 21 juin 2004 pour la Confiance dans l'économie numérique, dite L.C.E.N., nous portons à la connaissance des utilisateurs et visiteurs du site : <a href="https://monpersoweb.fr" target="_blank">monpersoweb.fr</a> les informations suivantes :</p>
 
                         <p class="legal"><strong>1. Informations légales :</strong></p>
 
@@ -44,7 +44,7 @@
 
                         <p class="legal"><strong>2. Présentation et principe :</strong></p>
 
-                        <p class="legal">Est désigné ci-après : <strong>Utilisateur</strong>, tout internaute se connectant et utilisant le site susnommé : <a href="http://monpersoweb.fr" target="_blank">monpersoweb.fr</a>.<br />
+                        <p class="legal">Est désigné ci-après : <strong>Utilisateur</strong>, tout internaute se connectant et utilisant le site susnommé : <a href="https://monpersoweb.fr" target="_blank">monpersoweb.fr</a>.<br />
                             Le site <strong>monpersoweb.fr</strong><strong> </strong>regroupe un ensemble de projets d'études sous forme de sites, à vocation non lucrative, dans l'état, mis à la disposition des utilisateurs. Il est ici précisé que ces derniers doivent rester courtois et faire preuve de bonne foi tant envers les autres utilisateurs qu'envers le webmaster du site monpersoweb.fr. Le site monpersoweb.fr est mis à jour régulièrement par Franck Boutot.<br />
                             Franck Boutot s’efforce de fournir sur le site monpersoweb.fr des informations les plus précises possibles (sous réserve de modifications apportées depuis leur mise en ligne), mais ne saurait garantir l'exactitude, la complétude et l'actualité des informations diffusées sur son site, qu’elles soient de son fait ou du fait des tiers partenaires qui lui fournissent ces informations. En conséquence, l'utilisateur reconnaît utiliser ces informations données (à titre indicatif, non exhaustives et susceptibles d'évoluer) sous sa responsabilité exclusive.</p>
 

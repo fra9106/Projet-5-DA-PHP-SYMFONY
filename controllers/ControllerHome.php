@@ -6,7 +6,18 @@ use Mod\HomeManager;
 
 class ControllerHome
 {
+	/**
+	 * instanciation variables
+	 *
+	 * @var [type]
+	 */
+	private $loader;
+    private $twig;
+    private $newMessage;
 
+	/**
+	 * builder
+	 */
 	public function __construct()
     {
         $this->loader = new \Twig\Loader\FilesystemLoader('../views/templates/home');

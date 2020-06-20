@@ -7,6 +7,21 @@ use Exception;
 
 class Router
 {
+    /**
+     * instantiation variables
+     *
+     * @var [type]
+     */
+    private $home;
+    private $connect;
+    private $user;
+    private $articles;
+    private $loaderSecurit;
+    private $twigySecur;
+
+    /**
+     * builder
+     */
     public function __construct()
     {
         $this->home = new ControllerHome();
