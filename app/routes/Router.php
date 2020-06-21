@@ -2,7 +2,9 @@
 
 namespace App\routes;
 
+
 use Control\{ConnectController, ControllerHome, ControllerArticles, ControllerUser};
+
 use Exception;
 
 class Router
@@ -18,6 +20,7 @@ class Router
     private $articles;
     private $loaderSecurit;
     private $twigySecur;
+    private $action;
 
     /**
      * builder
@@ -30,59 +33,60 @@ class Router
         $this->articles = new ControllerArticles();
         $this->loaderSecurit = new \Twig\Loader\FilesystemLoader('../views/templates/security');
         $this->twigySecur = new \Twig\Environment($this->loaderSecurit);
+        $this->action = new Request();
     }
     
     public function run()
     {
         try
         {
-            if (isset($_GET['action'])){
-                
+           if($this->action->get('action')){ 
+                $action = $this->action->get('action'); 
                 /**
                  * home page
                  */
-                if ($_GET['action'] == 'homePage'){
+                if ($action == 'homePage'){
                     $this->home->homePage();
                 }
 
                 /**
                  * send message home page
                  */
-                if ($_GET['action'] == 'sendMessage'){
-                    if (isset($_POST['sendMessage']) and isset($_POST['username']) and isset($_POST['mail']) and isset($_POST['content'])){
-                    $username = htmlspecialchars($_POST['username']);
-                    $mail = htmlspecialchars($_POST['mail']);
-                    $content = htmlspecialchars($_POST['content']);
-                    $this->home->sendMessage($username, $mail, $content);
+                if ($action == 'sendMessage'){
+                    $this->action->post('sendMessage');
+                        $username = $this->action->post('username');
+                        $mail = $this->action->post('mail'); 
+                        $content = $this->action->post('content'); 
+                        $this->home->sendMessage($username, $mail, $content);
                 }else{
                     throw new Exception('Message non envoyé !');
-                }
-            }
+                 }
+            
                 /**
                  * Legal Notice
                  */
-                if ($_GET['action'] == 'legalPage'){
-                    $contact = $this->home->legalPage();
+                if ($action == 'legalPage'){
+                   $this->home->legalPage();
                 }
 
                 /**
                  * display contact form 
                  */
-                if ($_GET['action'] == 'displFormulContact'){
+                if ($action == 'displFormulContact'){
                     $this->connect->displFormulContact();
                 }
 
                 /**
                  * display connect form
                  */
-                if ($_GET['action'] == 'displConnexion'){
+                if ($action == 'displConnexion'){
                     $this->connect->displConnexion();
                 }
 
                 /**
                  * login
                  */
-                if ($_GET['action'] == 'login'){
+                if ($action == 'login'){
                     if (isset($_POST['login']) and isset($_POST['mail']) and isset($_POST['mdp'])){
                         $mail = htmlspecialchars($_POST['mail']);
                         if (!empty(trim($_POST['mail'])) and !empty(trim($_POST['mdp']))){
@@ -96,16 +100,15 @@ class Router
                 /**
                  * logout
                  */
-                if ($_GET['action'] == 'logout'){
+                if ($action == 'logout'){
                     $this->connect->logout();
                 }
                 
                 /**
                  * add member
                  */
-                if ($_GET['action'] == 'addMember'){
-                    if (isset($_POST['addMember']) and isset($_POST['pseudo']) and isset($_POST['mail']) and isset($_POST['mdp']) and isset($_POST['mdp2']) )
-                    {
+                if ($action == 'addMember'){
+                    if (isset($_POST['addMember']) and isset($_POST['pseudo']) and isset($_POST['mail']) and isset($_POST['mdp']) and isset($_POST['mdp2']) ){
                         $pseudo = htmlspecialchars($_POST['pseudo']);
                         $mail = htmlspecialchars($_POST['mail']);
                         if (!empty($_POST['pseudo']) and !empty($_POST['mail']) and !empty($_POST['mdp']) and !empty($_POST['mdp2']) ){
@@ -128,14 +131,14 @@ class Router
                 /**
                  * list articles
                  */
-                elseif ($_GET['action'] == 'listArticles'){
+                elseif ($action == 'listArticles'){
                        $this->articles->listArticle();
                     }
 
                     /**
                      * get article by id
                      */
-                  if ($_GET['action'] == 'getArticle'){ 
+                  if ($action == 'getArticle'){ 
                         if (isset($_GET['id']) && $_GET['id'] > 0){
                             $this->articles->getArticle();
                         }else{
@@ -145,7 +148,7 @@ class Router
                     /**
                      * add comment
                      */
-                    if ($_GET['action'] == 'addComment'){
+                    if ($action == 'addComment'){
                         if (isset($_GET['id']) && $_GET['id'] > 0){
                             if (!empty($_GET['id']) && ($_POST['content'])){
                                 $this->articles->addComment($_GET['id'], $_SESSION['id'], $_POST['content']);
@@ -160,7 +163,7 @@ class Router
                 /**
                  * valid comment
                  */
-                if ($_GET['action'] == 'validComment'){
+                if ($action == 'validComment'){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
                         header("Location: index.php?action=homePage");
                     }else{
@@ -175,7 +178,7 @@ class Router
                 /**
                  * display list articles admin
                  */
-                if ($_GET['action'] == 'listArticlesAdmin'){
+                if ($action == 'listArticlesAdmin'){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
                         header("Location: index.php?action=homePage");
                     }else{
@@ -186,7 +189,7 @@ class Router
                 /**
                  * display list membres admin
                  */
-                if ($_GET['action'] == 'listUsersAdmin'){
+                if ($action == 'listUsersAdmin'){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
                         header("Location: index.php?action=homePage");
                     }else{
@@ -197,7 +200,7 @@ class Router
                 /**
                  * display list comments admin
                  */
-                if ($_GET['action'] == 'listCommentsAdmin'){
+                if ($action == 'listCommentsAdmin'){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
                         header("Location: index.php?action=homePage");
                     }else{
@@ -208,7 +211,7 @@ class Router
                 /**
                  * delete user
                  */
-                if ($_GET['action'] == 'deleteUser'){
+                if ($action == 'deleteUser'){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
@@ -222,7 +225,7 @@ class Router
                 /**
                  * confirm delete user
                  */
-                if ($_GET['action'] == "confirmdeleteuser"){
+                if ($action == "confirmdeleteuser"){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
@@ -237,7 +240,7 @@ class Router
                 /**
                  * edit article admin
                  */
-                if ($_GET['action'] == 'editArticleAdmin'){
+                if ($action == 'editArticleAdmin'){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
@@ -251,7 +254,7 @@ class Router
                 /**
                  * update article admin
                  */
-                if ($_GET['action'] == "updateArticleAdmin"){
+                if ($action == "updateArticleAdmin"){
                     if ((isset($_GET['id'])) && (!empty($_GET['id']))){
                         $this->articles->updateArticleAdmin($_POST['mini_content'], $_POST['title'], $_POST['content'], $_GET['id']);
                         }else{
@@ -263,7 +266,7 @@ class Router
                 /**
                  * delete article
                  */
-                if ($_GET['action'] == 'deleteArticle'){
+                if ($action == 'deleteArticle'){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
@@ -276,7 +279,7 @@ class Router
                 /**
                  * confirm delete article
                  */
-                if ($_GET['action'] == "confirmdeletearticle"){
+                if ($action == "confirmdeletearticle"){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
@@ -291,7 +294,7 @@ class Router
                  /**
                  * delete comment
                  */
-                if ($_GET['action'] == 'deleteComment'){
+                if ($action == 'deleteComment'){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
@@ -305,7 +308,7 @@ class Router
                 /**
                  * confirm delete comment
                  */
-                if ($_GET['action'] == "confirmdeletecomment"){
+                if ($action == "confirmdeletecomment"){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
@@ -320,7 +323,7 @@ class Router
                 /**
                  * display form to write article
                  */
-                if ($_GET['action'] == 'writeArticleDisplay'){
+                if ($action == 'writeArticleDisplay'){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location: index.php?action=homePage');
                     }else{
@@ -331,7 +334,7 @@ class Router
                 /**
                  * send written article 
                  */
-                if ($_GET['action'] == 'articleWriting'){
+                if ($action == 'articleWriting'){
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location: index.php?action=homePage');
                     }else{
@@ -353,7 +356,7 @@ class Router
                 /**
                  * user profil page
                  */
-                if ($_GET['action'] == 'diplayprofil'){
+                if ($action == 'diplayprofil'){
                     if (isset($_SESSION['id'])){
                         $this->user->displayprofil();
                     }else{
@@ -364,7 +367,7 @@ class Router
                  /**
                   * display edit page profil user
                   */
-                 if ($_GET['action'] == 'editprofilpage'){
+                 if ($action == 'editprofilpage'){
                     if (isset($_SESSION['id'])){
                         $this->user->editprofilpage();
                     }else{
@@ -375,7 +378,7 @@ class Router
                  /**
                   * upload avatar file
                   */
-                  if ($_GET['action'] == 'getAvatar'){
+                  if ($action == 'getAvatar'){
                       if (isset($_FILES['avatar']) and !empty($_FILES['avatar']['name'])){
                           $tailleMax = 2097152;
                           $extensionsValides = array(
@@ -409,7 +412,7 @@ class Router
                     /**
                      * update pseudo
                      */
-                    if ($_GET['action'] == 'updateUserPseudo')
+                    if ($action == 'updateUserPseudo')
                     {
                         if (isset($_POST['newpseudo']) and !empty($_POST['newpseudo']))
                         {
@@ -423,7 +426,7 @@ class Router
                     /**
                      * update mail
                      */
-                    if ($_GET['action'] == 'updateUserMail'){
+                    if ($action == 'updateUserMail'){
                         if (isset($_POST['newmail']) and !empty($_POST['newmail'])){
                             $newmail = htmlspecialchars($_POST['newmail']);
                             $this->user->updateUserMail($newmail);
@@ -435,7 +438,7 @@ class Router
                     /**
                      * update password
                      */
-                    if ($_GET['action'] == 'updateUserpwd'){
+                    if ($action == 'updateUserpwd'){
                         if (isset($_POST['newpwd']) and !empty($_POST['newpwd'])){
                             $newpwd = password_hash($_POST['newpwd'], PASSWORD_DEFAULT);
                             $this->user->updateUserpwd($newpwd);
