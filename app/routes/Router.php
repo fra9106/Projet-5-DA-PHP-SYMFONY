@@ -10,7 +10,7 @@ use Exception;
 class Router
 {
     /**
-     * instantiation variables
+     * class properties
      *
      * @var [type]
      */
@@ -40,8 +40,8 @@ class Router
     {
         try
         {
-           if($this->action->get('action')){ 
-                $action = $this->action->get('action'); 
+           if($this->action->get('action')){
+               $action = $this->action->get('action'); 
                 /**
                  * home page
                  */
@@ -58,9 +58,8 @@ class Router
                         $mail = $this->action->post('mail'); 
                         $content = $this->action->post('content'); 
                         $this->home->sendMessage($username, $mail, $content);
-                }else{
-                    throw new Exception('Message non envoyé !');
-                 }
+                }
+                
             
                 /**
                  * Legal Notice
