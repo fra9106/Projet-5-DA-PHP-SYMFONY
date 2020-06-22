@@ -3,6 +3,7 @@ namespace App\routes;
 
 class Request 
 {
+
     /**
      *get function
      *
@@ -26,7 +27,7 @@ class Request
      */
     public function post($key=null)
     {   
-        $_POST = array_map('htmlspecialchars',$_POST);
+        $_POST = $_POST;
         if($key) {
            return isset($_POST[$key]) ? $_POST[$key] : null;
         }

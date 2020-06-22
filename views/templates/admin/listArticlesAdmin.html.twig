@@ -22,7 +22,7 @@
                             {{article.title|nl2br}}
                         </h5>
                         <p class="card-text">{{article.mini_content }}</p>
-                        <p class="card-text">{{article.content|striptags|raw }}</p>
+                        <p class="card-text">{{article.content|striptags|raw}}</p>
                         <div class="btn-group">
                             <a href="index.php?action=editArticleAdmin&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-danger">Modifier</button></a>&nbsp;&nbsp;
                             <a href="index.php?action=confirmdeletearticle&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-success">Supprimer</button></a>
@@ -39,4 +39,14 @@
         </div>
     </div>
 </div>
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+{% block javascripts %}<script>
+    tinymce.init({
+        entity_encoding: "raw",
+        selector: '.mytextarea',
+        content_css: 'publics/css/style.css',
+        language_url: 'https://olli-suutari.github.io/tinyMCE-4-translations/fr_FR.js',
+        language: 'fr_FR'
+    });
+</script>{% endblock %}
 {% endblock %}

@@ -8,6 +8,7 @@ use Mod\Manager;
 
 class HomeManager extends Manager
 {
+
 	/**
 	 * send message home page
 	 *

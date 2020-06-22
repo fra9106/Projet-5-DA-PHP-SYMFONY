@@ -53,7 +53,7 @@ class Router
                  * send message home page
                  */
                 if ($action == 'sendMessage'){
-                    $this->action->post('sendMessage');
+                        $this->action->post('sendMessage');
                         $username = $this->action->post('username');
                         $mail = $this->action->post('mail'); 
                         $content = $this->action->post('content'); 
@@ -91,11 +91,10 @@ class Router
                         if (!empty(trim($_POST['mail'])) and !empty(trim($_POST['mdp']))){
                             $this->connect->login($_POST['mail'], $_POST['mdp']);
                         }else{
-                        throw new Exception('Oups...Tous les champs doivent être complétés !');
+                            throw new Exception('Oups...Tous les champs doivent être complétés !');
                         }
                     }
                 }
-
                 /**
                  * logout
                  */
@@ -114,7 +113,7 @@ class Router
                             $pseudolength = strlen($pseudo);
                             if ($pseudolength > 2){
                                 if (filter_var($mail, FILTER_VALIDATE_EMAIL)){
-                                    $contact = $this->user->addMember($_POST['pseudo'], $_POST['mail'], $_POST['mdp'], 'default.jpg');
+                                    $contact = $this->user->addMember ($_POST['pseudo'], $_POST['mail'], $_POST['mdp'], 'default.jpg');
                                     return $contact;
                                 }else{
                                     throw new Exception('Adresse mail non valide !');
@@ -138,7 +137,7 @@ class Router
                      * get article by id
                      */
                   if ($action == 'getArticle'){ 
-                        if (isset($_GET['id']) && $_GET['id'] > 0){
+                        if ($this->action->get('id') > 0){
                             $this->articles->getArticle();
                         }else{
                             throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
@@ -148,8 +147,8 @@ class Router
                      * add comment
                      */
                     if ($action == 'addComment'){
-                        if (isset($_GET['id']) && $_GET['id'] > 0){
-                            if (!empty($_GET['id']) && ($_POST['content'])){
+                        if ($this->action->get('id') > 0){
+                            if (!empty ($this->action->get('id') && ($this->action->post('content')))){
                                 $this->articles->addComment($_GET['id'], $_SESSION['id'], $_POST['content']);
                             }else{
                                 throw new Exception('Oups... Tous les champs ne sont pas remplis !');
@@ -166,8 +165,9 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
                         header("Location: index.php?action=homePage");
                     }else{
-                        if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                            $this->articles->validComment($_GET['id']);
+                        if ($this->action->get('id') && (!empty($this->action->get('id')))){
+                            $idComment = $this->action->get('id');
+                            $this->articles->validComment($idComment);
                         }else{
                             throw new Exception('Oups....erreur de validation !');
                         }
@@ -214,8 +214,9 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
-                                if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                                    $this->user->deleteUser($_GET['id']);
+                                if ($this->action->get('id') && $this->action->get('id') > 0){
+                                    $idUser = $this->action->get('id');
+                                    $this->user->deleteUser($idUser);
                                     
                                 }
                             }
@@ -228,7 +229,7 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
-                            if (isset($_GET['id']) && $_GET['id'] > 0){
+                            if ($this->action->get('id') && $this->action->get('id') > 0){
                                 $this->user->confirmdeleteuser();
                             }else{
                                 throw new Exception('Oups... Aucun identifiant membre !');
@@ -243,7 +244,7 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
-                            if (isset($_GET['id']) && $_GET['id'] > 0){
+                            if ($this->action->get('id') && $this->action->get('id') > 0){
                                 $this->articles->editArticleAdmin();
                             }else{
                                 throw new Exception('Oups... Aucun identifiant article !');
@@ -254,8 +255,12 @@ class Router
                  * update article admin
                  */
                 if ($action == "updateArticleAdmin"){
-                    if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                        $this->articles->updateArticleAdmin($_POST['mini_content'], $_POST['title'], $_POST['content'], $_GET['id']);
+                    if ($this->action->get('id') && (!empty($this->action->get('id')))){
+                        $postMini = $this->action->post('mini_content');
+                        $postTitle = $this->action->post('title');
+                        $postContent = $this->action->post('content');
+                        $getId = $this->action->get('id');
+                        $this->articles->updateArticleAdmin($postMini, $postTitle, $postContent, $getId);
                         }else{
                         throw new Exception('Impossible de modifier l\'article !');
                     }
@@ -269,8 +274,9 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
-                            if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                            $this->articles->deleteArticle($_GET['id']);
+                            if ($this->action->get('id') && (!empty($this->action->get('id')))){
+                                $dataId = $this->action->get('id');
+                                $this->articles->deleteArticle($dataId);
                             }
                         }
                     }
@@ -282,7 +288,7 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
-                            if (isset($_GET['id']) && $_GET['id'] > 0){
+                            if ($this->action->get('id') && $this->action->get('id') > 0){
                             $this->articles->confirmdeletearticle();
                             }else{
                                 throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
@@ -297,8 +303,9 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
-                            if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                                $this->articles->deleteComment($_GET['id']);
+                            if ($this->action->get('id') && (!empty($this->action->get('id')))){
+                                $dataId = $this->action->get('id');
+                                $this->articles->deleteComment($dataId);
                             }
                         }
                     }
@@ -311,8 +318,8 @@ class Router
                     if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
                         header('Location:index.php?action=homePage');
                         }else{
-                            if (isset($_GET['id']) && $_GET['id'] > 0){
-                                $display = $this->articles->confirmdeletecomment();
+                            if ($this->action->get('id') && $this->action->get('id') > 0){
+                                $this->articles->confirmdeletecomment();
                             }else{
                                 throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
                             }
@@ -411,11 +418,9 @@ class Router
                     /**
                      * update pseudo
                      */
-                    if ($action == 'updateUserPseudo')
-                    {
-                        if (isset($_POST['newpseudo']) and !empty($_POST['newpseudo']))
-                        {
-                            $newpseudo = htmlspecialchars($_POST['newpseudo']);
+                    if ($action == 'updateUserPseudo'){
+                        if ($this->action->post('newpseudo') && (!empty($this->action->post('newpseudo')))){
+                            $newpseudo = htmlspecialchars($this->action->post('newpseudo'));
                             $this->user->updateUserPseudo($newpseudo);
                         }else{
                             throw new Exception('Merci de remplir le champ pseudo');
@@ -426,8 +431,8 @@ class Router
                      * update mail
                      */
                     if ($action == 'updateUserMail'){
-                        if (isset($_POST['newmail']) and !empty($_POST['newmail'])){
-                            $newmail = htmlspecialchars($_POST['newmail']);
+                        if ($this->action->post('newmail') && (!empty($this->action->post('newmail')))){
+                            $newmail = htmlspecialchars($this->action->post('newmail'));
                             $this->user->updateUserMail($newmail);
                         }else{
                             throw new Exception('Merci de remplir le champ mail');
@@ -438,8 +443,8 @@ class Router
                      * update password
                      */
                     if ($action == 'updateUserpwd'){
-                        if (isset($_POST['newpwd']) and !empty($_POST['newpwd'])){
-                            $newpwd = password_hash($_POST['newpwd'], PASSWORD_DEFAULT);
+                        if ($this->action->post('newpwd') && (!empty($this->action->post('newpwd')))){
+                            $newpwd = password_hash($this->action->post('newpwd'), PASSWORD_DEFAULT);
                             $this->user->updateUserpwd($newpwd);
                         }else{
                             throw new Exception('Merci de remplir le champ password');
