@@ -6,7 +6,18 @@ use Mod\HomeManager;
 
 class ControllerHome
 {
+	/**
+	 * class properties
+	 *
+	 * @var [type]
+	 */
+	private $loader;
+    private $twig;
+    private $newMessage;
 
+	/**
+	 * builder
+	 */
 	public function __construct()
     {
         $this->loader = new \Twig\Loader\FilesystemLoader('../views/templates/home');
@@ -18,7 +29,6 @@ class ControllerHome
 	 * Display home page
 	 * @return void
 	 * */
-
 	public function homePage()
 	{
 		$this->twig->addGlobal('session', $_SESSION);
@@ -33,5 +43,10 @@ class ControllerHome
 	{
 		$this->newMessage->addMessage($username, $mail, $content);
 		header("Location:index.php?action=homePage");
+	}
+
+	public function legalPage()
+	{
+		require('../views/templates/legalNotice.php');
 	}
 }
