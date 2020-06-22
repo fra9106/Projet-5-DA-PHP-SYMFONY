@@ -4,7 +4,7 @@ namespace App\routes;
 
 
 use Control\{ConnectController, ControllerHome, ControllerArticles, ControllerUser};
-
+use App\sessions\Session;
 use Exception;
 
 class Router
@@ -21,6 +21,7 @@ class Router
     private $loaderSecurit;
     private $twigySecur;
     private $action;
+    private $session;
 
     /**
      * builder
@@ -34,6 +35,7 @@ class Router
         $this->loaderSecurit = new \Twig\Loader\FilesystemLoader('../views/templates/security');
         $this->twigySecur = new \Twig\Environment($this->loaderSecurit);
         $this->action = new Request();
+        $this->session = new Session();
     }
     
     public function run()
@@ -162,7 +164,7 @@ class Router
                  * valid comment
                  */
                 if ($action == 'validComment'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header("Location: index.php?action=homePage");
                     }else{
                         if ($this->action->get('id') && (!empty($this->action->get('id')))){
@@ -178,7 +180,7 @@ class Router
                  * display list articles admin
                  */
                 if ($action == 'listArticlesAdmin'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header("Location: index.php?action=homePage");
                     }else{
                         $this->articles->listArticlesAdmin();
@@ -189,7 +191,7 @@ class Router
                  * display list membres admin
                  */
                 if ($action == 'listUsersAdmin'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header("Location: index.php?action=homePage");
                     }else{
                         $this->user->listUsersAdmin();
@@ -200,7 +202,7 @@ class Router
                  * display list comments admin
                  */
                 if ($action == 'listCommentsAdmin'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header("Location: index.php?action=homePage");
                     }else{
                         $this->articles->listCommentsAdmin();
@@ -211,7 +213,7 @@ class Router
                  * delete user
                  */
                 if ($action == 'deleteUser'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
                                 if ($this->action->get('id') && $this->action->get('id') > 0){
@@ -226,7 +228,7 @@ class Router
                  * confirm delete user
                  */
                 if ($action == "confirmdeleteuser"){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
                             if ($this->action->get('id') && $this->action->get('id') > 0){
@@ -241,7 +243,7 @@ class Router
                  * edit article admin
                  */
                 if ($action == 'editArticleAdmin'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
                             if ($this->action->get('id') && $this->action->get('id') > 0){
@@ -271,7 +273,7 @@ class Router
                  * delete article
                  */
                 if ($action == 'deleteArticle'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
                             if ($this->action->get('id') && (!empty($this->action->get('id')))){
@@ -285,7 +287,7 @@ class Router
                  * confirm delete article
                  */
                 if ($action == "confirmdeletearticle"){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
                             if ($this->action->get('id') && $this->action->get('id') > 0){
@@ -300,7 +302,7 @@ class Router
                  * delete comment
                  */
                 if ($action == 'deleteComment'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
                             if ($this->action->get('id') && (!empty($this->action->get('id')))){
@@ -315,7 +317,7 @@ class Router
                  * confirm delete comment
                  */
                 if ($action == "confirmdeletecomment"){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
                             if ($this->action->get('id') && $this->action->get('id') > 0){
@@ -330,7 +332,7 @@ class Router
                  * display form to write article
                  */
                 if ($action == 'writeArticleDisplay'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location: index.php?action=homePage');
                     }else{
                         $this->articles->formArticle();
@@ -341,7 +343,7 @@ class Router
                  * send written article 
                  */
                 if ($action == 'articleWriting'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location: index.php?action=homePage');
                     }else{
                         if (isset($_POST['send_article']) and isset($_POST['id_category']) and isset($_SESSION['id']) and isset($_POST['mini_content']) and isset($_POST['title']) and isset($_POST['content'])){
@@ -363,7 +365,7 @@ class Router
                  * user profil page
                  */
                 if ($action == 'diplayprofil'){
-                    if (isset($_SESSION['id'])){
+                    if ($this->session->sessId('id')){
                         $this->user->displayprofil();
                     }else{
                         throw new Exception('Impossible d\'afficher la page profil, veuillez vous connecter !');
@@ -374,7 +376,7 @@ class Router
                   * display edit page profil user
                   */
                  if ($action == 'editprofilpage'){
-                    if (isset($_SESSION['id'])){
+                    if ($this->session->sessId('id')){
                         $this->user->editprofilpage();
                     }else{
                         throw new Exception('Impossible d\'afficher la page edition de profil, veuillez vous connecter !');
