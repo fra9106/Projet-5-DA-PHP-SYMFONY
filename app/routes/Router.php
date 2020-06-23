@@ -4,7 +4,7 @@ namespace App\routes;
 
 
 use Control\{ConnectController, ControllerHome, ControllerArticles, ControllerUser};
-
+use App\sessions\Session;
 use Exception;
 
 class Router
@@ -21,6 +21,7 @@ class Router
     private $loaderSecurit;
     private $twigySecur;
     private $action;
+    private $session;
 
     /**
      * builder
@@ -34,6 +35,7 @@ class Router
         $this->loaderSecurit = new \Twig\Loader\FilesystemLoader('../views/templates/security');
         $this->twigySecur = new \Twig\Environment($this->loaderSecurit);
         $this->action = new Request();
+        $this->session = new Session();
     }
     
     public function run()
@@ -53,7 +55,7 @@ class Router
                  * send message home page
                  */
                 if ($action == 'sendMessage'){
-                    $this->action->post('sendMessage');
+                        $this->action->post('sendMessage');
                         $username = $this->action->post('username');
                         $mail = $this->action->post('mail'); 
                         $content = $this->action->post('content'); 
@@ -91,11 +93,10 @@ class Router
                         if (!empty(trim($_POST['mail'])) and !empty(trim($_POST['mdp']))){
                             $this->connect->login($_POST['mail'], $_POST['mdp']);
                         }else{
-                        throw new Exception('Oups...Tous les champs doivent être complétés !');
+                            throw new Exception('Oups...Tous les champs doivent être complétés !');
                         }
                     }
                 }
-
                 /**
                  * logout
                  */
@@ -114,7 +115,7 @@ class Router
                             $pseudolength = strlen($pseudo);
                             if ($pseudolength > 2){
                                 if (filter_var($mail, FILTER_VALIDATE_EMAIL)){
-                                    $contact = $this->user->addMember($_POST['pseudo'], $_POST['mail'], $_POST['mdp'], 'default.jpg');
+                                    $contact = $this->user->addMember ($_POST['pseudo'], $_POST['mail'], $_POST['mdp'], 'default.jpg');
                                     return $contact;
                                 }else{
                                     throw new Exception('Adresse mail non valide !');
@@ -130,15 +131,26 @@ class Router
                 /**
                  * list articles
                  */
-                elseif ($action == 'listArticles'){
+                  if ($action == 'listArticles'){
                        $this->articles->listArticle();
                     }
+                
+                /**
+                 * get articles by categories
+                 */
+                if ($action == 'catArticles'){
+                    $idCategory = $this->action->get('id_category');
+                    $this->articles->catArticles($idCategory);
+                    
+                }
+
+                
 
                     /**
                      * get article by id
                      */
                   if ($action == 'getArticle'){ 
-                        if (isset($_GET['id']) && $_GET['id'] > 0){
+                        if ($this->action->get('id') > 0){
                             $this->articles->getArticle();
                         }else{
                             throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
@@ -148,8 +160,8 @@ class Router
                      * add comment
                      */
                     if ($action == 'addComment'){
-                        if (isset($_GET['id']) && $_GET['id'] > 0){
-                            if (!empty($_GET['id']) && ($_POST['content'])){
+                        if ($this->action->get('id') > 0){
+                            if (!empty ($this->action->get('id') && ($this->action->post('content')))){
                                 $this->articles->addComment($_GET['id'], $_SESSION['id'], $_POST['content']);
                             }else{
                                 throw new Exception('Oups... Tous les champs ne sont pas remplis !');
@@ -163,11 +175,12 @@ class Router
                  * valid comment
                  */
                 if ($action == 'validComment'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header("Location: index.php?action=homePage");
                     }else{
-                        if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                            $this->articles->validComment($_GET['id']);
+                        if ($this->action->get('id') && (!empty($this->action->get('id')))){
+                            $idComment = $this->action->get('id');
+                            $this->articles->validComment($idComment);
                         }else{
                             throw new Exception('Oups....erreur de validation !');
                         }
@@ -178,7 +191,7 @@ class Router
                  * display list articles admin
                  */
                 if ($action == 'listArticlesAdmin'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header("Location: index.php?action=homePage");
                     }else{
                         $this->articles->listArticlesAdmin();
@@ -189,7 +202,7 @@ class Router
                  * display list membres admin
                  */
                 if ($action == 'listUsersAdmin'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header("Location: index.php?action=homePage");
                     }else{
                         $this->user->listUsersAdmin();
@@ -200,7 +213,7 @@ class Router
                  * display list comments admin
                  */
                 if ($action == 'listCommentsAdmin'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == '0')){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header("Location: index.php?action=homePage");
                     }else{
                         $this->articles->listCommentsAdmin();
@@ -211,11 +224,12 @@ class Router
                  * delete user
                  */
                 if ($action == 'deleteUser'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
-                                if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                                    $this->user->deleteUser($_GET['id']);
+                                if ($this->action->get('id') && $this->action->get('id') > 0){
+                                    $idUser = $this->action->get('id');
+                                    $this->user->deleteUser($idUser);
                                     
                                 }
                             }
@@ -225,10 +239,10 @@ class Router
                  * confirm delete user
                  */
                 if ($action == "confirmdeleteuser"){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
-                            if (isset($_GET['id']) && $_GET['id'] > 0){
+                            if ($this->action->get('id') && $this->action->get('id') > 0){
                                 $this->user->confirmdeleteuser();
                             }else{
                                 throw new Exception('Oups... Aucun identifiant membre !');
@@ -240,10 +254,10 @@ class Router
                  * edit article admin
                  */
                 if ($action == 'editArticleAdmin'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
-                            if (isset($_GET['id']) && $_GET['id'] > 0){
+                            if ($this->action->get('id') && $this->action->get('id') > 0){
                                 $this->articles->editArticleAdmin();
                             }else{
                                 throw new Exception('Oups... Aucun identifiant article !');
@@ -254,10 +268,14 @@ class Router
                  * update article admin
                  */
                 if ($action == "updateArticleAdmin"){
-                    if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                        $this->articles->updateArticleAdmin($_POST['mini_content'], $_POST['title'], $_POST['content'], $_GET['id']);
+                    if ($this->action->get('id') && (!empty($this->action->get('id')))){
+                        $postMini = $this->action->post('mini_content');
+                        $postTitle = $this->action->post('title');
+                        $postContent = $this->action->post('content');
+                        $getId = $this->action->get('id');
+                        $this->articles->updateArticleAdmin($postMini, $postTitle, $postContent, $getId);
                         }else{
-                        throw new Exception('Impossible de modifier l\'article !');
+                            throw new Exception('Impossible de modifier l\'article !');
                     }
 
                 }
@@ -266,11 +284,12 @@ class Router
                  * delete article
                  */
                 if ($action == 'deleteArticle'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
-                            if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                            $this->articles->deleteArticle($_GET['id']);
+                            if ($this->action->get('id') && (!empty($this->action->get('id')))){
+                                $dataId = $this->action->get('id');
+                                $this->articles->deleteArticle($dataId);
                             }
                         }
                     }
@@ -279,10 +298,10 @@ class Router
                  * confirm delete article
                  */
                 if ($action == "confirmdeletearticle"){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
-                            if (isset($_GET['id']) && $_GET['id'] > 0){
+                            if ($this->action->get('id') && $this->action->get('id') > 0){
                             $this->articles->confirmdeletearticle();
                             }else{
                                 throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
@@ -294,11 +313,12 @@ class Router
                  * delete comment
                  */
                 if ($action == 'deleteComment'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
-                            if ((isset($_GET['id'])) && (!empty($_GET['id']))){
-                                $this->articles->deleteComment($_GET['id']);
+                            if ($this->action->get('id') && (!empty($this->action->get('id')))){
+                                $dataId = $this->action->get('id');
+                                $this->articles->deleteComment($dataId);
                             }
                         }
                     }
@@ -308,11 +328,11 @@ class Router
                  * confirm delete comment
                  */
                 if ($action == "confirmdeletecomment"){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location:index.php?action=homePage');
                         }else{
-                            if (isset($_GET['id']) && $_GET['id'] > 0){
-                                $display = $this->articles->confirmdeletecomment();
+                            if ($this->action->get('id') && $this->action->get('id') > 0){
+                                $this->articles->confirmdeletecomment();
                             }else{
                                 throw new Exception('Oups... Aucun identifiant d\'article envoyé !');
                             }
@@ -323,7 +343,7 @@ class Router
                  * display form to write article
                  */
                 if ($action == 'writeArticleDisplay'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location: index.php?action=homePage');
                     }else{
                         $this->articles->formArticle();
@@ -334,7 +354,7 @@ class Router
                  * send written article 
                  */
                 if ($action == 'articleWriting'){
-                    if (!isset($_SESSION['droits']) || ($_SESSION['droits'] == 0)){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header('Location: index.php?action=homePage');
                     }else{
                         if (isset($_POST['send_article']) and isset($_POST['id_category']) and isset($_SESSION['id']) and isset($_POST['mini_content']) and isset($_POST['title']) and isset($_POST['content'])){
@@ -356,7 +376,7 @@ class Router
                  * user profil page
                  */
                 if ($action == 'diplayprofil'){
-                    if (isset($_SESSION['id'])){
+                    if ($this->session->sessId('id')){
                         $this->user->displayprofil();
                     }else{
                         throw new Exception('Impossible d\'afficher la page profil, veuillez vous connecter !');
@@ -367,7 +387,7 @@ class Router
                   * display edit page profil user
                   */
                  if ($action == 'editprofilpage'){
-                    if (isset($_SESSION['id'])){
+                    if ($this->session->sessId('id')){
                         $this->user->editprofilpage();
                     }else{
                         throw new Exception('Impossible d\'afficher la page edition de profil, veuillez vous connecter !');
@@ -411,11 +431,9 @@ class Router
                     /**
                      * update pseudo
                      */
-                    if ($action == 'updateUserPseudo')
-                    {
-                        if (isset($_POST['newpseudo']) and !empty($_POST['newpseudo']))
-                        {
-                            $newpseudo = htmlspecialchars($_POST['newpseudo']);
+                    if ($action == 'updateUserPseudo'){
+                        if ($this->action->post('newpseudo') && (!empty($this->action->post('newpseudo')))){
+                            $newpseudo = htmlspecialchars($this->action->post('newpseudo'));
                             $this->user->updateUserPseudo($newpseudo);
                         }else{
                             throw new Exception('Merci de remplir le champ pseudo');
@@ -426,8 +444,8 @@ class Router
                      * update mail
                      */
                     if ($action == 'updateUserMail'){
-                        if (isset($_POST['newmail']) and !empty($_POST['newmail'])){
-                            $newmail = htmlspecialchars($_POST['newmail']);
+                        if ($this->action->post('newmail') && (!empty($this->action->post('newmail')))){
+                            $newmail = htmlspecialchars($this->action->post('newmail'));
                             $this->user->updateUserMail($newmail);
                         }else{
                             throw new Exception('Merci de remplir le champ mail');
@@ -438,8 +456,8 @@ class Router
                      * update password
                      */
                     if ($action == 'updateUserpwd'){
-                        if (isset($_POST['newpwd']) and !empty($_POST['newpwd'])){
-                            $newpwd = password_hash($_POST['newpwd'], PASSWORD_DEFAULT);
+                        if ($this->action->post('newpwd') && (!empty($this->action->post('newpwd')))){
+                            $newpwd = password_hash($this->action->post('newpwd'), PASSWORD_DEFAULT);
                             $this->user->updateUserpwd($newpwd);
                         }else{
                             throw new Exception('Merci de remplir le champ password');

@@ -4,10 +4,15 @@
 
 {% block body %}
 <div class="jumbotron text-center"><br><br>
-    <h1>
-        Liste des articles
-    </h1>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non nesciunt ducimus distinctio nostrum? Doloribus temporibus eum nulla doloremque maxime rem eveniet repellendus a deserunt velit dolorum unde tempore voluptatibus minus quidem, mollitia hic saepe? Reprehenderit cum ipsam quaerat modi recusandae.</p>
+    <h2>
+        Liste des articles par catégories
+    </h2>
+    <p>Bienvenue sur la page des articles de mon blog. Ceux-ci sont soit classé par ces trois catégories ou bien en liste complète. Bonne lecture... </p>
+    <div class="btn-group center">
+        <a href="index.php?action=catArticles&amp;id_category=1{{article.id_category}}"><button type="button" class="btn btn-lg btn-success">Activités</button></a>&nbsp;&nbsp;
+        <a href="index.php?action=catArticles&amp;id_category=2{{article.id_category}}"><button type="button" class="btn btn-lg btn-success">Objectifs</button></a>&nbsp;&nbsp;
+        <a href="index.php?action=catArticles&amp;id_category=3{{article.id_category}}"><button type="button" class="btn btn-lg btn-success">Astuces</button></a>
+    </div>
 </div>
 <div class="container">
     <h2>Mes articles</h2><br>
@@ -27,7 +32,7 @@
                         <small class="text-muted"><em>Modifié le : {{article.update_date_fr}}</em></small><br>
                         {% endif %}
                         <div class="btn-group center">
-                            <a href="index.php?action=getArticle&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-secondary">Lire la suite...</button></a>
+                            <a href="index.php?action=getArticle&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-success">Lire la suite...</button></a>
                         </div>
                     </div>
                 </div>
