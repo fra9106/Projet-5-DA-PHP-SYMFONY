@@ -12,6 +12,7 @@ This five OpenClassrooms project is the creation of a blog in PHP programmed in 
 
 4 - Import the database in phpMyAdmin found in the DataBase directory
 
-5 - The Admin account is : mail bibi@bibi.fr password bibi
+5 - The Admin account is : mail bibi@bibi.fr password : bibi
+    The Editor account is : mail bubu@bubu.fr password : bubu 
 
 6 - create a member account and enjoy it

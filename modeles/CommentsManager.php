@@ -71,7 +71,7 @@ class CommentsManager extends Manager{
 	 * @param [type] $commentId
 	 * @return void
 	 */
-	public function validation($commentId) //requete pour signaler un commentaire (user)
+	public function validation($commentId)
 	{
 		$db = $this->dbConnect();
 		$req = $db->prepare('UPDATE comments SET valid = 1 WHERE id = ?');

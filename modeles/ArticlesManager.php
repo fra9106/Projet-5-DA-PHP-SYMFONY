@@ -16,10 +16,25 @@ class ArticlesManager extends Manager
     public function getArticles()
     {
         $db = $this->dbConnect();
-		$articles = $db->prepare('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr, DATE_FORMAT(update_date, \'%d/%m/%Y à %Hh%imin%ss\') AS update_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id ORDER BY creation_date_fr DESC');
+		$articles = $db->prepare('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr, DATE_FORMAT(update_date, \'%d/%m/%Y à %Hh%imin%ss\') AS update_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id AND valid = 1 ORDER BY creation_date_fr DESC');
         $articles->execute(array());
         return $articles;
     }
+
+    /**
+     * get articles list admin
+     *
+     * @return void
+     */
+    public function getArticlesAdmin()
+    {
+        $db = $this->dbConnect();
+		$articles = $db->prepare('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, articles.valid, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr, DATE_FORMAT(update_date, \'%d/%m/%Y à %Hh%imin%ss\') AS update_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id ORDER BY creation_date_fr DESC');
+        $articles->execute(array());
+        return $articles;
+    }
+
+    
 
     /**
      * get articles by categories
@@ -30,7 +45,7 @@ class ArticlesManager extends Manager
     public function getArticlesByCat($idCategory)
     {
         $db = $this->dbConnect();
-		$articles = $db->prepare('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr, DATE_FORMAT(update_date, \'%d/%m/%Y à %Hh%imin%ss\') AS update_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id WHERE id_category = ? ORDER BY creation_date_fr DESC');
+		$articles = $db->prepare('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr, DATE_FORMAT(update_date, \'%d/%m/%Y à %Hh%imin%ss\') AS update_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id WHERE id_category = ? AND valid = 1 ORDER BY creation_date_fr DESC');
         $articles->execute(array($idCategory));
         
         return $articles;
@@ -65,6 +80,20 @@ class ArticlesManager extends Manager
         $articles->execute(array($dataId));
         return $articles;
     } 
+
+    /**
+	 * articles editor validation
+	 *
+	 * @param [type] $commentId
+	 * @return void
+	 */
+	public function validation($articleId)
+	{
+		$db = $this->dbConnect();
+		$req = $db->prepare('UPDATE articles SET valid = 1 WHERE id = ?');
+		$req->execute(array($articleId));
+		return $req;
+	}
     
     /**
      * update article
