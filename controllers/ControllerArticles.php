@@ -45,6 +45,20 @@ class ControllerArticles
     public function listArticle() 
     {
         $articles = $this->articlesManager->getArticles();
+        
+        $this->twig->addGlobal('session', $_SESSION);   
+        echo $this->twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
+    }
+
+    /**
+     * get articles by categories
+     *
+     * @param [type] $idCategory
+     * @return void
+     */
+    public function catArticles($idCategory){
+        $articles = $this->articlesManager->getArticlesByCat($idCategory);
+        
         $this->twig->addGlobal('session', $_SESSION);   
         echo $this->twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
     }

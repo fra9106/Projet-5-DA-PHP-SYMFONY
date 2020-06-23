@@ -22,6 +22,22 @@ class ArticlesManager extends Manager
     }
 
     /**
+     * get articles by categories
+     *
+     * @param [type] $idCategory
+     * @return void
+     */
+    public function getArticlesByCat($idCategory)
+    {
+        $db = $this->dbConnect();
+		$articles = $db->prepare('SELECT categories.id, categories.category, articles.id, users.pseudo, articles.mini_content, articles.title, articles.content, DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr, DATE_FORMAT(update_date, \'%d/%m/%Y à %Hh%imin%ss\') AS update_date_fr FROM articles INNER JOIN users ON articles.id_user = users.id INNER JOIN categories ON articles.id_category = categories.id WHERE id_category = ? ORDER BY creation_date_fr DESC');
+        $articles->execute(array($idCategory));
+        
+        return $articles;
+    }
+
+
+    /**
      * get article by id
      *
      * @param [type] $idArticle

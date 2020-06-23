@@ -131,9 +131,20 @@ class Router
                 /**
                  * list articles
                  */
-                elseif ($action == 'listArticles'){
+                  if ($action == 'listArticles'){
                        $this->articles->listArticle();
                     }
+                
+                /**
+                 * get articles by categories
+                 */
+                if ($action == 'catArticles'){
+                    $idCategory = $this->action->get('id_category');
+                    $this->articles->catArticles($idCategory);
+                    
+                }
+
+                
 
                     /**
                      * get article by id
@@ -264,7 +275,7 @@ class Router
                         $getId = $this->action->get('id');
                         $this->articles->updateArticleAdmin($postMini, $postTitle, $postContent, $getId);
                         }else{
-                        throw new Exception('Impossible de modifier l\'article !');
+                            throw new Exception('Impossible de modifier l\'article !');
                     }
 
                 }
