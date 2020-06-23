@@ -9,44 +9,44 @@
     <h3><a href="index.php?action=listArticlesAdmin">Gestion des articles</a></h3>
     <h3><a href="index.php?action=listCommentsAdmin">Gestion des commentaires</a></h3>
     <h3><a href="index.php?action=listUsersAdmin">Gestion des membres</a></h3>
-    <br />
-    <div class="container">
-        <h1>Articles</h1><br>
-        <div class="row flex">
+    <br>
+    <div class="container mt-4">
+        <h2>Articles :</h2><br><br><br>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Catégorie</th>
+                    <th>Chapô</th>
+                    <th>Contenu</th>
+                    <th>Auteur</th>
+                    <th>Date de création</th>
+                    <th>Date de modification</th>
+                    <th>Validation</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for article in articles %}
-            <div class="col-3"><br>
-                <div class="card">
-                    <div class="card-body">
-                        <strong>Catégorie : {{article.category}}</strong>
-                        <h5 class="card-title">
-                            {{article.title|nl2br}}
-                        </h5>
-                        <p class="card-text">{{article.mini_content }}</p>
-                        <p class="card-text">{{article.content|striptags|raw}}</p>
-                        <div class="btn-group">
-                            <a href="index.php?action=editArticleAdmin&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-danger">Modifier</button></a>&nbsp;&nbsp;
-                            <a href="index.php?action=confirmdeletearticle&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-success">Supprimer</button></a>
-                        </div><br>
-                        <small class="text-muted"><em>De la part de : {{article.pseudo}}</em></small><br>
-                        <small class="text-muted"><em>Créé le : {{article.creation_date_fr}}</em></small><br>
-                        {% if article.update_date_fr %}
-                        <small class="text-muted"><em>Modifié le : {{article.update_date_fr}}</em></small>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
+            <tr>
+                <td>{{article.category}}</td>
+                <td>{{article.mini_content}}</td>
+                <td>{{article.content|striptags|raw}}</td>
+                <td>{{article.pseudo}}</td>
+                <td>{{article.creation_date_fr}}</td>
+                <td>{{article.update_date_fr}}</td>
+                <td>{{article.valid}}</td>
+                <td>
+                    <a href="index.php?action=editArticleAdmin&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-success">Modifier</button></a>
+                </td>
+                <td>
+                    <a href="index.php?action=validArticle&amp;id={{article.id}}"><button type="button" class="btn btn-success">Valider</button></a>
+                </td>
+                <td>
+                    <a href="index.php?action=confirmdeletearticle&amp;id={{article.id}}"><button type="button" class="btn btn-sm btn-outline-danger">Supprimer</button></a>
+                </td>
+            </tr>
             {% endfor %}
-        </div>
-    </div>
+        </tbody>
+        </table>
+    </div><br><br>
 </div>
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-{% block javascripts %}<script>
-    tinymce.init({
-        entity_encoding: "raw",
-        selector: '.mytextarea',
-        content_css: 'publics/css/style.css',
-        language_url: 'https://olli-suutari.github.io/tinyMCE-4-translations/fr_FR.js',
-        language: 'fr_FR'
-    });
-</script>{% endblock %}
 {% endblock %}

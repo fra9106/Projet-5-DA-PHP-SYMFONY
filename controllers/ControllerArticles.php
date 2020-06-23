@@ -107,9 +107,25 @@ class ControllerArticles
     {
         $signal = $this->commentsManager->validation($commentId);
         if ($signal === false){
-            throw new \Exception('Oups... Impossible de signaler ce commentaire !');
+            throw new \Exception('Oups... Impossible de valider ce commentaire !');
         }else{
             header('Location: index.php?action=listCommentsAdmin');
+        }
+    }
+
+    /**
+     *valid article admin
+     *
+     * @param [type] $commentId
+     * @return void
+     */
+    public function validArticle($articleId) 
+    {
+        $signal = $this->articlesManager->validation($articleId);
+        if ($signal === false){
+            throw new \Exception('Oups... Impossible de valider cet article !');
+        }else{
+            header('Location: index.php?action=listArticlesAdmin');
         }
     }
 
@@ -120,7 +136,7 @@ class ControllerArticles
      */
     public function listArticlesAdmin() 
     {
-       $articles = $this->articlesManager->getArticles();
+       $articles = $this->articlesManager->getArticlesAdmin();
        $this->adminTwig->addGlobal('session', $_SESSION);
        echo $this->adminTwig->render('listArticlesAdmin.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1] );
     }
@@ -229,7 +245,7 @@ class ControllerArticles
     public function formArticle()
     {
         $this->adminTwig->addGlobal('session', $_SESSION);
-        echo $this->adminTwig->render("articleWriting.html.twig",['droits' => $_SESSION == 1] );	 
+        echo $this->adminTwig->render("articleWriting.html.twig",['droits' => $_SESSION == 1, 'droits' => $_SESSION == 2] );	 
     }  
     
     /**
@@ -246,10 +262,11 @@ class ControllerArticles
     {
         $createarticle = $this->articlesManager->postArticle($idCategory, $idUser, $miniContent, $title, $content);
         if ($createarticle === false){
-            throw new \Exception('Impossible d \'ajouter un article...');
+                    throw new \Exception('Impossible d \'ajouter un article...');
 
         }else{
                 header('Location:index.php?action=listArticlesAdmin');
             }
-        }
+    }
+    
 }

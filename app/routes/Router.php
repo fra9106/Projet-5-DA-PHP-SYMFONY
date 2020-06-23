@@ -62,7 +62,6 @@ class Router
                         $this->home->sendMessage($username, $mail, $content);
                 }
                 
-            
                 /**
                  * Legal Notice
                  */
@@ -144,9 +143,7 @@ class Router
                     
                 }
 
-                
-
-                    /**
+                /**
                      * get article by id
                      */
                   if ($action == 'getArticle'){ 
@@ -175,12 +172,28 @@ class Router
                  * valid comment
                  */
                 if ($action == 'validComment'){
-                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
-                        header("Location: index.php?action=homePage");
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
+                        throw new Exception('Votre status ne vous permet pas d\'accéder à cette fonction !');
                     }else{
                         if ($this->action->get('id') && (!empty($this->action->get('id')))){
                             $idComment = $this->action->get('id');
                             $this->articles->validComment($idComment);
+                        }else{
+                            throw new Exception('Oups....erreur de validation !');
+                        }
+                    }
+                }
+
+                /**
+                 * valid editor article
+                 */
+                if ($action == 'validArticle'){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
+                        throw new Exception('Votre status ne vous permet pas d\'accéder à cette fonction !');
+                    }else{
+                        if ($this->action->get('id') && (!empty($this->action->get('id')))){
+                            $idArticle = $this->action->get('id');
+                            $this->articles->validArticle($idArticle);
                         }else{
                             throw new Exception('Oups....erreur de validation !');
                         }
@@ -202,8 +215,8 @@ class Router
                  * display list membres admin
                  */
                 if ($action == 'listUsersAdmin'){
-                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
-                        header("Location: index.php?action=homePage");
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
+                        throw new Exception('Votre status ne vous permet pas d\'accéder à cette fonction !');
                     }else{
                         $this->user->listUsersAdmin();
                     }
@@ -224,7 +237,7 @@ class Router
                  * delete user
                  */
                 if ($action == 'deleteUser'){
-                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
                         header('Location:index.php?action=homePage');
                         }else{
                                 if ($this->action->get('id') && $this->action->get('id') > 0){
@@ -239,7 +252,7 @@ class Router
                  * confirm delete user
                  */
                 if ($action == "confirmdeleteuser"){
-                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
                         header('Location:index.php?action=homePage');
                         }else{
                             if ($this->action->get('id') && $this->action->get('id') > 0){
@@ -254,8 +267,8 @@ class Router
                  * edit article admin
                  */
                 if ($action == 'editArticleAdmin'){
-                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
-                        header('Location:index.php?action=homePage');
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
+                        throw new Exception('Votre status ne vous permet pas d\'accéder à cette fonction !');
                         }else{
                             if ($this->action->get('id') && $this->action->get('id') > 0){
                                 $this->articles->editArticleAdmin();
@@ -284,7 +297,7 @@ class Router
                  * delete article
                  */
                 if ($action == 'deleteArticle'){
-                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
                         header('Location:index.php?action=homePage');
                         }else{
                             if ($this->action->get('id') && (!empty($this->action->get('id')))){
@@ -298,8 +311,8 @@ class Router
                  * confirm delete article
                  */
                 if ($action == "confirmdeletearticle"){
-                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
-                        header('Location:index.php?action=homePage');
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
+                        throw new Exception('Votre status ne vous permet pas d\'accéder à cette fonction !');
                         }else{
                             if ($this->action->get('id') && $this->action->get('id') > 0){
                             $this->articles->confirmdeletearticle();
@@ -313,7 +326,7 @@ class Router
                  * delete comment
                  */
                 if ($action == 'deleteComment'){
-                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
                         header('Location:index.php?action=homePage');
                         }else{
                             if ($this->action->get('id') && (!empty($this->action->get('id')))){
@@ -328,8 +341,8 @@ class Router
                  * confirm delete comment
                  */
                 if ($action == "confirmdeletecomment"){
-                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
-                        header('Location:index.php?action=homePage');
+                    if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
+                        throw new Exception('Votre status ne vous permet pas d\'accéder à cette fonction !');
                         }else{
                             if ($this->action->get('id') && $this->action->get('id') > 0){
                                 $this->articles->confirmdeletecomment();
