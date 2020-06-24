@@ -5,6 +5,7 @@ namespace Control;
 require '../vendor/autoload.php';
 
 use Mod\{ArticlesManager, CommentsManager};
+use App\routes\request;
 
 class ControllerArticles
 {
@@ -21,6 +22,7 @@ class ControllerArticles
     private $twigySecur;
     private $articlesManager;
     private $commentsManager;
+    private $action;
 
     /**
      * builder
@@ -35,6 +37,7 @@ class ControllerArticles
         $this->twigySecur = new \Twig\Environment($this->loaderSecurit);
         $this->articlesManager = new ArticlesManager();
         $this->commentsManager = new CommentsManager();
+        $this->action = new Request();
     }
 
     /**
@@ -45,7 +48,6 @@ class ControllerArticles
     public function listArticle() 
     {
         $articles = $this->articlesManager->getArticles();
-        
         $this->twig->addGlobal('session', $_SESSION);   
         echo $this->twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
     }
@@ -58,7 +60,6 @@ class ControllerArticles
      */
     public function catArticles($idCategory){
         $articles = $this->articlesManager->getArticlesByCat($idCategory);
-        
         $this->twig->addGlobal('session', $_SESSION);   
         echo $this->twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
     }
@@ -70,8 +71,9 @@ class ControllerArticles
      */
     public function getArticle()
     {
-        $article = $this->articlesManager->Article($_GET['id']);
-        $comments = $this->commentsManager->getComments($_GET['id']);
+        $getId = $this->action->get('id');
+        $article = $this->articlesManager->Article($getId);
+        $comments = $this->commentsManager->getComments($getId);
         $this->twig->addGlobal('session', $_SESSION);
         echo $this->twig->render('article.html.twig',['comments' => $comments,'article' => $article],  ['droits' => $_SESSION == 1]);
     }
@@ -160,7 +162,8 @@ class ControllerArticles
      */
     public function confirmdeletearticle ()
     {
-        $article = $this->articlesManager->Article($_GET['id']);
+        $getId = $this->action->get('id');
+        $article = $this->articlesManager->Article($getId);
         $this->twigySecur->addGlobal('session', $_SESSION);
         echo $this->twigySecur->render('confirmdeletearticle.html.twig',['article' => $article], ['droits' => $_SESSION == 1]);
     }
@@ -172,7 +175,8 @@ class ControllerArticles
      */
     public function confirmdeletecomment ()
     {
-        $comment = $this->commentsManager->getComment($_GET['id']);
+        $getId = $this->action->get('id');
+        $comment = $this->commentsManager->getComment($getId);
         $this->twigySecur->addGlobal('session', $_SESSION);
         echo $this->twigySecur->render('confirmdeletecomment.html.twig',['comment' => $comment], ['droits' => $_SESSION == 1]);
     }
@@ -184,9 +188,10 @@ class ControllerArticles
      */
     public function editArticleAdmin()
     {
-       $articles = $this->articlesManager->getArticleAdmin($_GET['id']);
-       $this->adminTwig->addGlobal('session', $_SESSION);
-       echo $this->adminTwig->render("articleUpdating.html.twig", ['articles' => $articles], ['droits' => $_SESSION == 1]);	 
+        $getId = $this->action->get('id');
+        $articles = $this->articlesManager->getArticleAdmin($getId);
+        $this->adminTwig->addGlobal('session', $_SESSION);
+        echo $this->adminTwig->render("articleUpdating.html.twig", ['articles' => $articles], ['droits' => $_SESSION == 1]);	 
     }
 
     /**
@@ -235,7 +240,6 @@ class ControllerArticles
             header('Location: index.php?action=listCommentsAdmin');
         }
     }
-
 
     /**
      * display form to write article

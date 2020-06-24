@@ -159,7 +159,10 @@ class Router
                     if ($action == 'addComment'){
                         if ($this->action->get('id') > 0){
                             if (!empty ($this->action->get('id') && ($this->action->post('content')))){
-                                $this->articles->addComment($_GET['id'], $_SESSION['id'], $_POST['content']);
+                                $getId = $this->action->get('id');
+                                $sess = $this->session->sessId('id');
+                                $postId = $this->action->post('content');
+                                $this->articles->addComment($getId, $sess, $postId);
                             }else{
                                 throw new Exception('Oups... Tous les champs ne sont pas remplis !');
                                 }
@@ -173,7 +176,7 @@ class Router
                  */
                 if ($action == 'validComment'){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
-                        throw new Exception('Votre status ne vous permet pas d\'accéder à cette fonction !');
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                     }else{
                         if ($this->action->get('id') && (!empty($this->action->get('id')))){
                             $idComment = $this->action->get('id');
@@ -189,7 +192,7 @@ class Router
                  */
                 if ($action == 'validArticle'){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
-                        throw new Exception('Votre status ne vous permet pas d\'accéder à cette fonction !');
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                     }else{
                         if ($this->action->get('id') && (!empty($this->action->get('id')))){
                             $idArticle = $this->action->get('id');
@@ -216,7 +219,7 @@ class Router
                  */
                 if ($action == 'listUsersAdmin'){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
-                        throw new Exception('Votre status ne vous permet pas d\'accéder à cette fonction !');
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                     }else{
                         $this->user->listUsersAdmin();
                     }
@@ -268,7 +271,7 @@ class Router
                  */
                 if ($action == 'editArticleAdmin'){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
-                        throw new Exception('Votre status ne vous permet pas d\'accéder à cette fonction !');
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                         }else{
                             if ($this->action->get('id') && $this->action->get('id') > 0){
                                 $this->articles->editArticleAdmin();
@@ -312,7 +315,7 @@ class Router
                  */
                 if ($action == "confirmdeletearticle"){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
-                        throw new Exception('Votre status ne vous permet pas d\'accéder à cette fonction !');
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                         }else{
                             if ($this->action->get('id') && $this->action->get('id') > 0){
                             $this->articles->confirmdeletearticle();
@@ -342,7 +345,7 @@ class Router
                  */
                 if ($action == "confirmdeletecomment"){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
-                        throw new Exception('Votre status ne vous permet pas d\'accéder à cette fonction !');
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                         }else{
                             if ($this->action->get('id') && $this->action->get('id') > 0){
                                 $this->articles->confirmdeletecomment();
@@ -482,6 +485,7 @@ class Router
         }catch(Exception $e){
            
             $errorMessage = $e->getMessage();
+            
             $this->twigySecur->addGlobal('session', $_SESSION);
             echo $this->twigySecur ->render('error.html.twig', ['error' => $errorMessage], ['droits' => $_SESSION == 1]);
         }
