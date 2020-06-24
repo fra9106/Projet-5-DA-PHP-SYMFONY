@@ -172,7 +172,7 @@ class ControllerUser
      * @param [type] $newmdp
      * @return void
      */
-    public function updateUserpwd($newpwd) // update le motdepasse
+    public function updateUserpwd($newpwd)
     {
     
         $this->member->infopwd($newpwd);
