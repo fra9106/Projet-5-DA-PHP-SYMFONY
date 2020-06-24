@@ -58,6 +58,7 @@ class ControllerUser
         if ($testOk == 0 ){
             $this->member->insertMembre($pseudo, $mail, $mdp, 'default.jpg');
             header("Location:index.php?action=displConnexion ");
+            exit;
             }else{
                 throw new \Exception('Oups... Adresse email déjà utilisée');
             }
@@ -88,6 +89,7 @@ class ControllerUser
             throw new \Exception('Impossible de supprimer cet article!');
         }else{
             header('Location: index.php?action=listUsersAdmin');
+            exit;
         }
     }
 
@@ -137,6 +139,7 @@ class ControllerUser
     {
         $this->member->infosAvatar($newavatar);
         header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
+        exit;
     }
 
     /**
@@ -149,6 +152,7 @@ class ControllerUser
     {
         $this->member->infoPseudo($newpseudo);
         header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
+        exit;
     }
 
     /**
@@ -163,6 +167,7 @@ class ControllerUser
         if ($testOk == 0){ 
             $this->membre->infoMail($newmail);
             header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
+            exit;
         }
     }
 
@@ -177,6 +182,7 @@ class ControllerUser
     
         $this->member->infopwd($newpwd);
         header('Location: index.php?action=diplayprofil&id='.$_SESSION['id']);
+        exit;
     }
 
 }

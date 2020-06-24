@@ -43,6 +43,7 @@ class ControllerHome
 	{
 		$this->newMessage->addMessage($username, $mail, $content);
 		header("Location:index.php?action=homePage");
+		exit;
 	}
 
 	public function legalPage()

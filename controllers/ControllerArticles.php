@@ -96,6 +96,7 @@ class ControllerArticles
             throw new \Exception('Oups... Impossible d\'ajouter ce commentaire !');
         }else{
             header('Location: index.php?action=getArticle&id=' . $idArticle);
+            exit;
             }
     }
 
@@ -112,6 +113,7 @@ class ControllerArticles
             throw new \Exception('Oups... Impossible de valider ce commentaire !');
         }else{
             header('Location: index.php?action=listCommentsAdmin');
+            exit;
         }
     }
 
@@ -128,6 +130,7 @@ class ControllerArticles
             throw new \Exception('Oups... Impossible de valider cet article !');
         }else{
             header('Location: index.php?action=listArticlesAdmin');
+            exit;
         }
     }
 
@@ -207,6 +210,7 @@ class ControllerArticles
     {
         $this->articlesManager->updateArticle($miniContent, $title, $content, $postId);
         header('Location: index.php?action=listArticlesAdmin');
+        exit;
     }
 
     /**
@@ -222,6 +226,7 @@ class ControllerArticles
             throw new \Exception('Impossible de supprimer cet article!');
         }else{
             header('Location: index.php?action=listArticlesAdmin');
+            exit;
         }
     }
 
@@ -238,6 +243,7 @@ class ControllerArticles
             throw new \Exception('Impossible de supprimer ce commentaire!');
         }else{
             header('Location: index.php?action=listCommentsAdmin');
+            exit;
         }
     }
 
@@ -267,9 +273,9 @@ class ControllerArticles
         $createarticle = $this->articlesManager->postArticle($idCategory, $idUser, $miniContent, $title, $content);
         if ($createarticle === false){
                     throw new \Exception('Impossible d \'ajouter un article...');
-
-        }else{
+                }else{
                 header('Location:index.php?action=listArticlesAdmin');
+                exit;
             }
     }
     

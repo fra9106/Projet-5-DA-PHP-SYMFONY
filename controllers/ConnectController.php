@@ -82,6 +82,7 @@ class ConnectController
                         $_SESSION['avatar'] = $connect['avatar'];
 
                         header("Location: index.php?action=homePage");
+                        exit;
                     }else{ 
                         throw new \Exception('Oups... Veuillez vous reconnecter !');
                     }
@@ -99,8 +100,8 @@ class ConnectController
                 throw new \Exception('Mauvais identifiant ou mot de passe !');
             }
             if (!empty($_SESSION['droits']) && $_SESSION['droits'] == '1') {
-            
                 header("Location: index.php?action=writeArticleDisplay");
+                exit;
             }
         }
     }
@@ -118,5 +119,6 @@ class ConnectController
         $_SESSION = array();
         session_destroy();
         header("Location: index.php?action=homePage");
+        exit;
     }
 }
