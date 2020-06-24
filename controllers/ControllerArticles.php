@@ -88,14 +88,12 @@ class ControllerArticles
      */
     public function addComment($idArticle, $idUser, $content)
     {
-        
         $content = htmlspecialchars($content);
         $affectedLines = $this->commentsManager->postComment($idArticle, $_SESSION['id'], $content);
-
-        if ($affectedLines === false){ 
-            throw new \Exception('Oups... Impossible d\'ajouter ce commentaire !');
-        }else{
+        if ($affectedLines === true){ 
             header('Location: index.php?action=getArticle&id=' . $idArticle);
+            }else{
+            throw new \Exception('Oups... Impossible d\'ajouter ce commentaire !');
             }
     }
 
@@ -107,11 +105,11 @@ class ControllerArticles
      */
     public function validComment($commentId) 
     {
-        $signal = $this->commentsManager->validation($commentId);
-        if ($signal === false){
-            throw new \Exception('Oups... Impossible de valider ce commentaire !');
-        }else{
+        $valid = $this->commentsManager->validation($commentId);
+        if ($valid === true){
             header('Location: index.php?action=listCommentsAdmin');
+        }else{
+            throw new \Exception('Oups... Impossible de valider ce commentaire !');
         }
     }
 
@@ -123,11 +121,11 @@ class ControllerArticles
      */
     public function validArticle($articleId) 
     {
-        $signal = $this->articlesManager->validation($articleId);
-        if ($signal === false){
-            throw new \Exception('Oups... Impossible de valider cet article !');
-        }else{
+        $valid = $this->articlesManager->validation($articleId);
+        if ($valid === true ){
             header('Location: index.php?action=listArticlesAdmin');
+        }else{
+            throw new \Exception('Oups... Impossible de valider cet article !');
         }
     }
 
@@ -218,10 +216,10 @@ class ControllerArticles
     public function deleteArticle($dataId)
     {
         $deletearticle = $this->articlesManager->supprArticle($dataId);
-        if ($deletearticle === false){
-            throw new \Exception('Impossible de supprimer cet article!');
-        }else{
+        if ($deletearticle === true){
             header('Location: index.php?action=listArticlesAdmin');
+            }else{
+            throw new \Exception('Impossible de supprimer cet article!');
         }
     }
 
@@ -234,10 +232,10 @@ class ControllerArticles
     public function deleteComment($dataId)
     {
         $deletecomment = $this->commentsManager->supprComment($dataId);
-        if ($deletecomment === false){
-            throw new \Exception('Impossible de supprimer ce commentaire!');
-        }else{
+        if ($deletecomment === true){
             header('Location: index.php?action=listCommentsAdmin');
+            }else{
+            throw new \Exception('Impossible de supprimer ce commentaire!');
         }
     }
 
@@ -265,11 +263,10 @@ class ControllerArticles
     public function articleWriting($idCategory, $idUser, $miniContent, $title, $content)
     {
         $createarticle = $this->articlesManager->postArticle($idCategory, $idUser, $miniContent, $title, $content);
-        if ($createarticle === false){
-                    throw new \Exception('Impossible d \'ajouter un article...');
-
+        if ($createarticle === true){
+            header('Location:index.php?action=listArticlesAdmin');
         }else{
-                header('Location:index.php?action=listArticlesAdmin');
+            throw new \Exception('Impossible d \'ajouter un article...');
             }
     }
     
