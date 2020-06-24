@@ -209,7 +209,6 @@ class Router
                 if ($action == 'listArticlesAdmin'){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
                         header("Location: index.php?action=homePage");
-                        exit;
                     }else{
                         $this->articles->listArticlesAdmin();
                     }
@@ -231,8 +230,7 @@ class Router
                  */
                 if ($action == 'listCommentsAdmin'){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
-                        header("Location: index.php?action=homePage");
-                        exit;
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                     }else{
                         $this->articles->listCommentsAdmin();
                     }
@@ -243,8 +241,7 @@ class Router
                  */
                 if ($action == 'deleteUser'){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
-                        header('Location:index.php?action=homePage');
-                        exit;
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                         }else{
                                 if ($this->action->get('id') && $this->action->get('id') > 0){
                                     $idUser = $this->action->get('id');
@@ -259,8 +256,7 @@ class Router
                  */
                 if ($action == "confirmdeleteuser"){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
-                        header('Location:index.php?action=homePage');
-                        exit;
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                         }else{
                             if ($this->action->get('id') && $this->action->get('id') > 0){
                                 $this->user->confirmdeleteuser();
@@ -305,8 +301,7 @@ class Router
                  */
                 if ($action == 'deleteArticle'){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
-                        header('Location:index.php?action=homePage');
-                        exit;
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                         }else{
                             if ($this->action->get('id') && (!empty($this->action->get('id')))){
                                 $dataId = $this->action->get('id');
@@ -335,8 +330,7 @@ class Router
                  */
                 if ($action == 'deleteComment'){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0) || $this->session->rights('droits', 2))){
-                        header('Location:index.php?action=homePage');
-                        exit;
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                         }else{
                             if ($this->action->get('id') && (!empty($this->action->get('id')))){
                                 $dataId = $this->action->get('id');
@@ -366,8 +360,7 @@ class Router
                  */
                 if ($action == 'writeArticleDisplay'){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
-                        header('Location: index.php?action=homePage');
-                        exit;
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                     }else{
                         $this->articles->formArticle();
                         }
@@ -378,8 +371,7 @@ class Router
                  */
                 if ($action == 'articleWriting'){
                     if ($this->session->sess('droits') || ($this->session->rights('droits', 0))){
-                        header('Location: index.php?action=homePage');
-                        exit;
+                        throw new Exception('Votre statut ne vous permet pas d\'accéder à cette fonction !');
                     }else{
                         if (isset($_POST['send_article']) and isset($_POST['id_category']) and isset($_SESSION['id']) and isset($_POST['mini_content']) and isset($_POST['title']) and isset($_POST['content'])){
                             $idCategory = ($_POST['id_category']);
