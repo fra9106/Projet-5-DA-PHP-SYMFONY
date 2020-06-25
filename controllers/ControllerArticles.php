@@ -49,9 +49,8 @@ class ControllerArticles
     public function listArticle() 
     {
         if ($articles = $this->articlesManager->getArticles()){
-    
-        $this->twig->addGlobal('session', $_SESSION);   
-        echo $this->twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
+            $this->twig->addGlobal('session', $_SESSION);   
+            echo $this->twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
         }else{
             throw new Exception('impossible d\'afficher les articles');
         }
@@ -63,10 +62,14 @@ class ControllerArticles
      * @param [type] $idCategory
      * @return void
      */
-    public function catArticles($idCategory){
-        $articles = $this->articlesManager->getArticlesByCat($idCategory);
-        $this->twig->addGlobal('session', $_SESSION);   
-        echo $this->twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
+    public function catArticles($idCategory)
+    {
+        if($articles = $this->articlesManager->getArticlesByCat($idCategory)){
+            $this->twig->addGlobal('session', $_SESSION);   
+            echo $this->twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
+        }else{
+            throw new Exception('impossible d\'afficher les catégories');
+        }
     }
 
     /**
@@ -76,11 +79,14 @@ class ControllerArticles
      */
     public function getArticle()
     {
-        $getId = $this->action->get('id');
+        if($getId = $this->action->get('id')){
         $article = $this->articlesManager->Article($getId);
         $comments = $this->commentsManager->getComments($getId);
         $this->twig->addGlobal('session', $_SESSION);
         echo $this->twig->render('article.html.twig',['comments' => $comments,'article' => $article],  ['droits' => $_SESSION == 1]);
+        }else{
+        throw new Exception('impossible de récupérer l\'article');
+        }
     }
 
     /**
@@ -110,8 +116,7 @@ class ControllerArticles
      */
     public function validComment($commentId) 
     {
-        $valid = $this->commentsManager->validation($commentId);
-        if ($valid === true){
+        if($this->commentsManager->validation($commentId)){
             header('Location: index.php?action=listCommentsAdmin');
         }else{
             throw new \Exception('Oups... Impossible de valider ce commentaire !');
@@ -126,8 +131,7 @@ class ControllerArticles
      */
     public function validArticle($articleId) 
     {
-        $valid = $this->articlesManager->validation($articleId);
-        if ($valid === true ){
+        if($this->articlesManager->validation($articleId)){
             header('Location: index.php?action=listArticlesAdmin');
         }else{
             throw new \Exception('Oups... Impossible de valider cet article !');
@@ -141,9 +145,12 @@ class ControllerArticles
      */
     public function listArticlesAdmin() 
     {
-       $articles = $this->articlesManager->getArticlesAdmin();
-       $this->adminTwig->addGlobal('session', $_SESSION);
-       echo $this->adminTwig->render('listArticlesAdmin.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1] );
+        if($articles = $this->articlesManager->getArticlesAdmin()){
+            $this->adminTwig->addGlobal('session', $_SESSION);
+            echo $this->adminTwig->render('listArticlesAdmin.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1] );
+        }else{
+            throw new \Exception('Oups... Impossible d\'afficher les articles !');
+        }
     }
 
     /**
@@ -153,9 +160,12 @@ class ControllerArticles
      */
     public function listCommentsAdmin()
     {
-        $comments = $this->commentsManager->getCommentsAdmin();
-        $this->adminTwig->addGlobal('session', $_SESSION);
-        echo $this->adminTwig->render('listCommentsAdmin.html.twig',['comments' => $comments], ['droits' => $_SESSION == 1] );
+        if($comments = $this->commentsManager->getCommentsAdmin()){
+            $this->adminTwig->addGlobal('session', $_SESSION);
+            echo $this->adminTwig->render('listCommentsAdmin.html.twig',['comments' => $comments], ['droits' => $_SESSION == 1] );
+        }else{
+            throw new \Exception('Oups... Impossible d\'afficher les commentaires !');
+        }
     }
 
     /**
@@ -165,10 +175,13 @@ class ControllerArticles
      */
     public function confirmdeletearticle ()
     {
-        $getId = $this->action->get('id');
-        $article = $this->articlesManager->Article($getId);
-        $this->twigySecur->addGlobal('session', $_SESSION);
-        echo $this->twigySecur->render('confirmdeletearticle.html.twig',['article' => $article], ['droits' => $_SESSION == 1]);
+        if($getId = $this->action->get('id')){
+            $article = $this->articlesManager->Article($getId);
+            $this->twigySecur->addGlobal('session', $_SESSION);
+            echo $this->twigySecur->render('confirmdeletearticle.html.twig',['article' => $article], ['droits' => $_SESSION == 1]);
+        }else{
+            throw new \Exception('Oups... Impossible d\'afficher la confirmation de suppression !');
+        }
     }
 
     /**
@@ -178,11 +191,14 @@ class ControllerArticles
      */
     public function confirmdeletecomment ()
     {
-        $getId = $this->action->get('id');
-        $comment = $this->commentsManager->getComment($getId);
-        $this->twigySecur->addGlobal('session', $_SESSION);
-        echo $this->twigySecur->render('confirmdeletecomment.html.twig',['comment' => $comment], ['droits' => $_SESSION == 1]);
-    }
+        if($getId = $this->action->get('id')){
+            $comment = $this->commentsManager->getComment($getId);
+            $this->twigySecur->addGlobal('session', $_SESSION);
+            echo $this->twigySecur->render('confirmdeletecomment.html.twig',['comment' => $comment], ['droits' => $_SESSION == 1]);
+        }else{
+            throw new \Exception('Oups... Impossible d\'afficher la confirmation de suppression !');
+        }
+        }
 
     /**
      * edit article admin
@@ -191,10 +207,13 @@ class ControllerArticles
      */
     public function editArticleAdmin()
     {
-        $getId = $this->action->get('id');
+        if($getId = $this->action->get('id')){
         $articles = $this->articlesManager->getArticleAdmin($getId);
         $this->adminTwig->addGlobal('session', $_SESSION);
-        echo $this->adminTwig->render("articleUpdating.html.twig", ['articles' => $articles], ['droits' => $_SESSION == 1]);	 
+        echo $this->adminTwig->render("articleUpdating.html.twig", ['articles' => $articles], ['droits' => $_SESSION == 1]);
+        }else{
+            throw new \Exception('Impossible d\'éditer article!');
+            }	 
     }
 
     /**
@@ -208,8 +227,11 @@ class ControllerArticles
      */
     public function updateArticleAdmin($miniContent, $title, $content, $postId) 
     {
-        $this->articlesManager->updateArticle($miniContent, $title, $content, $postId);
+        if($this->articlesManager->updateArticle($miniContent, $title, $content, $postId)){
         header('Location: index.php?action=listArticlesAdmin');
+    }else{
+        throw new \Exception('Impossible de modifier cet article!');
+        }
     }
 
     /**
@@ -220,8 +242,7 @@ class ControllerArticles
      */
     public function deleteArticle($dataId)
     {
-        $deletearticle = $this->articlesManager->supprArticle($dataId);
-        if ($deletearticle === true){
+        if($this->articlesManager->supprArticle($dataId)){
             header('Location: index.php?action=listArticlesAdmin');
             }else{
             throw new \Exception('Impossible de supprimer cet article!');
@@ -236,8 +257,7 @@ class ControllerArticles
      */
     public function deleteComment($dataId)
     {
-        $deletecomment = $this->commentsManager->supprComment($dataId);
-        if ($deletecomment === true){
+        if($this->commentsManager->supprComment($dataId)){
             header('Location: index.php?action=listCommentsAdmin');
             }else{
             throw new \Exception('Impossible de supprimer ce commentaire!');
@@ -252,7 +272,7 @@ class ControllerArticles
     public function formArticle()
     {
         $this->adminTwig->addGlobal('session', $_SESSION);
-        echo $this->adminTwig->render("articleWriting.html.twig",['droits' => $_SESSION == 1, 'droits' => $_SESSION == 2] );	 
+        echo $this->adminTwig->render("articleWriting.html.twig",['droits' => $_SESSION == 1, 'droits' => $_SESSION == 2] );
     }  
     
     /**
@@ -267,8 +287,7 @@ class ControllerArticles
      */
     public function articleWriting($idCategory, $idUser, $miniContent, $title, $content)
     {
-        $createarticle = $this->articlesManager->postArticle($idCategory, $idUser, $miniContent, $title, $content);
-        if ($createarticle === true){
+        if($this->articlesManager->postArticle($idCategory, $idUser, $miniContent, $title, $content)){
             header('Location:index.php?action=listArticlesAdmin');
         }else{
             throw new \Exception('Impossible d \'ajouter un article...');
