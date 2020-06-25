@@ -6,6 +6,7 @@ require '../vendor/autoload.php';
 
 use Mod\{ArticlesManager, CommentsManager};
 use App\routes\request;
+use Exception;
 
 class ControllerArticles
 {
@@ -47,9 +48,13 @@ class ControllerArticles
      */
     public function listArticle() 
     {
-        $articles = $this->articlesManager->getArticles();
+        if ($articles = $this->articlesManager->getArticles()){
+    
         $this->twig->addGlobal('session', $_SESSION);   
         echo $this->twig->render('articles.html.twig',['articles' => $articles], ['droits' => $_SESSION == 1]);
+        }else{
+            throw new Exception('impossible d\'afficher les articles');
+        }
     }
 
     /**
