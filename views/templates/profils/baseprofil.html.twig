@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Pinyon+Script" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf " crossorigin="anonymous">
-    <link rel="stylesheet" href="../publics/css/style.css">
+    <link rel="stylesheet" href="publics/css/style.css">
     <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
     {% block stylesheets %}{% endblock %}
 </head>
@@ -50,9 +50,9 @@
             </ul>
             <span class=" text-white">{{session.pseudo}}</span>
             {% if session.pseudo %}
-            <img class=" reveal-dev pic " width="50" src="../publics/img/users/avatar/{{session.avatar}}" alt="photo utilisateur">
+            <img class=" reveal-dev pic " width="50" src="publics/img/users/avatar/{{session.avatar}}" alt="photo utilisateur">
             {% else %}
-            <img class=" reveal-dev pic " width="50" src="../publics/img/franck.jpg" alt="photo franck">
+            <img class=" reveal-dev pic " width="50" src="publics/img/franck.jpg" alt="photo franck">
             {% endif %}
         </div>
     </nav>
