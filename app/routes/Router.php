@@ -483,13 +483,11 @@ class Router
                     $this->home->homePage();
             }
         }catch(Exception $e){
-           
-           if( $errorMessage = $e->getMessage()){
+            $errorMessage = $e->getMessage();
             $this->twigySecur->addGlobal('session', $_SESSION);
             echo $this->twigySecur ->render('error.html.twig', ['error' => $errorMessage], ['droits' => $_SESSION == 1]);
-            }else{
-            throw new Exception('impossible d\'afficher la page');
-            }
+         
+            
         }
     }
 }
